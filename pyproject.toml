@@ -1,0 +1,13 @@
+[project]
+name = "nembot"
+version = "0.1.0"
+description = "CS chatbot :3"
+readme = "README.md"
+requires-python = "==3.11.9"
+dependencies = [
+    "aiohttp>=3.11.7",
+    "asqlite>=2.0.0",
+    "asyncio>=3.4.3",
+    "pywin32>=308",
+    "watchdog>=6.0.0",
+]
