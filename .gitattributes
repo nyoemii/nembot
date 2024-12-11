@@ -1,6 +1,7 @@
 # Mark all files as linguist-vendored by default
 * linguist-vendored
 
+aphrodite -linguist-vendored
 aphrodite/** -linguist-vendored
 
 # Override Linguist language for specific file types in aphrodite
