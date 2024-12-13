@@ -12,7 +12,7 @@ class FileUpdateHandler(FileSystemEventHandler):
 	def on_modified(self, event):
 		if (event.src_path) == self.file_path:
 			if HR_ENABLED:
-				#print(f"{event.src_path} has been modified")
+				# print(f"{event.src_path} has been modified")
 				file_updated()
 			else:
 				pass

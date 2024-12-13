@@ -2,18 +2,18 @@ import asyncio
 import re
 from collections import deque
 
-from database import insert_command
 from command_execution import execute_command
 from commands.fact import get_fact
-from commands.fetch import find_recently_played
 from commands.fish import cast_line, cast_line_team
-from config import *
-from globals import TEAMS, server, command_regex, command_list
+from config import PREFIX
+from database import insert_command
+from globals import COMMAND_LIST, COMMAND_REGEX, TEAMS, server
 
 COMMAND_QUEUE = deque()
 
+
 async def parse(line):
-	regex = re.search(command_regex, line, flags=re.UNICODE | re.VERBOSE)
+	regex = re.search(COMMAND_REGEX, line, flags=re.UNICODE | re.VERBOSE)
 	if regex:
 		team = regex.group("team")
 		username = regex.group("username")
@@ -29,12 +29,15 @@ async def parse(line):
 		command = ""
 		args = ""
 
-	#* this doesn't account for commands that haven't been executed yet
-	if command.lower() in command_list:
+	# print(f"Team: {team}\nUsername: {username}\nLocation: {location}\nDead: {dead}\nCommand: {command}\nArgs: {args}")
+
+	# * this doesn't account for commands that haven't been executed yet
+	if command.lower() in COMMAND_LIST:
 		timestamp = server.get_info("provider", "timestamp")
 		command_data = command.replace("!", "")
 		await insert_command(username, command_data, team, dead, location, timestamp)
 		COMMAND_QUEUE.append((command, args, username, team, dead, location))
+
 
 async def check_requirements():
 	global should_process_commands
@@ -53,12 +56,12 @@ async def check_requirements():
 	#     return False
 
 	if server.get_info("map", "phase") == "live":
-
 		should_process_commands = True
 		return True
 
 	should_process_commands = False
 	return False
+
 
 async def process_commands():
 	if await check_requirements():
@@ -67,8 +70,9 @@ async def process_commands():
 			await asyncio.sleep(0.25)
 			await switchcase_commands(cmd, arg, user, team, dead, location)
 
+
 async def switchcase_commands(cmd, arg, user, team, dead, location):
-    # TODO: maybe pass user to commmand execution check if it's me so that execute_command_cs2 doesn't need wacky 3621 delay shit... it is kinda funny tho :3
+	# TODO: maybe pass user to commmand execution check if it's me so that execute_command_cs2 doesn't need wacky 3621 delay shit... it is kinda funny tho :3
 	cmd = cmd.lower()
 	match cmd:
 		# case "!disconnect" | "!dc":
@@ -76,24 +80,25 @@ async def switchcase_commands(cmd, arg, user, team, dead, location):
 		# case "!quit" | "!q":
 		#     await execute_command("quit", 0.5)
 		case "!i":
-			if arg:
-				inspect_link = re.search(r"steam:\/\/rungame\/730\/[0-9]+\/\+csgo_econ_action_preview%20([A-Za-z0-9]+)", arg)
-				if inspect_link:
-					await execute_command(f"gameui_activate;csgo_econ_action_preview {inspect_link.group(1)}\n say {PREFIX} Opened inspect link on my client.")
+			if team in TEAMS:
+				if arg:
+					inspect_link = re.search(
+						r"steam:\/\/rungame\/730\/[0-9]+\/\+csgo_econ_action_preview%20([A-Za-z0-9]+)",
+						arg,
+					)
+					if inspect_link:
+						await execute_command(f"gameui_activate;csgo_econ_action_preview {inspect_link.group(1)}\n say {PREFIX} Opened inspect link on my client.")
+					else:
+						await execute_command(f"say {PREFIX} Invalid inspect link.")
 				else:
-					await execute_command(f"say {PREFIX} Invalid inspect link.")
+					await execute_command(f"say {PREFIX} No inspect link provided.")
 			else:
-				await execute_command(f"say {PREFIX} No inspect link provided.")
+				pass
 		case "!switchhands":
 			if team in TEAMS:
 				await execute_command(f"switchhands\nsay_team {PREFIX} Switched viewmodel.")
 			else:
 				pass
-		case "!play":
-			if arg:
-				await execute_command(f"play {arg}\nsay {PREFIX} Playing {arg}.")
-			else:
-				await execute_command(f"say {PREFIX} No sound provided.")
 		case "!flash":
 			if team in TEAMS:
 				await execute_command(f"say_team {PREFIX} fuck you.")
@@ -102,7 +107,7 @@ async def switchcase_commands(cmd, arg, user, team, dead, location):
 					await asyncio.sleep(0.01 / 13)
 			else:
 				pass
-		case "!fish" | "!〈͜͡˒": # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
+		case "!fish" | "!〈͜͡˒":  # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
 			if team in TEAMS:
 				await cast_line_team(user)
 			elif not dead:
@@ -111,9 +116,9 @@ async def switchcase_commands(cmd, arg, user, team, dead, location):
 				await execute_command(f"say {PREFIX} You cannot fish while dead.")
 		case "!info":
 			if team in TEAMS:
-				await execute_command(f"say_team {PREFIX} github.com/Pandaptable/galls, reads console.log and parses chat through it. (old version, need to update)")
+				await execute_command(f"say_team {PREFIX} github.com/Pandaptable/nembot, reads console.log and parses chat through it (aka not a cheat)")
 			else:
-				await execute_command(f"say {PREFIX} github.com/Pandaptable/galls, reads console.log and parses chat through it. (old version, need to update)")
+				await execute_command(f"say {PREFIX} github.com/Pandaptable/nembot, reads console.log and parses chat through it (aka not a cheat)")
 		case "!location":
 			if team in TEAMS:
 				message = "you're dead dumbass." if dead else f"Your current location: {location}"
@@ -127,9 +132,11 @@ async def switchcase_commands(cmd, arg, user, team, dead, location):
 				await execute_command(f"say {PREFIX} {fact}")
 		case "!drop":
 			if team in TEAMS:
-				await execute_command("drop", 3621) # funny 3621 placeholder for shit code to execute with 0 delay
+				await execute_command("drop", 3621)  # funny 3621 placeholder for shit code to execute with 0 delay
 			else:
 				pass
-		case "!fetch":
-			await find_recently_played()
-			await execute_command(f"say {PREFIX} Fetched recently played.")
+		case "!help" | "!commands" | "!cmds":
+			if team in TEAMS:
+				await execute_command(f"say_team {PREFIX} !help | !fish or !〈͜͡˒ ⋊  | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !flash | !switchhands")
+			else:
+				await execute_command(f"say {PREFIX} !help | !fish or !〈͜͡˒ ⋊  | !fact | !info (info on the bot)")

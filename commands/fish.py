@@ -15,6 +15,7 @@ class TimeOfDay(Enum):
 	Evening = 2
 	Night = 3
 
+
 class SeaWeatherCondition(Enum):
 	ClearSkies = 0
 	PartlyCloudy = 1
@@ -25,14 +26,17 @@ class SeaWeatherCondition(Enum):
 	Windy = 6
 	Calm = 7
 
+
 class FishData:
 	def __init__(self):
 		self.Categories = []
+
 
 class FishCategory:
 	def __init__(self):
 		self.Rarity = ""
 		self.FishList = []
+
 
 class Fish:
 	def __init__(self):
@@ -40,46 +44,63 @@ class Fish:
 		self.Price = 0.0
 		self.Weight = None
 
+
 class FishWeight:
 	def __init__(self):
 		self.Min = 0.0
 		self.Max = 0.0
 
+
 async def cast_line(username):
-	#time.sleep(1)
-	#write_command(f"say {PREFIX} ♌︎ Player {username} is casting their line...")
-	#press_key()
+	# time.sleep(1)
+	# write_command(f"say {PREFIX} ♌︎ Player {username} is casting their line...")
+	# press_key()
 	weather = get_weather()
-	#time.sleep(1)
-	#write_command(f"say {PREFIX} {username}: ☁︎ You casted your line on {weather[1]} weather")
-	#press_key()
+	# time.sleep(1)
+	# write_command(f"say {PREFIX} {username}: ☁︎ You casted your line on {weather[1]} weather")
+	# press_key()
 	await asyncio.sleep(0.5)
 	if random.randint(0, 2) == 0:
-		await execute_command(f"say {PREFIX} {username}: (ó﹏ò｡) You didnt catch anything, try again later...", 0.25)
+		await execute_command(
+			f"say {PREFIX} {username}: (ó﹏ò｡) You didnt catch anything, try again later...",
+			0.25,
+		)
 	else:
 		fish_name, price, weight = get_fish_result(weather[0])
-		await execute_command(f"say {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {fish_name}! ⚖️ It weighs {round(weight, 2)}kg and is worth around ${round(price, 2)}", 0.25)
+		await execute_command(
+			f"say {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {fish_name}! ⚖️ It weighs {round(weight, 2)}kg and is worth around ${round(price, 2)}",
+			0.25,
+		)
+
 
 async def cast_line_team(username):
-	#time.sleep(1)
-	#write_command(f"say {PREFIX} ♌︎ Player {username} is casting their line...")
-	#press_key()
+	# time.sleep(1)
+	# write_command(f"say {PREFIX} ♌︎ Player {username} is casting their line...")
+	# press_key()
 	weather = get_weather()
-	#time.sleep(1)
-	#write_command(f"say {PREFIX} {username}: ☁︎ You casted your line on {weather[1]} weather")
-	#press_key()
+	# time.sleep(1)
+	# write_command(f"say {PREFIX} {username}: ☁︎ You casted your line on {weather[1]} weather")
+	# press_key()
 	await asyncio.sleep(0.5)
 	if random.randint(0, 2) == 0:
-		await execute_command(f"say_team {PREFIX} {username}: (ó﹏ò｡) You didnt catch anything, try again later...", 0.25)
+		await execute_command(
+			f"say_team {PREFIX} {username}: (ó﹏ò｡) You didnt catch anything, try again later...",
+			0.25,
+		)
 	else:
 		fish_name, price, weight = get_fish_result(weather[0])
-		await execute_command(f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {fish_name}! ⚖️ It weighs {round(weight, 2)}kg and is worth around ${round(price, 2)}", 0.25)
+		await execute_command(
+			f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {fish_name}! ⚖️ It weighs {round(weight, 2)}kg and is worth around ${round(price, 2)}",
+			0.25,
+		)
+
 
 def load_fish_db():
 	with open("data/fishbase.json", "r") as file:
 		json_data = file.read()
 		fish_data = json.loads(json_data)
 	return fish_data
+
 
 def get_fish_result(sea_weather):
 	fish_data = load_fish_db()
@@ -88,7 +109,10 @@ def get_fish_result(sea_weather):
 		rarity_roll = random.random()
 		chosen_rarity = choose_rarity(rarity_roll, fish_data["Categories"], rarity_modifier)
 
-		chosen_category = next((category for category in fish_data["Categories"] if category["Rarity"] == chosen_rarity), None)
+		chosen_category = next(
+			(category for category in fish_data["Categories"] if category["Rarity"] == chosen_rarity),
+			None,
+		)
 		if chosen_category:
 			fish_list = chosen_category["FishList"]
 			chosen_fish = random.choice(fish_list)
@@ -98,10 +122,12 @@ def get_fish_result(sea_weather):
 	else:
 		raise ValueError("fishData was null")
 
+
 def get_weather():
 	forecasted_weather = forecast_sea_weather()
 	weather_description = get_weather_description(forecasted_weather)
 	return forecasted_weather, weather_description
+
 
 def forecast_sea_weather():
 	current_time_of_day = get_current_time_of_day()
@@ -117,6 +143,7 @@ def forecast_sea_weather():
 
 	return base_condition
 
+
 def get_current_time_of_day():
 	current_hour = datetime.now().hour
 
@@ -128,6 +155,7 @@ def get_current_time_of_day():
 		return TimeOfDay.Evening
 	else:
 		return TimeOfDay.Night
+
 
 def get_weather_description(condition):
 	return {
@@ -141,6 +169,7 @@ def get_weather_description(condition):
 		SeaWeatherCondition.Calm: "Calm seas with little to no wind",
 	}.get(condition, "Unknown weather condition")
 
+
 def get_rarity_modifier(sea_weather):
 	return {
 		SeaWeatherCondition.ClearSkies: 1.0,
@@ -153,6 +182,7 @@ def get_rarity_modifier(sea_weather):
 		SeaWeatherCondition.Calm: 1.1,
 	}.get(sea_weather, 1.0)
 
+
 def choose_rarity(roll, categories, modifier):
 	cumulative_chance = 0.0
 	for category in categories:
@@ -160,6 +190,7 @@ def choose_rarity(roll, categories, modifier):
 		if roll <= cumulative_chance:
 			return category["Rarity"]
 	return categories[-1]["Rarity"]
+
 
 def rarity_chance(rarity):
 	return {
@@ -171,6 +202,7 @@ def rarity_chance(rarity):
 		"Legendary": 0.025,
 	}.get(rarity, 0.0)
 
+
 def calculate_sell_price(tier, avg_size, loot_weight, sell_value, fish_type, quality, size_category):
 	# Quality multipliers
 	quality_multipliers = {
@@ -179,7 +211,7 @@ def calculate_sell_price(tier, avg_size, loot_weight, sell_value, fish_type, qua
 		"Glistening": 4.0,
 		"Opulent": 6.0,
 		"Radiant": 10.0,
-		"Alpha": 15.0
+		"Alpha": 15.0,
 	}
 
 	# Size multipliers
@@ -190,7 +222,7 @@ def calculate_sell_price(tier, avg_size, loot_weight, sell_value, fish_type, qua
 		"Avg Size+": 1.0,
 		"Avg Size x 1.5+": 1.5,
 		"Avg Size x 2+": 2.5,
-		"Avg Size x 3+": 4.25
+		"Avg Size x 3+": 4.25,
 	}
 
 	# Check if the fish is alien or a junk object

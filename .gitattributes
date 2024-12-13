@@ -1,4 +1,4 @@
-# Mark all files as linguist-vendored by default
+# :3
 * linguist-vendored
 
 aphrodite -linguist-vendored
@@ -13,9 +13,6 @@ aphrodite/*.sass linguist-language=ECL
 
 # Exclude aphrodite folder from export (if needed)
 aphrodite export-ignore
-
-# Common settings that generally should always be used with your language specific settings
-
 # Auto detect text files and perform LF normalization
 *          text=auto
 

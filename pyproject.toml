@@ -9,5 +9,19 @@ dependencies = [
     "asqlite>=2.0.0",
     "asyncio>=3.4.3",
     "pywin32>=308",
+    "ruff>=0.8.3",
     "watchdog>=6.0.0",
 ]
+
+[tool.ruff]
+line-length = 200
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "tab"
+line-ending = "cr-lf"
+preview = true
+
+[tool.ruff.lint]
+preview = true
+ignore = ["F401", "F403", "F405"]

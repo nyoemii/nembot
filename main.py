@@ -5,10 +5,10 @@ from watchdog.observers import Observer
 
 from command_processing import check_requirements, parse, process_commands
 from commands.fetch import find_recently_played
-from config import *
+from config import CONSOLE_FILE, HR_DIRECTORY, HR_FILE
 from database import init_database
-from loop.deathchecking import check_death
 from globals import PRINT_FILTER, server
+from loop.deathchecking import check_death
 from loop.heartrate import FileUpdateHandler
 from loop.roundtracking import check_round
 
@@ -33,6 +33,7 @@ async def listen(log_file):
 			await parse(line)
 		last_size = log_file.tell()
 
+
 async def main_loop():
 	while True:
 		await check_death()
@@ -52,6 +53,7 @@ async def shutdown(observer, server):
 	await asyncio.gather(*tasks, return_exceptions=True)
 	observer.join()
 
+
 async def start_server():
 	server.start_server()
 
@@ -64,7 +66,7 @@ async def start_server():
 	await find_recently_played()
 
 	try:
-		log_file = open(CONSOLE_FILE,"r", encoding="utf-8")
+		log_file = open(CONSOLE_FILE, "r", encoding="utf-8")
 		await asyncio.gather(main_loop(), listen(log_file))
 	except asyncio.CancelledError:
 		pass

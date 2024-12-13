@@ -24,7 +24,7 @@ async def check_round():
 	if current_phase == "live" and last_round is not None and current_round > last_round:
 		print(f"Round {current_round} has started.")
 		# await find_recently_played()
-		# TODO: add round delay before(?)
+		# TODO: add round delay before(? currently it will flash at the end of a round, think it can be fixed by checking player info or smth idk..)
 		if GAME == "csgo":
 			win32gui.FlashWindow(csgo_window_handle, win32con.FLASHW_ALL)
 		last_round = current_round
