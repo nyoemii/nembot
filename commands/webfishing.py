@@ -7,7 +7,7 @@ from unit_parse import parser
 from command_execution import execute_command
 from config import PREFIX
 from database import insert_fish, update_balance
-from globals import server
+from globals import TEAMS, server
 
 
 def load_json():
@@ -115,7 +115,7 @@ class Rarity:
 		raise AttributeError(f"No such rarity: {quality}")
 
 
-async def cast_line(steamid, username):
+async def cast_line(steamid, username, team):
 	catches = 1
 	bonus = False
 	# TODO: assign maps to tables and maybe other factors (steamid?)
@@ -189,7 +189,10 @@ async def cast_line(steamid, username):
 
 		await insert_fish(fish_name, size, price, quality, steamid, username)
 		await update_balance(steamid, price)
-		await execute_command(f"say {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth {price} ₶!", 0.5)
+		if team in TEAMS:
+			await execute_command(f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth {price} ₶!", 0.5)
+		else:
+			await execute_command(f"say {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth {price} ₶!", 0.5)
 
 
 async def calculate_worth(fish_roll, quality, size):
@@ -215,6 +218,9 @@ async def calculate_worth(fish_roll, quality, size):
 	idata = fish_roll
 
 	value = idata["sell_value"]
+
+	if not idata.get("generate_worth"):
+		idata["generate_worth"] = True
 
 	if idata["generate_worth"]:
 		t = 1.0 + (0.25 * idata["tier"])

@@ -2,13 +2,16 @@ import asyncio
 import re
 from collections import deque
 
+import psutil
+import win32gui
+import win32process
+from pynput.keyboard import Controller, Key
+
 from command_execution import execute_command
 from commands.fact import get_fact
 from commands.fetch import find_recently_played
-
-# from commands.fish import cast_line, cast_line_team
 from commands.webfishing import cast_line
-from config import PREFIX
+from config import DROP_KEY, GAME, PREFIX, SWITCH_HANDS_KEY
 from database import check_if_player_exists, insert_command
 from globals import COMMAND_LIST, COMMAND_REGEX, TEAMS, server
 
@@ -34,13 +37,13 @@ async def parse(line):
 
 	# print(f"Team: {team}\nUsername: {username}\nLocation: {location}\nDead: {dead}\nCommand: {command}\nArgs: {args}")
 
-	steamid = await check_if_player_exists(username)
-	if steamid:
-		steamid = int(steamid)
-	else:
-		await find_recently_played()
 	# * this doesn't account for commands that haven't been executed yet
 	if command.lower() in COMMAND_LIST:
+		steamid = await check_if_player_exists(username)
+		if steamid:
+			steamid = int(steamid)
+		else:
+			await find_recently_played()
 		timestamp = server.get_info("provider", "timestamp")
 		command_data = command.replace("!", "")
 		await insert_command(steamid, username, command_data, team, dead, location, timestamp)
@@ -49,19 +52,6 @@ async def parse(line):
 
 async def check_requirements():
 	global should_process_commands
-	# active_window_handle = win32gui.GetForegroundWindow()
-	# _, pid = win32process.GetWindowThreadProcessId(active_window_handle)
-
-	# if pid > 0:
-	#     try:
-	#         process = psutil.Process(pid)
-	#         process_name = process.name()
-	#     except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-	#         print("Unable to retrieve process info.")
-	#         return False
-	# else:
-	#     print("Invalid PID or no valid window is currently focused.")
-	#     return False
 
 	if server.get_info("map", "phase") == "live":
 		should_process_commands = True
@@ -103,23 +93,39 @@ async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 			else:
 				pass
 		case "!switchhands":
-			if team in TEAMS:
-				await execute_command(f"switchhands\nsay_team {PREFIX} Switched viewmodel.")
+			if GAME == "csgo":
+				if team in TEAMS:
+					await execute_command(f"switchhands\nsay_team {PREFIX} Switched viewmodel.")
+				else:
+					pass
 			else:
-				pass
+				if team in TEAMS:
+					if await check_ingame():
+						await send_key(SWITCH_HANDS_KEY)
+					else:
+						pass
+				else:
+					pass
+
 		case "!flash":
-			if team in TEAMS:
-				await execute_command(f"say_team {PREFIX} fuck you.")
-				for _ in range(13):
-					await execute_command("flashbangs", 3621)
-					await asyncio.sleep(0.01 / 13)
+			if GAME != "csgo":
+				if team in TEAMS:
+					await execute_command(f"{PREFIX} command unavailable for CS2 (blame valve)")
+				else:
+					pass
 			else:
-				pass
+				if team in TEAMS:
+					await execute_command(f"say_team {PREFIX} fuck you.")
+					for _ in range(13):
+						await execute_command("flashbangs", 3621)
+						await asyncio.sleep(0.01 / 13)
+				else:
+					pass
 		case "!fish" | "!〈͜͡˒":  # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
 			if team in TEAMS:
-				await cast_line(steamid, user)
+				await cast_line(steamid, user, team)
 			elif not dead:
-				await cast_line(steamid, user)
+				await cast_line(steamid, user, team)
 			else:
 				await execute_command(f"say {PREFIX} You cannot fish while dead.")
 		case "!info":
@@ -139,12 +145,44 @@ async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 				fact = await get_fact()
 				await execute_command(f"say {PREFIX} {fact}")
 		case "!drop":
-			if team in TEAMS:
-				await execute_command("drop", 3621)  # funny 3621 placeholder for shit code to execute with 0 delay
+			if GAME == "csgo":
+				if team in TEAMS:
+					await execute_command("drop", 3621)  # funny 3621 placeholder for shit code to execute with 0 delay
+				else:
+					pass
 			else:
-				pass
+				if team in TEAMS:
+					if await check_ingame():
+						await send_key(DROP_KEY)
+				else:
+					pass
 		case "!help" | "!commands" | "!cmds":
 			if team in TEAMS:
-				await execute_command(f"say_team {PREFIX} !help | !fish or !〈͜͡˒ ⋊  | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !flash | !switchhands")
+				await execute_command(f"say_team {PREFIX} !help | !fish or !〈͜͡˒ ⋊  | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !flash (cs2 only) | !switchhands")
 			else:
 				await execute_command(f"say {PREFIX} !help | !fish or !〈͜͡˒ ⋊  | !fact | !info (info on the bot)")
+
+
+async def check_ingame():
+	active_window_handle = win32gui.GetForegroundWindow()
+	_, pid = win32process.GetWindowThreadProcessId(active_window_handle)
+
+	if pid > 0:
+		try:
+			process = psutil.Process(pid)
+			process_name = process.name()
+		except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+			print("Unable to retrieve process info.")
+			return False
+	else:
+		print("Invalid PID or no valid window is currently focused.")
+		return False
+
+	if process_name == "cs2.exe" and server.get_info("player", "activity") != "textinput":
+		return True
+
+
+async def send_key(key):
+	keyboard = Controller()
+	keyboard.press(key)
+	keyboard.release(key)
