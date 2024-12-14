@@ -106,6 +106,18 @@ wheels = [
 ]
 
 [[package]]
+name = "godot-parser"
+version = "0.1.7"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyparsing" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c6/19/f78a97816bcdc1220a67c53a83a4594840de7a497c3e816f1c14ac03b2bb/godot_parser-0.1.7.tar.gz", hash = "sha256:832e8d0a2984cf635168f529bfb08cd64e8006c94ab02fe15e82a61c1ea2f32f", size = 17107 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/61/76/4a71a874a2e1e6c64265685bdc5bf8084d3d79e548df3e57f03e087b509b/godot_parser-0.1.7-py3-none-any.whl", hash = "sha256:e0af880a93c9abc5b216bbe00f20dcc8d8e9761acd8c8287cb1d2113ca09d3c2", size = 17165 },
+]
+
+[[package]]
 name = "idna"
 version = "3.10"
 source = { registry = "https://pypi.org/simple" }
@@ -146,6 +158,7 @@ dependencies = [
     { name = "aiohttp" },
     { name = "asqlite" },
     { name = "asyncio" },
+    { name = "godot-parser" },
     { name = "pywin32" },
     { name = "ruff" },
     { name = "watchdog" },
@@ -156,6 +169,7 @@ requires-dist = [
     { name = "aiohttp", specifier = ">=3.11.7" },
     { name = "asqlite", specifier = ">=2.0.0" },
     { name = "asyncio", specifier = ">=3.4.3" },
+    { name = "godot-parser", specifier = ">=0.1.7" },
     { name = "pywin32", specifier = ">=308" },
     { name = "ruff", specifier = ">=0.8.3" },
     { name = "watchdog", specifier = ">=6.0.0" },
@@ -184,6 +198,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/05/64/17eb2796e2d1c3d0c431dc5f40078d7282f4645af0bb4da9097fbb628c6c/propcache-0.2.0-cp311-cp311-win32.whl", hash = "sha256:5f2564ec89058ee7c7989a7b719115bdfe2a2fb8e7a4543b8d1c0cc4cf6478c1", size = 40473 },
     { url = "https://files.pythonhosted.org/packages/83/c5/e89fc428ccdc897ade08cd7605f174c69390147526627a7650fb883e0cd0/propcache-0.2.0-cp311-cp311-win_amd64.whl", hash = "sha256:6e2e54267980349b723cff366d1e29b138b9a60fa376664a157a342689553f71", size = 44921 },
     { url = "https://files.pythonhosted.org/packages/3d/b6/e6d98278f2d49b22b4d033c9f792eda783b9ab2094b041f013fc69bcde87/propcache-0.2.0-py3-none-any.whl", hash = "sha256:2ccc28197af5313706511fab3a8b66dcd6da067a1331372c82ea1cb74285e036", size = 11603 },
+]
+
+[[package]]
+name = "pyparsing"
+version = "3.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8c/d5/e5aeee5387091148a19e1145f63606619cb5f20b83fccb63efae6474e7b2/pyparsing-3.2.0.tar.gz", hash = "sha256:cbf74e27246d595d9a74b186b810f6fbb86726dbf3b9532efb343f6d7294fe9c", size = 920984 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/be/ec/2eb3cd785efd67806c46c13a17339708ddc346cbb684eade7a6e6f79536a/pyparsing-3.2.0-py3-none-any.whl", hash = "sha256:93d9577b88da0bbea8cc8334ee8b918ed014968fd2ec383e868fb8afb1ccef84", size = 106921 },
 ]
 
 [[package]]

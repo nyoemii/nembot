@@ -1,3 +1,4 @@
+# TODO: run on separate thread for async execution due to ctypes being blocking
 import ctypes
 import os
 

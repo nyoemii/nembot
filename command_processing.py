@@ -4,7 +4,9 @@ from collections import deque
 
 from command_execution import execute_command
 from commands.fact import get_fact
-from commands.fish import cast_line, cast_line_team
+
+# from commands.fish import cast_line, cast_line_team
+from commands.webfishing import cast_line
 from config import PREFIX
 from database import insert_command
 from globals import COMMAND_LIST, COMMAND_REGEX, TEAMS, server
@@ -109,9 +111,9 @@ async def switchcase_commands(cmd, arg, user, team, dead, location):
 				pass
 		case "!fish" | "!〈͜͡˒":  # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
 			if team in TEAMS:
-				await cast_line_team(user)
+				await cast_line(cmd, arg, user, team, dead, location)
 			elif not dead:
-				await cast_line(user)
+				await cast_line(cmd, arg, user, team, dead, location)
 			else:
 				await execute_command(f"say {PREFIX} You cannot fish while dead.")
 		case "!info":

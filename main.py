@@ -5,6 +5,7 @@ from watchdog.observers import Observer
 
 from command_processing import check_requirements, parse, process_commands
 from commands.fetch import find_recently_played
+from commands.webfishing import generate_loot_tables
 from config import CONSOLE_FILE, HR_DIRECTORY, HR_FILE
 from database import init_database
 from globals import PRINT_FILTER, server
@@ -64,6 +65,21 @@ async def start_server():
 
 	await init_database()
 	await find_recently_played()
+	# await load_resources()
+	await generate_loot_tables("fish", "lake")
+	await generate_loot_tables("fish", "ocean")
+	await generate_loot_tables("fish", "deep")
+	await generate_loot_tables("fish", "prehistoric")
+	await generate_loot_tables("fish", "rain")
+	await generate_loot_tables("fish", "alien")
+	await generate_loot_tables("fish", "void")
+
+	await generate_loot_tables("fish", "water_trash")
+
+	await generate_loot_tables("none", "seashell")
+	await generate_loot_tables("none", "trash")
+
+	await generate_loot_tables("fish", "metal")
 
 	try:
 		log_file = open(CONSOLE_FILE, "r", encoding="utf-8")
