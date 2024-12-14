@@ -11,6 +11,7 @@ dependencies = [
     "godot-parser>=0.1.7",
     "pywin32>=308",
     "ruff>=0.8.3",
+    "unit-parse>=0.1.11",
     "watchdog>=6.0.0",
 ]
 

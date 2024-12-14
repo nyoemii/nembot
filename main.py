@@ -69,7 +69,6 @@ async def start_server():
 	await generate_loot_tables("fish", "lake")
 	await generate_loot_tables("fish", "ocean")
 	await generate_loot_tables("fish", "deep")
-	await generate_loot_tables("fish", "prehistoric")
 	await generate_loot_tables("fish", "rain")
 	await generate_loot_tables("fish", "alien")
 	await generate_loot_tables("fish", "void")

@@ -55,6 +55,7 @@ class COPYDATASTRUCT(ctypes.Structure):
 	]
 
 
+# TODO: if possible, switch to proper async instead of this lmfao
 async def send_message_async(target_hwnd, message):
 	loop = asyncio.get_event_loop()
 	await loop.run_in_executor(None, send_message, target_hwnd, message)

@@ -3,6 +3,7 @@ import win32gui
 from config import GAME, GSI_TOKEN
 from gsi.server import GSIServer
 
+# TODO: change gsi library or add type definitions to everything
 server = GSIServer(("127.0.0.1", 3000), GSI_TOKEN)
 
 csgo_window_handle = win32gui.FindWindow("Valve001", None)
@@ -68,4 +69,5 @@ PRINT_FILTER = [
 	"GameTypes: missing",
 	"Unable to read",
 	"failed to load file",
+	"CNavGenParams",
 ]

@@ -2,6 +2,7 @@ import asqlite
 
 from commands.fetch import find_recently_played
 from config import DATABASE_NAME
+from globals import server
 
 
 async def init_database():
@@ -12,7 +13,7 @@ async def init_database():
 				CREATE TABLE IF NOT EXISTS players (
 					steamid INTEGER PRIMARY KEY,
 					username TEXT,
-					money TEXT DEFAULT 0
+					money INTEGER DEFAULT 0
 				)
 				"""
 			)
@@ -36,10 +37,10 @@ async def init_database():
 					id INTEGER PRIMARY KEY AUTOINCREMENT,
 					steamid INTEGER NOT NULL,
 					username TEXT,
-					fish TEXT,
-					weight TEXT,
-					price TEXT,
-					rarity TEXT,
+					fish_name TEXT,
+					size INTEGER,
+					price INTEGER,
+					quality TEXT,
 					timestamp TEXT
 				)
 				"""
@@ -47,25 +48,7 @@ async def init_database():
 			await connection.commit()
 
 
-async def insert_command(username, command, team, dead, location, timestamp):
-	async with asqlite.connect(DATABASE_NAME) as connection:
-		async with connection.cursor() as cursor:
-			while True:
-				await cursor.execute(
-					"""
-					SELECT steamid FROM players WHERE username = ?
-					""",
-					(username,),
-				)
-				steamid_row = await cursor.fetchone()
-				if steamid_row is not None:
-					steamid = int(steamid_row[0])
-					break
-				else:
-					# print("Player not found in database.")
-					# break
-					await find_recently_played()
-			await connection.commit()
+async def insert_command(steamid, username, command, team, dead, location, timestamp):
 	async with asqlite.connect(DATABASE_NAME) as connection:
 		async with connection.cursor() as cursor:
 			await cursor.execute(
@@ -74,5 +57,46 @@ async def insert_command(username, command, team, dead, location, timestamp):
 				VALUES (?, ?, ?, ?, ?, ?, ?)
 				""",
 				(steamid, username, command, team, dead, location, timestamp),
+			)
+			await connection.commit()
+
+
+async def check_if_player_exists(username):
+	async with asqlite.connect(DATABASE_NAME) as connection:
+		async with connection.cursor() as cursor:
+			await cursor.execute(
+				"""
+				SELECT steamid FROM players WHERE username = ?
+				""",
+				(username,),
+			)
+			steamid_row = await cursor.fetchone()
+			await connection.commit()
+			if steamid_row:
+				steamid_row = steamid_row[0]
+			return steamid_row
+
+
+async def insert_fish(fish_name, size, price, quality, steamid, username):
+	async with asqlite.connect(DATABASE_NAME) as connection:
+		async with connection.cursor() as cursor:
+			await cursor.execute(
+				"""
+				INSERT INTO fish_caught (steamid, username, fish_name, size, price, quality, timestamp)
+				VALUES (?, ?, ?, ?, ?, ?, ?)
+				""",
+				(steamid, username, fish_name, size, price, quality, server.get_info("provider", "timestamp")),
+			)
+			await connection.commit()
+
+
+async def update_balance(steamid, amount):
+	async with asqlite.connect(DATABASE_NAME) as connection:
+		async with connection.cursor() as cursor:
+			await cursor.execute(
+				"""
+				UPDATE players SET money = ? WHERE steamid = ?
+				""",
+				(amount, steamid),
 			)
 			await connection.commit()

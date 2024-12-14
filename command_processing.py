@@ -4,11 +4,12 @@ from collections import deque
 
 from command_execution import execute_command
 from commands.fact import get_fact
+from commands.fetch import find_recently_played
 
 # from commands.fish import cast_line, cast_line_team
 from commands.webfishing import cast_line
 from config import PREFIX
-from database import insert_command
+from database import check_if_player_exists, insert_command
 from globals import COMMAND_LIST, COMMAND_REGEX, TEAMS, server
 
 COMMAND_QUEUE = deque()
@@ -33,12 +34,17 @@ async def parse(line):
 
 	# print(f"Team: {team}\nUsername: {username}\nLocation: {location}\nDead: {dead}\nCommand: {command}\nArgs: {args}")
 
+	steamid = await check_if_player_exists(username)
+	if steamid:
+		steamid = int(steamid)
+	else:
+		await find_recently_played()
 	# * this doesn't account for commands that haven't been executed yet
 	if command.lower() in COMMAND_LIST:
 		timestamp = server.get_info("provider", "timestamp")
 		command_data = command.replace("!", "")
-		await insert_command(username, command_data, team, dead, location, timestamp)
-		COMMAND_QUEUE.append((command, args, username, team, dead, location))
+		await insert_command(steamid, username, command_data, team, dead, location, timestamp)
+		COMMAND_QUEUE.append((steamid, command, args, username, team, dead, location))
 
 
 async def check_requirements():
@@ -68,12 +74,12 @@ async def check_requirements():
 async def process_commands():
 	if await check_requirements():
 		if COMMAND_QUEUE:
-			cmd, arg, user, team, dead, location = COMMAND_QUEUE.popleft()
+			steamid, cmd, arg, user, team, dead, location = COMMAND_QUEUE.popleft()
 			await asyncio.sleep(0.25)
-			await switchcase_commands(cmd, arg, user, team, dead, location)
+			await switchcase_commands(steamid, cmd, arg, user, team, dead, location)
 
 
-async def switchcase_commands(cmd, arg, user, team, dead, location):
+async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 	# TODO: maybe pass user to commmand execution check if it's me so that execute_command_cs2 doesn't need wacky 3621 delay shit... it is kinda funny tho :3
 	cmd = cmd.lower()
 	match cmd:
@@ -111,9 +117,9 @@ async def switchcase_commands(cmd, arg, user, team, dead, location):
 				pass
 		case "!fish" | "!〈͜͡˒":  # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
 			if team in TEAMS:
-				await cast_line(cmd, arg, user, team, dead, location)
+				await cast_line(steamid, user)
 			elif not dead:
-				await cast_line(cmd, arg, user, team, dead, location)
+				await cast_line(steamid, user)
 			else:
 				await execute_command(f"say {PREFIX} You cannot fish while dead.")
 		case "!info":
