@@ -90,37 +90,26 @@ async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 						await execute_command(f"say {PREFIX} Invalid inspect link.")
 				else:
 					await execute_command(f"say {PREFIX} No inspect link provided.")
-			else:
-				pass
 		case "!switchhands":
 			if GAME == "csgo":
 				if team in TEAMS:
 					await execute_command(f"switchhands\nsay_team {PREFIX} Switched viewmodel.")
-				else:
-					pass
 			else:
 				if team in TEAMS:
 					if await check_ingame():
 						await send_key(SWITCH_HANDS_KEY)
 					else:
-						pass
-				else:
-					pass
-
+						await execute_command(f"say_team {PREFIX} I'm tabbed out or in a chat input :p")
 		case "!flash":
 			if GAME != "csgo":
 				if team in TEAMS:
 					await execute_command(f"{PREFIX} command unavailable for CS2 (blame valve)")
-				else:
-					pass
 			else:
 				if team in TEAMS:
 					await execute_command(f"say_team {PREFIX} fuck you.")
 					for _ in range(13):
 						await execute_command("flashbangs", 3621)
 						await asyncio.sleep(0.01 / 13)
-				else:
-					pass
 		case "!fish" | "!〈͜͡˒":  # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
 			if team in TEAMS:
 				await cast_line(steamid, user, team)
@@ -148,14 +137,13 @@ async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 			if GAME == "csgo":
 				if team in TEAMS:
 					await execute_command("drop", 3621)  # funny 3621 placeholder for shit code to execute with 0 delay
-				else:
-					pass
 			else:
 				if team in TEAMS:
 					if await check_ingame():
 						await send_key(DROP_KEY)
-				else:
-					pass
+					else:
+						await execute_command(f"say_team {PREFIX} I'm tabbed out or in a chat input :p")
+
 		case "!help" | "!commands" | "!cmds":
 			if team in TEAMS:
 				await execute_command(f"say_team {PREFIX} !help | !fish or !〈͜͡˒ ⋊  | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !flash (cs2 only) | !switchhands")
