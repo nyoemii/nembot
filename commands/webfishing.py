@@ -260,7 +260,6 @@ async def roll_loot_table(table, max_tier=-1):
 
 
 async def roll_item_size(item):
-	print(f"Rolling item size for {item}")
 	average_size = item["average_size"]
 	deviation = average_size * 0.55
 	average_size += average_size * 0.25
