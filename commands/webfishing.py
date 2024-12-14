@@ -66,7 +66,7 @@ class Rarity:
 	contraband = {
 		"name": "Contraband",
 		"odds": 0.0256,
-		"color": "",
+		"color": "",
 		"database_id": "contraband",
 		"price_mult": 15.0,
 	}
@@ -123,7 +123,6 @@ async def cast_line(steamid, username, team):
 	fish_table = random.choice([
 		"lake",
 		"ocean",
-		"deep",
 		"rain",
 		"alien",
 		"void",
@@ -172,7 +171,24 @@ async def cast_line(steamid, username, team):
 	fish_roll = chosen[0]
 	size = chosen[1]
 
-	quality = random.choices([Rarity.blue, Rarity.purple, Rarity.pink, Rarity.red, Rarity.gold], weights=[79.92, 15.98, 3.2, 0.64, 0.26])
+	quality = random.choices(
+		[
+			Rarity.blue,
+			Rarity.purple,
+			Rarity.pink,
+			Rarity.red,
+			Rarity.gold,
+			Rarity.contraband,
+		],
+		weights=[
+			79.92,
+			15.98,
+			3.2,
+			0.64,
+			0.26,
+			0.0256,
+		],
+	)
 
 	if rod_cast_data == "double" and random.random() < 0.15:
 		catches = 2
@@ -183,6 +199,7 @@ async def cast_line(steamid, username, team):
 		item_description = fish_roll["item_description"]
 		catch_blurb = fish_roll["catch_blurb"]
 		quality_name = quality[0]["name"]
+		quality_color = quality[0]["color"]
 		quality = quality[0]["database_id"]
 		normalized_size = parser(f"{size} cm")
 		price = await calculate_worth(fish_roll, quality, size)
@@ -190,9 +207,20 @@ async def cast_line(steamid, username, team):
 		await insert_fish(fish_name, size, price, quality, steamid, username)
 		await update_balance(steamid, price)
 		if team in TEAMS:
-			await execute_command(f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth {price} ₶!", 0.5)
+			if quality in "pink, red, gold":
+				await execute_command(
+					f"playerchatwheel CW.1 \"{PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_color}{quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!",
+					0.5,
+				)
+			elif quality in "contraband":
+				await execute_command(
+					f'playerchatwheel CW.1 "{PREFIX} {username}: {quality_color}〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It\'s {normalized_size} and is worth ₶{price}!"',
+					0.5,
+				)
+			else:
+				await execute_command(f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
 		else:
-			await execute_command(f"say {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth {price} ₶!", 0.5)
+			await execute_command(f"say {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
 
 
 async def calculate_worth(fish_roll, quality, size):
