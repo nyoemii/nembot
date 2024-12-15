@@ -42,7 +42,7 @@ async def execute_command_cs2(command, delay=None):
 	else:
 		await asyncio.sleep(0.25)  # wait 0.25 seconds for chat delay, 0.15 should work but is very inconsistent... fuck valve
 		await write_command(command)
-		await asyncio.sleep(0.0501)
+		await asyncio.sleep(0.050001)
 		await clear_command()
 
 

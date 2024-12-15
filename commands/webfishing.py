@@ -184,7 +184,7 @@ class Map:
 		"name": "de_train",
 	}
 	de_vertigo = {
-		"tables_increased": ["water_trash", "metal"],
+		"tables_increased": ["lake", "water_trash", "metal"],
 		"tables_excluded": [],
 		"name": "de_vertigo",
 	}
@@ -205,8 +205,6 @@ class Map:
 async def cast_line(steamid, username, team):
 	catches = 1
 	bonus = False
-	# TODO: assign maps to tables and maybe other factors (steamid?)
-	# fish_table = server.get_info("map", "name")
 	map = server.get_info("map", "name")
 	if map not in Map.getattr(map)["name"]:
 		pass
@@ -310,12 +308,17 @@ async def cast_line(steamid, username, team):
 		await insert_fish(fish_name, size, price, quality, steamid, username)
 		await update_balance(steamid, price)
 		if team in TEAMS:
-			if quality in "pink, red, gold":
+			if quality in "pink, red":
 				await execute_command(
 					f"playerchatwheel CW.1 \"{PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_color}{quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!",
 					0.5,
 				)
-			elif quality in "contraband":
+			elif quality == "gold":
+				await execute_command(
+					f'playerchatwheel CW.1 "{PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_color}{quality_name} {fish_name}! {catch_blurb} It\'s {normalized_size} and is worth ₶{price}!"',
+					0.5,
+				)
+			elif quality == "contraband":
 				await execute_command(
 					f'playerchatwheel CW.1 "{PREFIX} {username}: {quality_color}〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It\'s {normalized_size} and is worth ₶{price}!"',
 					0.5,
@@ -457,7 +460,7 @@ async def parse_files_in_directory(directory_path, current_depth):
 							elif value.startswith('"') and value.endswith('"'):
 								value = re.sub("﻿", "", value)
 								# aaron wanted me to add a liberal joke and i can't be fucked to find smth else to change this to
-								value = re.sub("(If you have a good idea for this blurb, @MudKipster on the Webfishing Modding Discord!)", "fucking liberals got to the fish too...", value)
+								value = re.sub("(\(If you have a good idea for this blurb, @MudKipster on the Webfishing Modding Discord!\))", "fucking liberals got to the fish too...", value)
 								value = value[1:-1]
 
 							item_data[key] = value
