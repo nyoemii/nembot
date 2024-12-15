@@ -432,7 +432,6 @@ async def parse_files_in_directory(directory_path, current_depth):
 
 	for entry in os.scandir(directory_path):
 		if entry.is_file() and entry.name.endswith(".tres"):
-			print(f"Parsing {entry.path}")
 			with open(entry.path, "r", encoding="utf-8", errors="replace") as file:
 				item_data = {}
 				in_resource_section = False
