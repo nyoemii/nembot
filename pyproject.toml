@@ -8,7 +8,6 @@ dependencies = [
     "aiohttp>=3.11.7",
     "asqlite>=2.0.0",
     "asyncio>=3.4.3",
-    "godot-parser>=0.1.7",
     "psutil>=6.1.0",
     "pynput>=1.7.7",
     "pywin32>=308",

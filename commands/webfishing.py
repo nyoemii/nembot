@@ -1,6 +1,8 @@
-import json
 import math
+import os
 import random
+import re
+from collections import defaultdict
 
 from unit_parse import parser
 
@@ -9,21 +11,6 @@ from config import PREFIX
 from database import insert_fish, update_balance
 from globals import TEAMS, server
 
-
-def load_json():
-	with open("data/webfishing.json", "r", encoding="utf-8") as f:
-		data = json.load(f)
-	return data
-
-
-def load_json_alt():
-	with open("data/webfishing_alt.json", "r", encoding="utf-8") as f:
-		data = json.load(f)
-	return data
-
-
-fish_data = load_json_alt()
-item_data = load_json()
 loot_tables = {}
 
 
@@ -115,18 +102,134 @@ class Rarity:
 		raise AttributeError(f"No such rarity: {quality}")
 
 
+class Map:
+	ar_baggage = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "ar_baggage",
+	}
+	ar_pool_day = {
+		"tables_increased": ["lake"],
+		"tables_excluded": [],
+		"name": "ar_pool_day",
+	}
+	ar_shoots = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "ar_shoots",
+	}
+	cs_italy = {
+		"tables_increased": ["lake"],
+		"tables_excluded": ["ocean"],
+		"name": "cs_italy",
+	}
+	cs_office = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "cs_office",
+	}
+	de_ancient = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "de_ancient",
+	}
+	de_anubis = {
+		"tables_increased": ["lake", "ocean"],
+		"tables_excluded": [],
+		"name": "de_anubis",
+	}
+	de_basalt = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "de_basalt",
+	}
+	de_dust2 = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "de_dust2",
+	}
+	de_edin = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "de_edin",
+	}
+	de_inferno = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "de_inferno",
+	}
+	de_mirage = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "de_mirage",
+	}
+	de_nuke = {
+		"tables_increased": ["lake", "alien", "void"],
+		"tables_excluded": ["ocean"],
+		"name": "de_nuke",
+	}
+	de_overpass = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "de_overpass",
+	}
+	de_palais = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "de_palais",
+	}
+	de_train = {
+		"tables_increased": ["rain"],
+		"tables_excluded": [],
+		"name": "de_train",
+	}
+	de_vertigo = {
+		"tables_increased": ["water_trash", "metal"],
+		"tables_excluded": [],
+		"name": "de_vertigo",
+	}
+	de_whistle = {
+		"tables_increased": [],
+		"tables_excluded": [],
+		"name": "de_whistle",
+	}
+
+	@classmethod
+	def getattr(cls, map):
+		"""Retrieve map data dynamically by map name."""
+		if hasattr(cls, map):
+			return getattr(cls, map)
+		raise AttributeError(f"No such map: {map}")
+
+
 async def cast_line(steamid, username, team):
 	catches = 1
 	bonus = False
 	# TODO: assign maps to tables and maybe other factors (steamid?)
 	# fish_table = server.get_info("map", "name")
-	fish_table = random.choice([
+	map = server.get_info("map", "name")
+	if map not in Map.getattr(map)["name"]:
+		pass
+
+	fish_table_pre = [
 		"lake",
 		"ocean",
 		"rain",
 		"alien",
 		"void",
-	])
+		"water_trash",
+		"metal",
+	]
+
+	if Map.getattr(map)["tables_increased"]:
+		if random.randint(0, 100) <= 70:
+			fish_table_pre = Map.getattr(map)["tables_increased"]
+
+	if any(t in Map.getattr(map)["tables_excluded"] for t in fish_table_pre):
+		fish_table_pre = [t for t in fish_table_pre if t not in Map.getattr(map)["tables_excluded"]]
+
+	fish_table = random.choice(fish_table_pre)
+
 	rod_cast_data = random.choice([
 		"small",
 		"sparkling",
@@ -307,4 +410,72 @@ async def stepify(value, step):
 	return round(value / step) * step
 
 
-# TODO: add the json generation script instead of having already generated jsons, dynamically loading fish on every launch of the bot
+max_depth = 5
+
+resource_type_regex = re.compile(r"\[gd_resource.*\]")
+ext_resource_regex = re.compile(r'\[ext_resource path="(.+)" type="(.+)" id=(\d+)\]')
+resource_regex = re.compile(r"\[(resource)\]")
+key_value_regex = re.compile(r"(\w+)\s*=\s*(.*)")
+
+organized_items = {}
+loot_table_items = defaultdict(dict)  # loot_table -> fishname -> data
+
+
+async def parse_files_in_directory(directory_path, current_depth):
+	global item_data
+	global fish_data
+	if current_depth > max_depth:
+		return
+
+	for entry in os.scandir(directory_path):
+		if entry.is_file() and entry.name.endswith(".tres"):
+			print(f"Parsing {entry.path}")
+			with open(entry.path, "r", encoding="utf-8", errors="replace") as file:
+				item_data = {}
+				in_resource_section = False
+
+				for line in file:
+					line = line.strip()
+
+					if resource_regex.match(line):
+						in_resource_section = True
+						continue
+
+					if in_resource_section:
+						key_value_match = key_value_regex.match(line)
+						if key_value_match:
+							key, value = key_value_match.groups()
+
+							if value in {"true", "false"}:
+								value = value == "true"
+							elif re.match(r"^\d+\.\d+$", value):
+								value = float(value)
+							elif value.isdigit():
+								value = int(value)
+							elif value.startswith("[") and value.endswith("]"):
+								value = []
+							elif value.startswith('"') and value.endswith('"'):
+								value = re.sub("﻿", "", value)
+								# aaron wanted me to add a liberal joke and i can't be fucked to find smth else to change this to
+								value = re.sub("(If you have a good idea for this blurb, @MudKipster on the Webfishing Modding Discord!)", "fucking liberals got to the fish too...", value)
+								value = value[1:-1]
+
+							item_data[key] = value
+
+				if "tier" in item_data and "item_name" in item_data:
+					name = item_data.pop("item_name")
+					item_data["item_name"] = name
+
+					organized_items[name] = item_data
+
+					# If there's a loot_table, organize by loot_table -> fishname
+					loot_table = item_data.get("loot_table", "Uncategorized")
+					loot_table_items[loot_table][name] = item_data
+
+		elif entry.is_dir():
+			await parse_files_in_directory(entry.path, current_depth + 1)
+
+	sorted_items = dict(sorted(organized_items.items()))
+
+	item_data = sorted_items
+	fish_data = loot_table_items

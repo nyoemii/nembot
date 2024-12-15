@@ -1,0 +1,39 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://Resources/Scripts/item_resource.gd" type="Script" id=1]
+[ext_resource path="res://mods/morefishing/assets/fish/peacock_bass.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+item_name = "Peacock Bass"
+item_description = "Cichla ocellaris"
+catch_blurb = "Prettier!"
+item_is_hidden = false
+icon = ExtResource( 2 )
+show_item = true
+show_scene = false
+uses_size = true
+action = ""
+action_params = []
+release_action = ""
+prop_code = ""
+help_text = ""
+arm_value = 0.2
+hold_offset = 0.0
+unselectable = false
+category = "fish"
+alive = true
+tier = 1
+catch_difficulty = 2.1
+catch_speed = 120.0
+loot_table = "lake"
+loot_weight = 0.22
+average_size = 38
+sell_value = 40
+sell_multiplier = 1.0
+obtain_xp = 30
+generate_worth = true
+can_be_sold = true
+rare = false
+show_bait = false
+detect_item = false

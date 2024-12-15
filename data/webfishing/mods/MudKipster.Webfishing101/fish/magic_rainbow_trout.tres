@@ -1,0 +1,39 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://Resources/Scripts/item_resource.gd" type="Script" id=1]
+[ext_resource path="res://mods/MudKipster.Webfishing101/assets/fish/magic_rainbow_trout.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+item_name = "Magic Rainbow Trout"
+item_description = "Extrus Oncorhynchus Mykiss"
+catch_blurb = "cause I know that I'm a gay fish. (good for them :3)"
+item_is_hidden = false
+icon = ExtResource( 2 )
+show_item = true
+show_scene = false
+uses_size = true
+action = ""
+action_params = []
+release_action = ""
+prop_code = ""
+help_text = ""
+arm_value = 0.2
+hold_offset = -20
+unselectable = false
+category = "fish"
+alive = true
+tier = 2
+catch_difficulty = 3.35
+catch_speed = 120
+loot_table = "lake"
+loot_weight = 0.06
+average_size = 60
+sell_value = 90
+sell_multiplier = 1
+obtain_xp = 200
+generate_worth = true
+can_be_sold = true
+rare = false
+show_bait = false
+detect_item = false

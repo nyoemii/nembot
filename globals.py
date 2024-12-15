@@ -44,8 +44,8 @@ else:
 
 # List of strings to filter out of console output (if the line contains anything in this then it'll be filtered)
 PRINT_FILTER = [
-	# "[InputSystem]",
-	# "[InputService]",
+	"[InputSystem]",
+	"[InputService]",
 	"[NetSteamConn]",
 	"[Networking]",
 	"[Host]",
@@ -57,7 +57,7 @@ PRINT_FILTER = [
 	"[Panorama]",
 	"[SteamNetSockets]",
 	"[RenderPipelineCsgo]",
-	# "execing selfbot",
+	"execing selfbot",
 	"execing movement/de-subticks/",
 	"Invalid content height",
 	"Certificate expires in",

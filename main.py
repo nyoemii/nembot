@@ -5,7 +5,7 @@ from watchdog.observers import Observer
 
 from command_processing import check_requirements, parse, process_commands
 from commands.fetch import find_recently_played
-from commands.webfishing import generate_loot_tables
+from commands.webfishing import generate_loot_tables, parse_files_in_directory
 from config import CONSOLE_FILE, HR_DIRECTORY, HR_FILE
 from database import init_database
 from globals import PRINT_FILTER, server
@@ -65,7 +65,7 @@ async def start_server():
 
 	await init_database()
 	await find_recently_played()
-	# await load_resources()
+	await parse_files_in_directory("data/webfishing", 1)
 	await generate_loot_tables("fish", "lake")
 	await generate_loot_tables("fish", "ocean")
 	await generate_loot_tables("fish", "rain")
@@ -74,8 +74,8 @@ async def start_server():
 
 	await generate_loot_tables("fish", "water_trash")
 
-	await generate_loot_tables("none", "seashell")
-	await generate_loot_tables("none", "trash")
+	# await generate_loot_tables("none", "seashell")
+	# await generate_loot_tables("none", "trash")
 
 	await generate_loot_tables("fish", "metal")
 

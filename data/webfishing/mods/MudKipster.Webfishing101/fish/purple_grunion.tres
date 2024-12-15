@@ -1,0 +1,39 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://Resources/Scripts/item_resource.gd" type="Script" id=1]
+[ext_resource path="res://mods/MudKipster.Webfishing101/assets/fish/purple_grunion.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+item_name = "Purple Grunion"
+item_description = "Purpura Leuresthes"
+catch_blurb = "(If you have a good idea for this blurb, @MudKipster on the Webfishing Modding Discord!)"
+item_is_hidden = false
+icon = ExtResource( 2 )
+show_item = true
+show_scene = false
+uses_size = true
+action = ""
+action_params = []
+release_action = ""
+prop_code = ""
+help_text = ""
+arm_value = 0.2
+hold_offset = -20
+unselectable = false
+category = "fish"
+alive = true
+tier = 2
+catch_difficulty = 5.2
+catch_speed = 120
+loot_table = "ocean"
+loot_weight = 0.32
+average_size = 66
+sell_value = 45
+sell_multiplier = 1
+obtain_xp = 150
+generate_worth = true
+can_be_sold = true
+rare = true
+show_bait = false
+detect_item = false

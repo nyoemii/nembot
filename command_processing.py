@@ -5,13 +5,13 @@ from collections import deque
 import psutil
 import win32gui
 import win32process
-from pynput.keyboard import Controller, Key
+from pynput.keyboard import Controller
 
 from command_execution import execute_command
 from commands.fact import get_fact
 from commands.fetch import find_recently_played
 from commands.webfishing import cast_line
-from config import DROP_KEY, GAME, PREFIX, SWITCH_HANDS_KEY
+from config import GAME, PREFIX
 from database import check_if_player_exists, insert_command
 from globals import COMMAND_LIST, COMMAND_REGEX, TEAMS, server
 
@@ -91,15 +91,8 @@ async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 				else:
 					await execute_command(f"say {PREFIX} No inspect link provided.")
 		case "!switchhands":
-			if GAME == "csgo":
-				if team in TEAMS:
-					await execute_command(f"switchhands\nsay_team {PREFIX} Switched viewmodel.")
-			else:
-				if team in TEAMS:
-					if await check_ingame():
-						await send_key(SWITCH_HANDS_KEY)
-					else:
-						await execute_command(f"say_team {PREFIX} I'm tabbed out or in a chat input :p")
+			if team in TEAMS:
+				await execute_command("switchhands", 3621)
 		case "!flash":
 			if GAME != "csgo":
 				if team in TEAMS:
@@ -134,16 +127,8 @@ async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 				fact = await get_fact()
 				await execute_command(f"say {PREFIX} {fact}")
 		case "!drop":
-			if GAME == "csgo":
-				if team in TEAMS:
-					await execute_command("drop", 3621)  # funny 3621 placeholder for shit code to execute with 0 delay
-			else:
-				if team in TEAMS:
-					if await check_ingame():
-						await send_key(DROP_KEY)
-					else:
-						await execute_command(f"say_team {PREFIX} I'm tabbed out or in a chat input :p")
-
+			if team in TEAMS:
+				await execute_command("drop", 3621)  # funny 3621 placeholder for shit code to execute with 0 delay
 		case "!help" | "!commands" | "!cmds":
 			if team in TEAMS:
 				await execute_command(f"say_team {PREFIX} !help | !fish or !〈͜͡˒ ⋊  | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !flash (cs2 only) | !switchhands")
@@ -151,6 +136,7 @@ async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 				await execute_command(f"say {PREFIX} !help | !fish or !〈͜͡˒ ⋊  | !fact | !info (info on the bot)")
 
 
+# keeping the following 2 functions in case of future issues (also check_ingame may be useful)
 async def check_ingame():
 	active_window_handle = win32gui.GetForegroundWindow()
 	_, pid = win32process.GetWindowThreadProcessId(active_window_handle)

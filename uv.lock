@@ -112,18 +112,6 @@ wheels = [
 ]
 
 [[package]]
-name = "godot-parser"
-version = "0.1.7"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "pyparsing" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/c6/19/f78a97816bcdc1220a67c53a83a4594840de7a497c3e816f1c14ac03b2bb/godot_parser-0.1.7.tar.gz", hash = "sha256:832e8d0a2984cf635168f529bfb08cd64e8006c94ab02fe15e82a61c1ea2f32f", size = 17107 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/61/76/4a71a874a2e1e6c64265685bdc5bf8084d3d79e548df3e57f03e087b509b/godot_parser-0.1.7-py3-none-any.whl", hash = "sha256:e0af880a93c9abc5b216bbe00f20dcc8d8e9761acd8c8287cb1d2113ca09d3c2", size = 17165 },
-]
-
-[[package]]
 name = "idna"
 version = "3.10"
 source = { registry = "https://pypi.org/simple" }
@@ -164,7 +152,6 @@ dependencies = [
     { name = "aiohttp" },
     { name = "asqlite" },
     { name = "asyncio" },
-    { name = "godot-parser" },
     { name = "psutil" },
     { name = "pynput" },
     { name = "pywin32" },
@@ -178,7 +165,6 @@ requires-dist = [
     { name = "aiohttp", specifier = ">=3.11.7" },
     { name = "asqlite", specifier = ">=2.0.0" },
     { name = "asyncio", specifier = ">=3.4.3" },
-    { name = "godot-parser", specifier = ">=0.1.7" },
     { name = "psutil", specifier = ">=6.1.0" },
     { name = "pynput", specifier = ">=1.7.7" },
     { name = "pywin32", specifier = ">=308" },
@@ -312,15 +298,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/eb/bd/d78c845a6f0640975e837d1d0f04d6bbd95bb88b77dcee22482144ac5ad0/pyobjc_framework_quartz-10.3.2.tar.gz", hash = "sha256:193e7752c93e2d1304f914e3a8c069f4b66de237376c5285ba7c72e9ee0e3b15", size = 3776754 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e5/0c/465bb4415be16d96106f972500bc0fba5cd8a64951e24b37467d331e68f7/pyobjc_framework_Quartz-10.3.2-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:4697f3ef1991f7877c201778005dc4098ced3d19d938ebf916384c8f795488d3", size = 209298 },
-]
-
-[[package]]
-name = "pyparsing"
-version = "3.2.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/8c/d5/e5aeee5387091148a19e1145f63606619cb5f20b83fccb63efae6474e7b2/pyparsing-3.2.0.tar.gz", hash = "sha256:cbf74e27246d595d9a74b186b810f6fbb86726dbf3b9532efb343f6d7294fe9c", size = 920984 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/be/ec/2eb3cd785efd67806c46c13a17339708ddc346cbb684eade7a6e6f79536a/pyparsing-3.2.0-py3-none-any.whl", hash = "sha256:93d9577b88da0bbea8cc8334ee8b918ed014968fd2ec383e868fb8afb1ccef84", size = 106921 },
 ]
 
 [[package]]

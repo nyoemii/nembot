@@ -1,0 +1,39 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://Resources/Scripts/item_resource.gd" type="Script" id=1]
+[ext_resource path="res://mods/WebValley/assets/fish/broken_cd.png" type="Texture" id=2]
+
+[resource]
+script = ExtResource( 1 )
+item_name = "Broken CD"
+item_description = "Discus compactus"
+catch_blurb = "It's a JojaNet 2.0 trial CD. They must've made a billion of these things."
+item_is_hidden = false
+icon = ExtResource( 2 )
+show_item = true
+show_scene = false
+uses_size = true
+action = ""
+action_params = []
+release_action = ""
+prop_code = ""
+help_text = ""
+arm_value = 0.2
+hold_offset = 0.0
+unselectable = false
+category = "fish"
+alive = false
+tier = 0
+catch_difficulty = 1
+catch_speed = 120
+loot_table = "water_trash"
+loot_weight = 1
+average_size = 96
+sell_value = 10
+sell_multiplier = 1
+obtain_xp = 30
+generate_worth = false
+can_be_sold = true
+rare = false
+show_bait = false
+detect_item = false
