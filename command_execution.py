@@ -35,10 +35,9 @@ async def execute_command_cs2(command, delay=None):
 	if delay is not None and delay != 3621:
 		await asyncio.sleep(delay)
 	if delay == 3621:
-		if "_team" in command:
-			write_command(f"say_team {PREFIX} command unavailable for CS2 (blame valve)")
-		else:
-			write_command(f"say {PREFIX} command unavailable for CS2 (blame valve)")
+		await write_command(command)
+		await asyncio.sleep(0.050001)
+		await clear_command()
 	else:
 		await asyncio.sleep(0.25)  # wait 0.25 seconds for chat delay, 0.15 should work but is very inconsistent... fuck valve
 		await write_command(command)

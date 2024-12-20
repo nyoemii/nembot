@@ -10,6 +10,7 @@ from command_execution import execute_command
 from config import PREFIX
 from database import insert_fish, update_balance
 from globals import TEAMS, server
+from loop.deathchecking import check_if_dead
 
 loot_tables = {}
 
@@ -199,15 +200,14 @@ class Map:
 		"""Retrieve map data dynamically by map name."""
 		if hasattr(cls, map):
 			return getattr(cls, map)
-		raise AttributeError(f"No such map: {map}")
+		else:
+			return False
 
 
 async def cast_line(steamid, username, team):
 	catches = 1
 	bonus = False
 	map = server.get_info("map", "name")
-	if map not in Map.getattr(map)["name"]:
-		pass
 
 	fish_table_pre = [
 		"lake",
@@ -219,12 +219,15 @@ async def cast_line(steamid, username, team):
 		"metal",
 	]
 
-	if Map.getattr(map)["tables_increased"]:
-		if random.randint(0, 100) <= 70:
-			fish_table_pre = Map.getattr(map)["tables_increased"]
+	if Map.getattr(map):
+		if Map.getattr(map)["tables_increased"]:
+			if random.randint(0, 100) <= 70:
+				fish_table_pre = Map.getattr(map)["tables_increased"]
 
-	if any(t in Map.getattr(map)["tables_excluded"] for t in fish_table_pre):
-		fish_table_pre = [t for t in fish_table_pre if t not in Map.getattr(map)["tables_excluded"]]
+		if any(t in Map.getattr(map)["tables_excluded"] for t in fish_table_pre):
+			fish_table_pre = [t for t in fish_table_pre if t not in Map.getattr(map)["tables_excluded"]]
+	else:
+		pass
 
 	fish_table = random.choice(fish_table_pre)
 
@@ -308,23 +311,27 @@ async def cast_line(steamid, username, team):
 		await insert_fish(fish_name, size, price, quality, steamid, username)
 		await update_balance(steamid, price)
 		if team in TEAMS:
-			if quality in "pink, red":
-				await execute_command(
-					f"playerchatwheel CW.1 \"{PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_color}{quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!",
-					0.5,
-				)
-			elif quality == "gold":
-				await execute_command(
-					f'playerchatwheel CW.1 "{PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_color}{quality_name} {fish_name}! {catch_blurb} It\'s {normalized_size} and is worth ₶{price}!"',
-					0.5,
-				)
-			elif quality == "contraband":
-				await execute_command(
-					f'playerchatwheel CW.1 "{PREFIX} {username}: {quality_color}〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It\'s {normalized_size} and is worth ₶{price}!"',
-					0.5,
-				)
+			if not await check_if_dead():
+				if quality in "pink, red":
+					await execute_command(
+						f"playerchatwheel CW.1 \"{PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_color}{quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!",
+						0.5,
+					)
+				elif quality == "gold":
+					await execute_command(
+						f'playerchatwheel CW.1 "{PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_color}{quality_name} {fish_name}! {catch_blurb} It\'s {normalized_size} and is worth ₶{price}!"',
+						0.5,
+					)
+				elif quality == "contraband":
+					await execute_command(
+						f'playerchatwheel CW.1 "{PREFIX} {username}: {quality_color}〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It\'s {normalized_size} and is worth ₶{price}!"',
+						0.5,
+					)
+				else:
+					await execute_command(f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
 			else:
 				await execute_command(f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
+
 		else:
 			await execute_command(f"say {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
 
@@ -413,7 +420,7 @@ async def stepify(value, step):
 	return round(value / step) * step
 
 
-max_depth = 5
+max_depth = 8
 
 resource_type_regex = re.compile(r"\[gd_resource.*\]")
 ext_resource_regex = re.compile(r'\[ext_resource path="(.+)" type="(.+)" id=(\d+)\]')
@@ -458,6 +465,7 @@ async def parse_files_in_directory(directory_path, current_depth):
 								value = []
 							elif value.startswith('"') and value.endswith('"'):
 								value = re.sub("﻿", "", value)
+								value = re.sub("�", "", value)
 								# aaron wanted me to add a liberal joke and i can't be fucked to find smth else to change this to
 								value = re.sub("(\(If you have a good idea for this blurb, @MudKipster on the Webfishing Modding Discord!\))", "fucking liberals got to the fish too...", value)
 								value = value[1:-1]

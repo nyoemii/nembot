@@ -10,6 +10,7 @@ csgo_window_handle = win32gui.FindWindow("Valve001", None)
 
 TEAMS = ["CT", "T", "Terrorist", "Counter-Terrorist"]
 
+
 last_round = None
 last_phase = None
 
@@ -26,6 +27,10 @@ COMMAND_LIST = [
 	"!help",
 	"!commands",
 	"!cmds",
+	"!balance",
+	"!bal",
+	"!money",
+	"!steamid",
 ]
 
 # https://regex101.com/r/pTapEF/5
@@ -35,6 +40,11 @@ csgo_regex = (
 
 # https://regex101.com/r/1lYpb1/5
 cs2_regex = r"\[(?P<team>ALL|CT|T)\]\s+(?P<username>.*)‎(?:﹫(?P<location>.*))?\s*(?P<dead_status>\[DEAD\])?:(?:\s)?(?P<command>\S+)?\s(?P<args>\S+)?"
+
+BANNED_LIST = [
+	76561198055654571,
+	76561198162871889,
+]
 
 if GAME == "csgo":
 	COMMAND_REGEX = csgo_regex

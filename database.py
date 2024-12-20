@@ -95,8 +95,24 @@ async def update_balance(steamid, amount):
 		async with connection.cursor() as cursor:
 			await cursor.execute(
 				"""
-				UPDATE players SET money = ? WHERE steamid = ?
+				UPDATE players SET money = money + ? WHERE steamid = ?
 				""",
 				(amount, steamid),
 			)
 			await connection.commit()
+
+
+async def get_balance(steamid):
+	async with asqlite.connect(DATABASE_NAME) as connection:
+		async with connection.cursor() as cursor:
+			await cursor.execute(
+				"""
+				SELECT money FROM players WHERE steamid = ?
+				""",
+				(steamid,),
+			)
+			balance_row = await cursor.fetchone()
+			await connection.commit()
+			if balance_row:
+				balance_row = balance_row[0]
+			return balance_row

@@ -1,6 +1,8 @@
 import win32con
 import win32gui
 
+from commands.fetch import find_recently_played
+
 # from commands.fetch import find_recently_played
 from config import GAME
 from globals import csgo_window_handle, last_phase, last_round, server
@@ -17,6 +19,7 @@ async def check_round():
 		elif current_phase == "live" and last_round is None:
 			if current_round == 0:
 				print("Round 0 has started.")
+				await find_recently_played()
 			last_round = current_round
 
 	last_phase = current_phase
@@ -27,4 +30,6 @@ async def check_round():
 		# TODO: add round delay before(? currently it will flash at the end of a round, think it can be fixed by checking player info or smth idk..)
 		if GAME == "csgo":
 			win32gui.FlashWindow(csgo_window_handle, win32con.FLASHW_ALL)
+		if current_round == 0:
+			await find_recently_played()
 		last_round = current_round

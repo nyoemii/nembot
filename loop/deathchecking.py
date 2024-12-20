@@ -46,3 +46,12 @@ async def on_death():
 						print(f"Failed to activate shocker. Status code: {response}")
 			except aiohttp.ClientError as e:
 				print(f"An error occurred: {e}")
+
+
+async def check_if_dead():
+	global DEAD_STATUS
+	if server.get_info("player", "steamid") == server.get_info("provider", "steamid") and not server.get_info("player", "state", "health") > 0:
+		DEAD_STATUS = True
+	else:
+		DEAD_STATUS = False
+	return DEAD_STATUS
