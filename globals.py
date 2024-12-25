@@ -38,8 +38,8 @@ csgo_regex = (
 	r"(?:\d{2}\/){2}\d{4}\s-\s\d{2}:(?:\d{2}:){2}\s(?P<dead_status>\*DEAD\*)?\s?(?:\((?P<team>[^)]+)\))?\s?(?P<username>.*)‎\s(?:@\s(?P<location>.*))?\s?:(?:\s)*(?P<command>\S+)?\s(?P<args>\S+)?"
 )
 
-# https://regex101.com/r/1lYpb1/5
-cs2_regex = r"\[(?P<team>ALL|CT|T)\]\s+(?P<username>.*)‎(?:﹫(?P<location>.*))?\s*(?P<dead_status>\[DEAD\])?:(?:\s)?(?P<command>\S+)?\s(?P<args>\S+)?"
+# https://regex101.com/r/1lYpb1/6
+cs2_regex = r"\[(?P<team>ALL|CT|T)\]\s+(?P<username>.*)‎(?:﹫(?P<location>.*))?\s*(?P<dead_status>\[DEAD\])?:(?:\s)*(?P<command>\S+)?\s(?P<args>\S+)?"
 
 BANNED_LIST = [
 	76561198055654571,
@@ -61,12 +61,17 @@ PRINT_FILTER = [
 	"[Host]",
 	"[VProf]",
 	"[Client]",
-	"[EngineServiceManager][CL CommandQueue]",
+	"[EngineServiceManager]",
+	"[CL CommandQueue]",
 	"[SplitScreen]",
 	"[RenderSystem]",
 	"[Panorama]",
 	"[SteamNetSockets]",
 	"[RenderPipelineCsgo]",
+	"[VScript]",
+	"[stringtables]",
+	"[SigOnState]",
+	"[WorldRenderer]",
 	"execing selfbot",
 	"execing movement/de-subticks/",
 	"Invalid content height",
@@ -91,4 +96,9 @@ PRINT_FILTER = [
 	"ms SDL",
 	"PlayerStatsUpdate",
 	"used during construction differ",
+	"Invalid image URL",
+	"ReadSteamRemoteStorageFile",
+	"CAnimGraphNetworkedVariables::",
+	"CAsyncWriteInProgress::",
+	"ChangeGameUIState",
 ]
