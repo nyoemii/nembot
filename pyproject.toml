@@ -10,6 +10,7 @@ dependencies = [
     "asyncio>=3.4.3",
     "psutil>=6.1.0",
     "pynput>=1.7.7",
+    "pypresence>=4.3.0",
     "pywin32>=308",
     "ruff>=0.8.3",
     "unit-parse>=0.1.11",

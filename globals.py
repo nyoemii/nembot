@@ -46,6 +46,8 @@ BANNED_LIST = [
 	76561198162871889,
 ]
 
+CLIENT_ID = 872181511334543370
+
 if GAME == "csgo":
 	COMMAND_REGEX = csgo_regex
 else:
@@ -53,7 +55,7 @@ else:
 
 
 # List of strings to filter out of console output (if the line contains anything in this then it'll be filtered)
-PRINT_FILTER = [
+PRE_FILTER = [
 	"[InputSystem]",
 	"[InputService]",
 	"[NetSteamConn]",
@@ -70,8 +72,15 @@ PRINT_FILTER = [
 	"[RenderPipelineCsgo]",
 	"[VScript]",
 	"[stringtables]",
-	"[SigOnState]",
+	"[SignonState]",
 	"[WorldRenderer]",
+	"[AnimResource]",
+	"[ResourceSystem]",
+	"[Shooting]",
+	"[HostStateManager]",
+	"[Server]",
+	"[BuildSparseShadowTree]",
+	"[SteamAudio]",
 	"execing selfbot",
 	"execing movement/de-subticks/",
 	"Invalid content height",
@@ -100,5 +109,74 @@ PRINT_FILTER = [
 	"ReadSteamRemoteStorageFile",
 	"CAnimGraphNetworkedVariables::",
 	"CAsyncWriteInProgress::",
+	"WriteSteamRemoteStorageFileAsync",
 	"ChangeGameUIState",
+	"This is usually a symptom of a general performance problem such as thread starvation.",
+	"Obtained direct RTT measurements to relays in",
+	"CS_App_Lifetime_Gamestats:",
+	"Inventory filter setting",
+	"Ping measurement completed after",
+	"via direct route",
+	"(This list may include POPs without any gameservers)",
+	"Measured RTT to",
+	"SDR ping location:",
+	"Forcing SDR connection to",
+	"Received SDR ticket for [",
+	"Confirmation number",
+	"Excessive frame time of ",
+	"Present_RenderDevice",
+	" not found in map ",
+	"Unknown command: sellback",
+	"CreateProceduralSfx:",
+	"Ping measurement has been active for ",
+	"    bind scancode97",
+	"Executing server command (",
+	"ResetBreakpadAppId: ",
+	"Logging into anonymous listen server account.",
+	"Setting mapgroup to ",
+	"Invalid counterterrorist spawnpoint",
+	"Invalid terrorist spawnpoint",
 ]
+
+
+REGION_FILTER = [
+	"ord:",
+	"atl:",
+	"iad:",
+	"dfw:",
+	"dfw2:",
+	"sea:",
+	"lax:",
+	"lhr:",
+	"par:",
+	"ams4:",
+	"ams:",
+	"sto:",
+	"sto2:",
+	"fra:",
+	"waw:",
+	"eat:",
+	"hel:",
+	"mad:",
+	"vie:",
+	"tyo:",
+	"eze:",
+	"seo:",
+	"hkg4:",
+	"can:",
+	"cant:",
+	"pwg:",
+	"canm:",
+	"tgdm:",
+	"shb:",
+	"pvgt:",
+	"canu:",
+	"pwj:",
+	"pwz:",
+	"pww:",
+	"maa2:",
+	"pwu:",
+	"bom2:",
+]
+
+PRINT_FILTER = PRE_FILTER + REGION_FILTER

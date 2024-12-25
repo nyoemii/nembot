@@ -36,7 +36,7 @@ async def on_death():
 								"duration": DEATH_SHOCK_DURATION,
 							}
 						],
-						"customName": "Died in CS in round " + str(server.get_info("map", "round")),
+						"customName": "Died in CS",
 					},
 					headers={"OpenShockToken": API_TOKEN},
 				) as response:

@@ -10,6 +10,7 @@ from config import CONSOLE_FILE, HR_DIRECTORY, HR_FILE
 from database import init_database
 from globals import PRINT_FILTER, server
 from loop.deathchecking import check_death
+from loop.discord_rpc import DiscordManager
 from loop.heartrate import FileUpdateHandler
 from loop.roundtracking import check_round
 
@@ -44,6 +45,13 @@ async def main_loop():
 		await asyncio.sleep(0.05)
 
 
+async def rpc_loop():
+	while True:
+		await asyncio.sleep(1)
+		presence = DiscordManager.build_presence_from_data(server)
+		await DiscordManager.update_presence(presence)
+
+
 async def shutdown(observer, server):
 	print("Shutting down...")
 	observer.stop()
@@ -57,6 +65,8 @@ async def shutdown(observer, server):
 
 async def start_server():
 	server.start_server()
+
+	await DiscordManager.initialize()
 
 	event_handler = FileUpdateHandler(f"{HR_DIRECTORY + HR_FILE}")
 	observer = Observer()
@@ -81,7 +91,7 @@ async def start_server():
 
 	try:
 		log_file = open(CONSOLE_FILE, "r", encoding="utf-8")
-		await asyncio.gather(main_loop(), listen(log_file))
+		await asyncio.gather(main_loop(), rpc_loop(), listen(log_file))
 	except asyncio.CancelledError:
 		pass
 	finally:

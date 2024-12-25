@@ -31,6 +31,7 @@ async def execute_command_csgo(command, delay=None):
 		send_message(csgo_window_handle, command)
 
 
+# TODO: check if command is sent, otherwise try again
 async def execute_command_cs2(command, delay=None):
 	if delay is not None and delay != 3621:
 		await asyncio.sleep(delay)

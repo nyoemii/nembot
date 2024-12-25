@@ -74,7 +74,7 @@ async def process_commands():
 async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 	# TODO: maybe pass user to commmand execution check if it's me so that execute_command_cs2 doesn't need wacky 3621 delay shit... it is kinda funny tho :3
 	cmd = cmd.lower()
-	if not steamid in BANNED_LIST:
+	if steamid not in BANNED_LIST:
 		match cmd:
 			# case "!disconnect" | "!dc":
 			#     await execute_command("disconnect", 0.5)

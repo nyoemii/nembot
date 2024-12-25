@@ -154,6 +154,7 @@ dependencies = [
     { name = "asyncio" },
     { name = "psutil" },
     { name = "pynput" },
+    { name = "pypresence" },
     { name = "pywin32" },
     { name = "ruff" },
     { name = "unit-parse" },
@@ -167,6 +168,7 @@ requires-dist = [
     { name = "asyncio", specifier = ">=3.4.3" },
     { name = "psutil", specifier = ">=6.1.0" },
     { name = "pynput", specifier = ">=1.7.7" },
+    { name = "pypresence", specifier = ">=4.3.0" },
     { name = "pywin32", specifier = ">=308" },
     { name = "ruff", specifier = ">=0.8.3" },
     { name = "unit-parse", specifier = ">=0.1.11" },
@@ -298,6 +300,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/eb/bd/d78c845a6f0640975e837d1d0f04d6bbd95bb88b77dcee22482144ac5ad0/pyobjc_framework_quartz-10.3.2.tar.gz", hash = "sha256:193e7752c93e2d1304f914e3a8c069f4b66de237376c5285ba7c72e9ee0e3b15", size = 3776754 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/e5/0c/465bb4415be16d96106f972500bc0fba5cd8a64951e24b37467d331e68f7/pyobjc_framework_Quartz-10.3.2-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:4697f3ef1991f7877c201778005dc4098ced3d19d938ebf916384c8f795488d3", size = 209298 },
+]
+
+[[package]]
+name = "pypresence"
+version = "4.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/f4/2e/d110f862720b5e3ba1b0b719657385fc4151929befa2c6981f48360aa480/pypresence-4.3.0.tar.gz", hash = "sha256:a6191a3af33a9667f2a4ef0185577c86b962ee70aa82643c472768a6fed1fbf3", size = 10696 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/1e/40/1d30b30e18f81eb71365681223971a9822a89b3d6ee5269dd2aa955bc228/pypresence-4.3.0-py2.py3-none-any.whl", hash = "sha256:af878c6d49315084f1b108aec86b31915080614d9421d6dd3a44737aba9ff13f", size = 11778 },
 ]
 
 [[package]]
