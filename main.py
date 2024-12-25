@@ -1,39 +1,18 @@
 import asyncio
-import os
 
 from watchdog.observers import Observer
 
-from command_processing import check_requirements, parse, process_commands
+from command_processing import check_requirements, process_commands
 from commands.fetch import find_recently_played
 from commands.webfishing import generate_loot_tables, parse_files_in_directory
 from config import CONSOLE_FILE, HR_DIRECTORY, HR_FILE
 from database import init_database
-from globals import PRINT_FILTER, server
+from globals import server
 from loop.deathchecking import check_death
 from loop.discord_rpc import DiscordManager
 from loop.heartrate import FileUpdateHandler
 from loop.roundtracking import check_round
-
-
-async def listen(log_file):
-	log_file.seek(0, os.SEEK_END)
-	last_size = log_file.tell()
-
-	while True:
-		current_size = os.stat(log_file.name).st_size
-		if current_size < last_size:
-			log_file.seek(0, os.SEEK_SET)
-			last_size = current_size
-
-		line = log_file.readline()
-		if not line:
-			await asyncio.sleep(0.1)
-			continue
-
-		if not any(filter_text in line for filter_text in PRINT_FILTER):
-			print(line.strip())
-			await parse(line)
-		last_size = log_file.tell()
+from console_handler import listen
 
 
 async def main_loop():
