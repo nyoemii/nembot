@@ -113,6 +113,7 @@ PRE_FILTER = [
 	"Invalid counterterrorist spawnpoint",
 	"Invalid terrorist spawnpoint",
 	"Achievements disabled: cheats turned on in this app session.",
+	"6ms Server ",
 ]
 
 

@@ -99,7 +99,7 @@ async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 			case "!flash":
 				if GAME != "csgo":
 					if team in TEAMS:
-						await execute_command(f"{PREFIX} command unavailable for CS2 (blame valve)")
+						await execute_command(f"say_team {PREFIX} command unavailable for CS2 (blame valve)")
 				else:
 					if team in TEAMS:
 						await execute_command(f"say_team {PREFIX} fuck you.")
