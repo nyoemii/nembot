@@ -13,9 +13,10 @@ no this doesn't read memory it's not a cheat, i'm just using fucking [schizo met
 	- add `alias n "exec selfbot.cfg"` into your autoexec (or whatever you named the file at the root of your cfg directory)
 	- add `exec "selfbot/setup.cfg"` into your autoexec (in main menu, it needs `sv_cheats 1` so it will break otherwise)
 	- add `gamestate_integration_GSI.cfg` to the root of your cfg folder and use the same auth token you set in config
-5. download the [steamworks SDK](https://partner.steamgames.com/downloads/list) dll for version 1.61
-6. `uv run main.py`
-7. :trollface:
+5. download the [steamworks SDK](https://partner.steamgames.com/downloads/list) dll for version 1.61'
+6. put `steam_api64.dll` and `steam_api64.lib` in the root of the repo
+7. `uv run main.py`
+8. :trollface:
 
 ### credits for fish (other than webfishing)
 [More Fishing](https://github.com/reallymako/MoreFishingWEBFISHING)
@@ -29,7 +30,6 @@ no this doesn't read memory it's not a cheat, i'm just using fucking [schizo met
 [WebValley](https://thunderstore.io/c/webfishing/p/Junohno/WebValley/)
 
 [SuperMarioWeb](https://github.com/MonkeyMan1242/SuperMarioWEB)
-
 
 [Webnautica](https://github.com/SecondEgg101/Webnautica)
 
