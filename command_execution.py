@@ -6,22 +6,22 @@ from ctypes import wintypes
 import win32api
 
 from config import EXEC_FILE, GAME
-from globals import csgo_window_handle, command_nonce_list, nonce_signal
+from globals import csgo_window_handle, nonce_signal
 
 WM_COPYDATA = 0x004A
 
 
-async def write_command(command):
+def write_command(command):
 	with open(EXEC_FILE, "w", encoding="utf-8") as f:
 		f.write(command)
 
 
-async def clear_command():
+def clear_command():
 	with open(EXEC_FILE, "w", encoding="utf-8") as f:
 		f.write("")
 
 
-async def execute_command_csgo(command, delay=None):
+async def execute_command_csgo(command: str, delay: float | None = None):
 	if delay is not None and delay != 3621:
 		await asyncio.sleep(delay)
 		send_message(csgo_window_handle, command)
@@ -32,14 +32,12 @@ async def execute_command_csgo(command, delay=None):
 		send_message(csgo_window_handle, command)
 
 
-async def generate_nonce(length: int) -> str:
+def generate_nonce(length: int) -> str:
 	invisible_chars = [
 		"\u200b",  # Zero-width space
 		"\u200c",  # Zero-width non-joiner
-		"\u200d",  # Zero-width joiner
-		"\u200e",  # Left-to-right mark
-		"\u200f",  # Right-to-left mark
-		"\ufeff",  # Byte order mark
+		"\u0020",  # Space
+		"\u2800",  # Braille blank
 	]
 
 	nonce = "".join(random.choice(invisible_chars) for _ in range(length))
@@ -47,30 +45,43 @@ async def generate_nonce(length: int) -> str:
 	return nonce
 
 
-def nonce_callback(data):
-	return
+async def execute_command_cs2(command: str, delay: float | None = None):
+	nonce = generate_nonce(4)  # btw you could maybe have collisions here?
+	nonce_signal.register(nonce)
 
+	# Giving it 3 tries (change it if you want :D)
+	for _ in range(3):
+		if delay is not None and delay != 3621:
+			await asyncio.sleep(delay)
+		if delay == 3621:
+			write_command(command + nonce)
+			await asyncio.sleep(0.051)
+			clear_command()
+		else:
+			await asyncio.sleep(0.25)  # wait 0.25 seconds for chat delay, 0.15 should work but is very inconsistent... fuck valve
+			if "playerchatwheel" in command:
+				write_command(command + f"\necholn {nonce}")
+				await asyncio.sleep(0.0500001)
+				clear_command()
+			else:
+				write_command(command + nonce)
+				await asyncio.sleep(0.0500001)
+				clear_command()
 
-# TODO: PLEASE HOW DO I STOP EXECUTION UNTIL THE CALLBACK IS FUCKING CALLED :(
-async def execute_command_cs2(command, delay=None):
-	nonce = await generate_nonce(4)
-	command_nonce_list.append(nonce)
-	if delay is not None and delay != 3621:
-		await asyncio.sleep(delay)
-	if delay == 3621:
-		await write_command(command + nonce)
-		await asyncio.sleep(0.050001)
-		await clear_command()
+		try:
+			await nonce_signal.wait(nonce, timeout=2.5)
+		except asyncio.TimeoutError:
+			continue
+		else:
+			break
 	else:
-		await asyncio.sleep(0.25)  # wait 0.25 seconds for chat delay, 0.15 should work but is very inconsistent... fuck valve
-		await write_command(command + nonce)
-		await asyncio.sleep(0.050001)
-		await clear_command()
-
-	nonce_signal.await_callback(nonce_callback)
+		nonce_signal.unregister(nonce)
+		print(f"Failed to run command {command}")
+		# Do whatever you want here (e.g. log instead of throw)
+		# raise RuntimeError(f"Failed to run command {command}")
 
 
-async def execute_command(command, delay=None):
+async def execute_command(command: str, delay: float | None = None):
 	if GAME == "csgo":
 		await execute_command_csgo(command, delay)
 	else:
@@ -85,7 +96,6 @@ class COPYDATASTRUCT(ctypes.Structure):
 	]
 
 
-# TODO: if possible, switch to proper async instead of this lmfao
 async def send_message_async(target_hwnd, message):
 	loop = asyncio.get_event_loop()
 	await loop.run_in_executor(None, send_message, target_hwnd, message)

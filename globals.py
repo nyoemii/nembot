@@ -4,7 +4,6 @@ from config import GAME, GSI_TOKEN
 from gsi.server import GSIServer
 from util.signal import EventSignal
 
-
 BANNED_LIST = [
 	76561198055654571,
 	76561198162871889,
@@ -106,7 +105,7 @@ PRE_FILTER = [
 	"Unknown command: sellback",
 	"CreateProceduralSfx:",
 	"Ping measurement has been active for ",
-	"    bind scancode97",
+	"    bind scancode",
 	"Executing server command (",
 	"ResetBreakpadAppId: ",
 	"Logging into anonymous listen server account.",
@@ -185,5 +184,4 @@ TEAMS = ["CT", "T", "Terrorist", "Counter-Terrorist"]
 
 last_round = None
 last_phase = None
-command_nonce_list = []
 nonce_signal = EventSignal()

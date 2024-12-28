@@ -2,7 +2,7 @@ import asyncio
 import os
 
 from command_processing import parse
-from globals import PRINT_FILTER, command_nonce_list, nonce_signal
+from globals import PRINT_FILTER, nonce_signal
 
 
 async def listen(log_file):
@@ -20,10 +20,7 @@ async def listen(log_file):
 			await asyncio.sleep(0.1)
 			continue
 
-		for nonce in command_nonce_list:
-			if nonce in line:
-				print(f"Nonce {nonce} detected")
-				nonce_signal.emit(nonce)
+		nonce_signal.handle_line(line)
 		if not any(filter_text in line for filter_text in PRINT_FILTER):
 			print(line.strip())
 			await parse(line)

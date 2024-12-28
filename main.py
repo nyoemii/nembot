@@ -6,13 +6,13 @@ from command_processing import check_requirements, process_commands
 from commands.fetch import find_recently_played
 from commands.webfishing import generate_loot_tables, parse_files_in_directory
 from config import CONSOLE_FILE, HR_DIRECTORY, HR_FILE
+from console_handler import listen
 from database import init_database
 from globals import server
 from loop.deathchecking import check_death
 from loop.discord_rpc import DiscordManager
 from loop.heartrate import FileUpdateHandler
 from loop.roundtracking import check_round
-from console_handler import listen
 
 
 async def main_loop():
@@ -32,7 +32,6 @@ async def rpc_loop():
 
 
 async def shutdown(observer, server):
-	print("Shutting down...")
 	observer.stop()
 	server.shutdown()
 
@@ -71,8 +70,8 @@ async def start_server():
 	try:
 		log_file = open(CONSOLE_FILE, "r", encoding="utf-8")
 		await asyncio.gather(main_loop(), rpc_loop(), listen(log_file))
-	except asyncio.CancelledError:
-		pass
+	except Exception as e:
+		print(e)
 	finally:
 		await shutdown(observer, server)
 

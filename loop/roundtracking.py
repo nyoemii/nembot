@@ -2,8 +2,6 @@ import win32con
 import win32gui
 
 from commands.fetch import find_recently_played
-
-# from commands.fetch import find_recently_played
 from config import GAME
 from globals import csgo_window_handle, last_phase, last_round, server
 

@@ -3,30 +3,31 @@ import asyncio
 
 class EventSignal:
 	def __init__(self):
-		self._callbacks = []
+		self._pending: dict[str, asyncio.Event] = {}
 
-	def connect(self, callback):
-		"""Connects a callback function to the signal."""
-		self._callbacks.append(callback)
+	def register(self, nonce: str):
+		self._pending[nonce] = asyncio.Event()
 
-	def disconnect(self, callback):
-		"""Disconnects a callback function from the signal."""
-		try:
-			self._callbacks.remove(callback)
-		except ValueError:
-			pass  # Ignore if callback not found
+	def unregister(self, nonce: str):
+		self._pending.pop(nonce, None)
 
-	def emit(self, *args, **kwargs):
-		"""Emits the signal, calling all connected callbacks."""
-		for callback in self._callbacks:
-			try:
-				callback(*args, **kwargs)
-			except Exception as e:
-				print(f"Error in callback: {e}")  # Handle exceptions gracefully
+	async def wait(self, nonce: str, *, timeout: float | None = None):
+		if nonce not in self._pending:
+			# Shortcut
+			return
+		elif timeout:
+			return await asyncio.wait_for(self.wait(nonce), timeout)
 
-	def await_callback(self, callback):
-		def internal_callback(*args):
-			self.disconnect(internal_callback)
-			callback(*args)
+		await self._pending[nonce].wait()
 
-		self.connect(internal_callback)
+	def emit(self, nonce: str):
+		lock = self._pending.pop(nonce, None)
+		if not lock:
+			# Not sure what to do here
+			return
+		lock.set()
+
+	def handle_line(self, line: str):
+		for nonce in list(self._pending):
+			if nonce in line:
+				self.emit(nonce)

@@ -16,20 +16,20 @@ loot_tables = {}
 
 
 class Rarity:
-	blue = {
-		"name": "Blue",
-		"odds": 79.92,
-		"color": "",
-		"database_id": "blue",
-		"price_mult": 1.0,
-	}
-	purple = {
-		"name": "Purple",
-		"odds": 15.98,
-		"color": "\r",
-		"database_id": "purple",
-		"price_mult": 1.8,
-	}
+	# blue = {
+	# 	"name": "Blue",
+	# 	"odds": 79.92,
+	# 	"color": "",
+	# 	"database_id": "blue",
+	# 	"price_mult": 1.0,
+	# }
+	# purple = {
+	# 	"name": "Purple",
+	# 	"odds": 15.98,
+	# 	"color": "\r",
+	# 	"database_id": "purple",
+	# 	"price_mult": 1.8,
+	# }
 	pink = {
 		"name": "Pink",
 		"odds": 3.2,
@@ -277,16 +277,16 @@ async def cast_line(steamid, username, team):
 
 	quality = random.choices(
 		[
-			Rarity.blue,
-			Rarity.purple,
+			# Rarity.blue,
+			# Rarity.purple,
 			Rarity.pink,
 			Rarity.red,
 			Rarity.gold,
 			Rarity.contraband,
 		],
 		weights=[
-			79.92,
-			15.98,
+			# 79.92,
+			# 15.98,
 			3.2,
 			0.64,
 			0.26,
