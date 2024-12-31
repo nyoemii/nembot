@@ -123,7 +123,7 @@ async def find_recently_played():
 		await insert_player(player["id"], player["name"])
 
 
-async def insert_player(steamid, username):
+async def insert_player(steamid: int, username: str):
 	async with asqlite.connect(DATABASE_NAME) as connection:
 		async with connection.cursor() as cursor:
 			await cursor.execute(

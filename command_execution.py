@@ -11,7 +11,7 @@ from globals import csgo_window_handle, nonce_signal
 WM_COPYDATA = 0x004A
 
 
-def write_command(command):
+def write_command(command: str):
 	with open(EXEC_FILE, "w", encoding="utf-8") as f:
 		f.write(command)
 
@@ -24,12 +24,12 @@ def clear_command():
 async def execute_command_csgo(command: str, delay: float | None = None):
 	if delay is not None and delay != 3621:
 		await asyncio.sleep(delay)
-		send_message(csgo_window_handle, command)
+		await send_message_async(csgo_window_handle, command)
 	if delay == 3621:
-		send_message(csgo_window_handle, command)
+		await send_message_async(csgo_window_handle, command)
 	else:
 		await asyncio.sleep(0.25)
-		send_message(csgo_window_handle, command)
+		await send_message_async(csgo_window_handle, command)
 
 
 def generate_nonce(length: int) -> str:
@@ -96,12 +96,12 @@ class COPYDATASTRUCT(ctypes.Structure):
 	]
 
 
-async def send_message_async(target_hwnd, message):
+async def send_message_async(target_hwnd: str, message: str):
 	loop = asyncio.get_event_loop()
 	await loop.run_in_executor(None, send_message, target_hwnd, message)
 
 
-def send_message(target_hwnd, message):
+def send_message(target_hwnd: str, message: str):
 	message_bytes = (message + "\0").encode("utf-8")
 	cds = COPYDATASTRUCT()
 	cds.dwData = 0

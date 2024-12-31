@@ -5,7 +5,7 @@ from watchdog.observers import Observer
 from command_processing import check_requirements, process_commands
 from commands.fetch import find_recently_played
 from commands.webfishing import generate_loot_tables, parse_files_in_directory
-from config import CONSOLE_FILE, HR_DIRECTORY, HR_FILE
+from config import CONSOLE_FILE, HR_DIRECTORY, HR_FILE, RPC_ENABLED
 from console_handler import listen
 from database import init_database
 from globals import server
@@ -27,7 +27,7 @@ async def main_loop():
 async def rpc_loop():
 	while True:
 		await asyncio.sleep(1)
-		presence = DiscordManager.build_presence_from_data(server)
+		presence = await DiscordManager.build_presence_from_data(server)
 		await DiscordManager.update_presence(presence)
 
 
@@ -44,7 +44,10 @@ async def shutdown(observer, server):
 async def start_server():
 	server.start_server()
 
-	await DiscordManager.initialize()
+	if RPC_ENABLED:
+		await DiscordManager.initialize()
+	else:
+		pass
 
 	event_handler = FileUpdateHandler(f"{HR_DIRECTORY + HR_FILE}")
 	observer = Observer()

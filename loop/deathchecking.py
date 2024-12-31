@@ -48,7 +48,7 @@ async def on_death():
 				print(f"An error occurred: {e}")
 
 
-async def check_if_dead():
+async def check_if_dead() -> bool:
 	global DEAD_STATUS
 	if server.get_info("player", "steamid") == server.get_info("provider", "steamid") and not server.get_info("player", "state", "health") > 0:
 		DEAD_STATUS = True

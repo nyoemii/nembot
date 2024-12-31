@@ -48,7 +48,7 @@ async def init_database():
 			await connection.commit()
 
 
-async def insert_command(steamid, username, command, team, dead, location, timestamp):
+async def insert_command(steamid: int, username: str, command: str, team: str, dead: str, location: str, timestamp: str):
 	async with asqlite.connect(DATABASE_NAME) as connection:
 		async with connection.cursor() as cursor:
 			await cursor.execute(
@@ -61,7 +61,7 @@ async def insert_command(steamid, username, command, team, dead, location, times
 			await connection.commit()
 
 
-async def check_if_player_exists(username):
+async def check_if_player_exists(username: str) -> int | None:
 	async with asqlite.connect(DATABASE_NAME) as connection:
 		async with connection.cursor() as cursor:
 			await cursor.execute(
@@ -77,7 +77,7 @@ async def check_if_player_exists(username):
 			return steamid_row
 
 
-async def insert_fish(fish_name, size, price, quality, steamid, username):
+async def insert_fish(fish_name: str, size: int, price: int, quality: str, steamid: int, username: str):
 	async with asqlite.connect(DATABASE_NAME) as connection:
 		async with connection.cursor() as cursor:
 			await cursor.execute(
@@ -90,7 +90,7 @@ async def insert_fish(fish_name, size, price, quality, steamid, username):
 			await connection.commit()
 
 
-async def update_balance(steamid, amount):
+async def update_balance(steamid: int, amount: int):
 	async with asqlite.connect(DATABASE_NAME) as connection:
 		async with connection.cursor() as cursor:
 			await cursor.execute(
@@ -102,7 +102,7 @@ async def update_balance(steamid, amount):
 			await connection.commit()
 
 
-async def get_balance(steamid):
+async def get_balance(steamid: int) -> int:
 	async with asqlite.connect(DATABASE_NAME) as connection:
 		async with connection.cursor() as cursor:
 			await cursor.execute(

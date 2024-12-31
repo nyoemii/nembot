@@ -18,7 +18,7 @@ from globals import BANNED_LIST, COMMAND_LIST, COMMAND_REGEX, TEAMS, server
 COMMAND_QUEUE = deque()
 
 
-async def parse(line):
+async def parse(line: str):
 	regex = re.search(COMMAND_REGEX, line, flags=re.UNICODE | re.VERBOSE)
 	if regex:
 		team = regex.group("team")
@@ -52,7 +52,7 @@ async def parse(line):
 		COMMAND_QUEUE.append((steamid, command, args, username, team, dead, location))
 
 
-async def check_requirements():
+async def check_requirements() -> bool:
 	global should_process_commands
 
 	if server.get_info("map", "phase") == "live" or "warmup":
@@ -71,7 +71,7 @@ async def process_commands():
 			await switchcase_commands(steamid, cmd, arg, user, team, dead, location)
 
 
-async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
+async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team: str, dead: str, location: str):
 	# TODO: maybe pass user to commmand execution check if it's me so that execute_command_cs2 doesn't need wacky 3621 delay shit... it is kinda funny tho :3
 	cmd = cmd.lower()
 	if steamid not in BANNED_LIST:
@@ -157,7 +157,7 @@ async def switchcase_commands(steamid, cmd, arg, user, team, dead, location):
 
 
 # keeping the following 2 functions in case of future issues (also check_ingame may be useful)
-async def check_ingame():
+async def check_ingame() -> bool:
 	active_window_handle = win32gui.GetForegroundWindow()
 	_, pid = win32process.GetWindowThreadProcessId(active_window_handle)
 
@@ -176,7 +176,7 @@ async def check_ingame():
 		return True
 
 
-async def send_key(key):
+async def send_key(key: str):
 	keyboard = Controller()
 	keyboard.press(key)
 	keyboard.release(key)

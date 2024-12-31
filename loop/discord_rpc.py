@@ -1,3 +1,5 @@
+import asyncio
+
 from pypresence import AioPresence
 
 # yeah i'm gonna be totally honest i literally just asked chatgpt to adapt this from a C# RPC app to python (lazy)
@@ -16,9 +18,10 @@ class DiscordManager:
 			await cls.client.connect()
 			cls.connected = True
 			print("[DISCORD] RPC Initialized and connected.")
-		except Exception as e:
-			print(f"[DISCORD] Failed to connect: {e}")
+		except Exception:
 			cls.connected = False
+			await asyncio.sleep(5)
+			await cls.initialize()
 
 	@classmethod
 	async def update_presence(cls, presence):
@@ -27,11 +30,13 @@ class DiscordManager:
 			return
 		try:
 			await cls.client.update(**presence)
-		except Exception as e:
-			print(f"[DISCORD] Failed to update presence: {e}")
+		except Exception:
+			print("[DISCORD] Attempting to reconnect in 5 seconds...")
+			await asyncio.sleep(5)
+			await cls.initialize()
 
 	@staticmethod
-	def build_presence_from_data(server):
+	async def build_presence_from_data(server):
 		"""Build rich presence based on game data."""
 		# Default presence set to menu.
 		presence = {

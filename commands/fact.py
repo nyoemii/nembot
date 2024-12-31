@@ -4,7 +4,7 @@ import random
 import aiohttp
 
 
-async def get_fact():
+async def get_fact() -> str:
 	if random.random() <= 0.1:  # 10% chance for local fact
 		fact = await get_local_fact()
 	else:
@@ -12,7 +12,7 @@ async def get_fact():
 	return fact
 
 
-async def get_api_fact():
+async def get_api_fact() -> str:
 	url = "https://uselessfacts.jsph.pl/api/v2/facts/random"
 
 	async with aiohttp.ClientSession() as session:
@@ -25,7 +25,7 @@ async def get_api_fact():
 	return fact
 
 
-async def get_local_fact():
+async def get_local_fact() -> str:
 	try:
 		with open("data/facts.json", "r") as f:
 			facts = json.load(f)

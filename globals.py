@@ -52,6 +52,7 @@ PRE_FILTER = [
 	"[WorldRenderer]",
 	"[AnimResource]",
 	"[ResourceSystem]",
+	"[SoundSystem]",
 	"[Shooting]",
 	"[HostStateManager]",
 	"[Server]",
@@ -114,6 +115,7 @@ PRE_FILTER = [
 	"Invalid terrorist spawnpoint",
 	"Achievements disabled: cheats turned on in this app session.",
 	"6ms Server ",
+	"missing sounds dir. Fixing for now.",
 ]
 
 

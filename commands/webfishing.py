@@ -59,44 +59,8 @@ class Rarity:
 		"price_mult": 15.0,
 	}
 
-	# blue = {
-	# 		"name": "Mil-Spec Grade",
-	# 		"odds": 79.92,
-	# 		"color": "",
-	# 		"database_id": "blue",
-	# 		"price_mult": 1.0,
-	# 	}
-	# 	purple = {
-	# 		"name": "Restricted",
-	# 		"odds": 15.98,
-	# 		"color": "\r",
-	# 		"database_id": "purple",
-	# 		"price_mult": 4.0,
-	# 	}
-	# 	pink = {
-	# 		"name": "Classified",
-	# 		"odds": 3.2,
-	# 		"color": "",
-	# 		"database_id": "pink",
-	# 		"price_mult": 6.0,
-	# 	}
-	# 	red = {
-	# 		"name": "Covert",
-	# 		"odds": 0.64,
-	# 		"color": "",
-	# 		"database_id": "red",
-	# 		"price_mult": 10.0,
-	# 	}
-	# 	gold = {
-	# 		"name": "Exceedingly Rare",
-	# 		"odds": 0.26,
-	# 		"color": "",
-	# 		"database_id": "gold",
-	# 		"price_mult": 15.0,
-	# 	}
-
 	@classmethod
-	def getattr(cls, quality):
+	def getattr(cls, quality) -> dict:
 		"""Retrieve rarity data dynamically by quality name."""
 		if hasattr(cls, quality):
 			return getattr(cls, quality)
@@ -196,7 +160,7 @@ class Map:
 	}
 
 	@classmethod
-	def getattr(cls, map):
+	def getattr(cls, map) -> dict | bool:
 		"""Retrieve map data dynamically by map name."""
 		if hasattr(cls, map):
 			return getattr(cls, map)
@@ -204,7 +168,7 @@ class Map:
 			return False
 
 
-async def cast_line(steamid, username, team):
+async def cast_line(steamid: int, username: str, team: str):
 	catches = 1
 	bonus = False
 	map = server.get_info("map", "name")
@@ -336,7 +300,7 @@ async def cast_line(steamid, username, team):
 			await execute_command(f"say {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
 
 
-async def calculate_worth(fish_roll, quality, size):
+async def calculate_worth(fish_roll: dict, quality: str, size: str) -> int:
 	size_prefix = {
 		0.1: 1.75,
 		0.25: 0.6,
@@ -380,7 +344,7 @@ async def calculate_worth(fish_roll, quality, size):
 	return worth
 
 
-async def generate_loot_tables(category, table):
+async def generate_loot_tables(category: str, table: str):
 	new_table = {"entries": {}, "total_weight": 0.0}
 	total_weight = 0.0
 
@@ -394,7 +358,7 @@ async def generate_loot_tables(category, table):
 	print(f"Generated Table {table} for category {category}")
 
 
-async def roll_loot_table(table, max_tier=-1):
+async def roll_loot_table(table, max_tier=-1) -> dict:
 	table_data = loot_tables[table]
 
 	for _ in range(20):
@@ -406,7 +370,7 @@ async def roll_loot_table(table, max_tier=-1):
 					return data
 
 
-async def roll_item_size(item):
+async def roll_item_size(item: str) -> float:
 	average_size = item["average_size"]
 	deviation = average_size * 0.55
 	average_size += average_size * 0.25
@@ -416,7 +380,7 @@ async def roll_item_size(item):
 	return roll
 
 
-async def stepify(value, step):
+async def stepify(value: float, step: float) -> float:
 	return round(value / step) * step
 
 
@@ -431,7 +395,7 @@ organized_items = {}
 loot_table_items = defaultdict(dict)  # loot_table -> fishname -> data
 
 
-async def parse_files_in_directory(directory_path, current_depth):
+async def parse_files_in_directory(directory_path: str, current_depth: int):
 	global item_data
 	global fish_data
 	if current_depth > max_depth:
