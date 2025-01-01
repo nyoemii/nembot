@@ -116,6 +116,7 @@ PRE_FILTER = [
 	"Achievements disabled: cheats turned on in this app session.",
 	"6ms Server ",
 	"missing sounds dir. Fixing for now.",
+	"[SoundSystemLowLevel]",
 ]
 
 
