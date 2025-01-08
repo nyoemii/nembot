@@ -149,11 +149,11 @@ async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team:
 					await execute_command(f"say_team {PREFIX} Your SteamID is: {steamid}")
 				else:
 					await execute_command(f"say {PREFIX} Your SteamID is: {steamid}")
-	else:
-		if team in TEAMS:
-			await execute_command(f"say_team {PREFIX} You are banned from using the bot. fuck you.")
-		else:
-			await execute_command(f"say {PREFIX} You are banned from using the bot. fuck you.")
+	# else:
+	# 	if team in TEAMS:
+	# 		await execute_command(f"say_team {PREFIX} You are banned from using the bot. fuck you.")
+	# 	else:
+	# 		await execute_command(f"say {PREFIX} You are banned from using the bot. fuck you.")
 
 
 # keeping the following 2 functions in case of future issues (also check_ingame may be useful)
