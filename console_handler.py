@@ -6,6 +6,12 @@ from globals import PRINT_FILTER, nonce_signal
 
 
 async def listen(log_file):
+	"""
+	Blocks until the log file is modified and then parses the new line.
+
+	Args:
+		log_file (TextIO): The file object to watch for modifications.
+	"""
 	log_file.seek(0, os.SEEK_END)
 	last_size = log_file.tell()
 

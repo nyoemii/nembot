@@ -1,7 +1,7 @@
 from watchdog.events import FileSystemEventHandler
 
 from command_execution import send_message
-from config import HR_DIRECTORY, HR_ENABLED, HR_FILE
+from config import HR_DIRECTORY, HR_FILE
 from globals import csgo_window_handle, server
 
 
@@ -11,11 +11,7 @@ class FileUpdateHandler(FileSystemEventHandler):
 
 	def on_modified(self, event):
 		if (event.src_path) == self.file_path:
-			if HR_ENABLED:
-				# print(f"{event.src_path} has been modified")
-				file_updated()
-			else:
-				pass
+			file_updated()
 
 
 def file_updated():

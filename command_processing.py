@@ -19,6 +19,17 @@ COMMAND_QUEUE = deque()
 
 
 async def parse(line: str):
+	"""
+	Parses a line of text to extract command details and processes it if valid.
+
+	Args:
+		line (str): The input text line containing command information.
+
+	Extracts information such as team, username, location, command, and its arguments
+	using a regex pattern. If a valid command is found, the user's steam ID is checked
+	or retrieved, and the command is logged into the database. The command is then added
+	to a processing queue.
+	"""
 	regex = re.search(COMMAND_REGEX, line, flags=re.UNICODE | re.VERBOSE)
 	if regex:
 		team = regex.group("team")
@@ -35,24 +46,31 @@ async def parse(line: str):
 		command = ""
 		args = ""
 
-	# print(f"Team: {team}\nUsername: {username}\nLocation: {location}\nDead: {dead}\nCommand: {command}\nArgs: {args}")
+	# null checking for commands
+	if not command:
+		return
 
 	if command.lower() in COMMAND_LIST:
 		steamid = await check_if_player_exists(username)
-		if steamid:
-			steamid = int(steamid)
-		else:
+		if not steamid:
 			await find_recently_played()
 			steamid = await check_if_player_exists(username)
 
-		timestamp = server.get_info("provider", "timestamp")
-		command_data = command.replace("!", "")
-		# * this doesn't account for commands that haven't been executed yet
-		await insert_command(steamid, username, command_data, team, dead, location, timestamp)
-		COMMAND_QUEUE.append((steamid, command, args, username, team, dead, location))
+		if steamid:
+			steamid = int(steamid)
+			timestamp = server.get_info("provider", "timestamp")
+			command_data = command.replace("!", "")
+			await insert_command(steamid, username, command_data, team, dead, location, timestamp)
+			COMMAND_QUEUE.append((steamid, command, args, username, team, dead, location))
 
 
 async def check_requirements() -> bool:
+	"""
+	Check if the bot should process commands based on the current phase.
+
+	Returns:
+		bool: True if the bot should process commands, False otherwise.
+	"""
 	global should_process_commands
 
 	if server.get_info("map", "phase") == "live" or "warmup":
@@ -64,6 +82,9 @@ async def check_requirements() -> bool:
 
 
 async def process_commands():
+	"""
+	Process commands in the queue if the bot should process commands.
+	"""
 	if await check_requirements():
 		if COMMAND_QUEUE:
 			steamid, cmd, arg, user, team, dead, location = COMMAND_QUEUE.popleft()
@@ -71,8 +92,19 @@ async def process_commands():
 			await switchcase_commands(steamid, cmd, arg, user, team, dead, location)
 
 
-async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team: str, dead: str, location: str):
-	# TODO: maybe pass user to commmand execution check if it's me so that execute_command_cs2 doesn't need wacky 3621 delay shit... it is kinda funny tho :3
+async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team: str, dead: str, location: str) -> None:
+	"""
+	Process commands in the queue if the bot should process commands.
+
+	Args:
+		steamid (int): The SteamID of the player that sent the command.
+		cmd (str): The command issued by the player.
+		arg (str): The arguments provided with the command.
+		user (str): The username of the player that sent the command.
+		team (str): The team of the player that sent the command.
+		dead (str): The dead status of the player that sent the command.
+		location (str): The location of the player that sent the command.
+	"""
 	cmd = cmd.lower()
 	if steamid not in BANNED_LIST:
 		match cmd:
@@ -158,6 +190,12 @@ async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team:
 
 # keeping the following 2 functions in case of future issues (also check_ingame may be useful)
 async def check_ingame() -> bool:
+	"""
+	Check if the game is active and ready for input.
+
+	Returns:
+		bool: True if the game is active and not in text input mode, False otherwise.
+	"""
 	active_window_handle = win32gui.GetForegroundWindow()
 	_, pid = win32process.GetWindowThreadProcessId(active_window_handle)
 
@@ -172,11 +210,16 @@ async def check_ingame() -> bool:
 		print("Invalid PID or no valid window is currently focused.")
 		return False
 
-	if process_name == "cs2.exe" and server.get_info("player", "activity") != "textinput":
-		return True
+	return process_name == "cs2.exe" and server.get_info("player", "activity") != "textinput"
 
 
 async def send_key(key: str):
+	"""
+	Simulate a key press and release.
+
+	Args:
+		key (str): The key to be pressed and released.
+	"""
 	keyboard = Controller()
 	keyboard.press(key)
 	keyboard.release(key)

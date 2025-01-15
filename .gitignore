@@ -172,3 +172,4 @@ steam_api64.lib
 # assumes people are sane and use .db file type (it's arbitrary.. but also adding jonathan.db because i like jonathan for a db name :3)
 jonathan.db
 *.db
+lazy.py

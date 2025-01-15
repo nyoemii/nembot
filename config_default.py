@@ -35,9 +35,8 @@ SHOCKING_ENABLED = True
 
 API_TOKEN = "your openshock api token"
 API_URL = "https://api.openshock.app/2/shockers/control"
-SHOCKER_ID = "your openshock shaker id"
+SHOCKER_ID = "your openshock shocker id"
 
-# unused
 RPC_ENABLED = True
 
 # token used for GSI in CS (put in auth field of your gamestate_integration_GSI.cfg)

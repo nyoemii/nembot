@@ -25,11 +25,7 @@ class EFriendFlags:
 
 async def find_recently_played():
 	print("\nFetching players...\n")
-	# TODO: move to main load function
-	if os.path.exists("./steam_api64.dll"):
-		steam_api = ctypes.CDLL("./steam_api64.dll")
-	else:
-		print("Steam API dll not found.")
+	steam_api = ctypes.CDLL("./steam_api64.dll")
 
 	steam_api.SteamAPI_InitSafe.restype = ctypes.c_bool
 	steam_api.SteamAPI_InitSafe.argtypes = []

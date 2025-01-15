@@ -11,17 +11,33 @@ from globals import csgo_window_handle, nonce_signal
 WM_COPYDATA = 0x004A
 
 
-def write_command(command: str):
+def write_command(command: str) -> None:
+	"""
+	Write a command to the file that gets executed by the game.
+
+	Args:
+		command (str): The command to write.
+	"""
 	with open(EXEC_FILE, "w", encoding="utf-8") as f:
 		f.write(command)
 
 
-def clear_command():
+def clear_command() -> None:
+	"""
+	Clear the command file.
+	"""
 	with open(EXEC_FILE, "w", encoding="utf-8") as f:
 		f.write("")
 
 
-async def execute_command_csgo(command: str, delay: float | None = None):
+async def execute_command_csgo(command: str, delay: float | None = None) -> None:
+	"""
+	Execute a command in CS:GO.
+
+	Args:
+		command (str): The command to execute.
+		delay (float | None): The time to wait before executing the command in seconds. Defaults to None.
+	"""
 	if delay is not None and delay != 3621:
 		await asyncio.sleep(delay)
 		await send_message_async(csgo_window_handle, command)
@@ -33,6 +49,19 @@ async def execute_command_csgo(command: str, delay: float | None = None):
 
 
 def generate_nonce(length: int) -> str:
+	"""
+	Generate a string of invisible characters of a given length.
+
+	These characters are used to create a unique identifier that is not visible to the user.
+	They do not take up any space, so they can be used to uniquely identify a command without
+	adding any visible characters.
+
+	Args:
+		length (int): The length of the nonce to generate.
+
+	Returns:
+		str: The generated nonce.
+	"""
 	invisible_chars = [
 		"\u200b",  # Zero-width space
 		"\u200c",  # Zero-width non-joiner
@@ -46,10 +75,22 @@ def generate_nonce(length: int) -> str:
 
 
 async def execute_command_cs2(command: str, delay: float | None = None):
-	nonce = generate_nonce(4)  # btw you could maybe have collisions here?
+	"""
+	Execute a command in CS2.
+
+	Args:
+		command (str): The command to execute.
+		delay (float | None): The time to wait before executing the command in seconds. Defaults to None.
+
+	Notes:
+
+		* This function will retry the command up to 3 times if it fails.
+		* It will wait for 2.5 seconds after sending the command to see if it gets executed.
+		* If the command fails to get executed after the 3rd retry, it will print a message saying that the command failed to run.
+	"""
+	nonce = generate_nonce(4)
 	nonce_signal.register(nonce)
 
-	# Giving it 3 tries (change it if you want :D)
 	for _ in range(3):
 		if delay is not None and delay != 3621:
 			await asyncio.sleep(delay)
@@ -77,11 +118,16 @@ async def execute_command_cs2(command: str, delay: float | None = None):
 	else:
 		nonce_signal.unregister(nonce)
 		print(f"Failed to run command {command}")
-		# Do whatever you want here (e.g. log instead of throw)
-		# raise RuntimeError(f"Failed to run command {command}")
 
 
-async def execute_command(command: str, delay: float | None = None):
+async def execute_command(command: str, delay: float | None = None) -> None:
+	"""
+	Execute a command in the game.
+
+	Args:
+		command (str): The command to execute.
+		delay (float | None): The time to wait before executing the command in seconds. Defaults to None.
+	"""
 	if GAME == "csgo":
 		await execute_command_csgo(command, delay)
 	else:
@@ -96,12 +142,26 @@ class COPYDATASTRUCT(ctypes.Structure):
 	]
 
 
-async def send_message_async(target_hwnd: str, message: str):
+async def send_message_async(target_hwnd: str, message: str) -> None:
+	"""
+	Send a message to the specified window using WM_COPYDATA.
+
+	Args:
+		target_hwnd (str): The target window handle.
+		message (str): The message to send.
+	"""
 	loop = asyncio.get_event_loop()
 	await loop.run_in_executor(None, send_message, target_hwnd, message)
 
 
-def send_message(target_hwnd: str, message: str):
+def send_message(target_hwnd: str, message: str) -> None:
+	"""
+	Send a message to the specified window using WM_COPYDATA.
+
+	Args:
+		target_hwnd (str): The target window handle.
+		message (str): The message to send.
+	"""
 	message_bytes = (message + "\0").encode("utf-8")
 	cds = COPYDATASTRUCT()
 	cds.dwData = 0

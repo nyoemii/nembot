@@ -119,7 +119,6 @@ PRE_FILTER = [
 	"[SoundSystemLowLevel]",
 ]
 
-
 REGION_FILTER = [
 	"ord:",
 	"atl:",

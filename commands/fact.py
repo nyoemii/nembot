@@ -5,6 +5,11 @@ import aiohttp
 
 
 async def get_fact() -> str:
+	"""
+	Retrieve a random fact from either the local data/facts.json file or the Useless Facts API.
+
+	:return: A string containing the random fact.
+	"""
 	if random.random() <= 0.1:  # 10% chance for local fact
 		fact = await get_local_fact()
 	else:
@@ -13,6 +18,11 @@ async def get_fact() -> str:
 
 
 async def get_api_fact() -> str:
+	"""
+	Retrieve a random fact from the Useless Facts API.
+
+	:return: A string containing the random fact.
+	"""
 	url = "https://uselessfacts.jsph.pl/api/v2/facts/random"
 
 	async with aiohttp.ClientSession() as session:
@@ -26,6 +36,11 @@ async def get_api_fact() -> str:
 
 
 async def get_local_fact() -> str:
+	"""
+	Retrieve a random fact from the local data/facts.json file.
+
+	:return: A string containing the random fact.
+	"""
 	try:
 		with open("data/facts.json", "r") as f:
 			facts = json.load(f)
