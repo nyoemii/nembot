@@ -14,6 +14,7 @@ no this doesn't read memory it's not a cheat, i'm just using fucking [schizo met
 	- add `exec "selfbot/setup.cfg"` into your autoexec (in main menu, it needs `sv_cheats 1` so it will break otherwise)
 	- add `gamestate_integration_GSI.cfg` to the root of your cfg folder and use the same auth token you set in config
  	- add `-condebug` and `-conclearlog` to your launch options. (i'd also recommend adding `-allow_third_party_software` as i may implement something with window handles, which could possibly cause issues?)
+ 	- highly recommend adding`log_flags InputService +donotecho` to the end of your autoexec :3
 5. download the [steamworks SDK](https://partner.steamgames.com/downloads/list) dll for version 1.61
 7. put `steam_api64.dll` and `steam_api64.lib` in the root of the repo
 8. `uv run main.py`
