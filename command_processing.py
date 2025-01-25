@@ -11,7 +11,7 @@ from command_execution import execute_command
 from commands.fact import get_fact
 from commands.fetch import find_recently_played
 from commands.webfishing import cast_line
-from config import GAME, PREFIX
+from config import GAME, PREFIX, HR_DIRECTORY, HR_FILE
 from database import check_if_player_exists, get_balance, insert_command
 from globals import BANNED_LIST, COMMAND_LIST, COMMAND_REGEX, TEAMS, server
 
@@ -88,7 +88,7 @@ async def process_commands():
 	if await check_requirements():
 		if COMMAND_QUEUE:
 			steamid, cmd, arg, user, team, dead, location = COMMAND_QUEUE.popleft()
-			await asyncio.sleep(0.25)
+			# await asyncio.sleep(0.25)
 			await switchcase_commands(steamid, cmd, arg, user, team, dead, location)
 
 
@@ -120,14 +120,14 @@ async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team:
 							arg,
 						)
 						if inspect_link:
-							await execute_command(f"gameui_activate;csgo_econ_action_preview {inspect_link.group(1)}\n say {PREFIX} Opened inspect link on my client.")
+							await execute_command(f"gameui_activate;csgo_econ_action_preview {inspect_link.group(1)}\n say {PREFIX} Opened inspect link on my client.", 3621, False)
 						else:
 							await execute_command(f"say {PREFIX} Invalid inspect link.")
 					else:
 						await execute_command(f"say {PREFIX} No inspect link provided.")
 			case "!switchhands":
 				if team in TEAMS:
-					await execute_command("switchhands", 3621)
+					await execute_command("switchhands", 3621, False)
 			case "!flash":
 				if GAME != "csgo":
 					if team in TEAMS:
@@ -163,7 +163,7 @@ async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team:
 					await execute_command(f"say {PREFIX} {fact}")
 			case "!drop":
 				if team in TEAMS:
-					await execute_command("drop", 3621)  # funny 3621 placeholder for shit code to execute with 0 delay
+					await execute_command("drop", 3621, False)  # funny 3621 placeholder for shit code to execute with 0 delay
 			case "!help" | "!commands" | "!cmds":
 				if team in TEAMS:
 					await execute_command(
@@ -181,11 +181,26 @@ async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team:
 					await execute_command(f"say_team {PREFIX} Your SteamID is: {steamid}")
 				else:
 					await execute_command(f"say {PREFIX} Your SteamID is: {steamid}")
+			case "!heartrate" | "!hr":
+				if team in TEAMS:
+					await execute_command(f"say_team {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
+				else:
+					await execute_command(f"say {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
 	# else:
 	# 	if team in TEAMS:
 	# 		await execute_command(f"say_team {PREFIX} You are banned from using the bot. fuck you.")
 	# 	else:
 	# 		await execute_command(f"say {PREFIX} You are banned from using the bot. fuck you.")
+
+
+async def get_heart_rate():
+	"""
+	Get your heartrate.
+
+	Returns:
+		int: The heart rate of the user.
+	"""
+	return open(f"{HR_DIRECTORY + HR_FILE}", "r", encoding="utf-8").read().splitlines()[0]
 
 
 # keeping the following 2 functions in case of future issues (also check_ingame may be useful)

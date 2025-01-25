@@ -7,7 +7,7 @@
 script = ExtResource( 1 )
 item_name = "Black Squidow"
 item_description = "Inkish Latrodelliae"
-catch_blurb = "The females canonically cannibalize their male counterparts. YEP. THAT'S ACTUAL LORE FROM THE ORIGINAL GAME. No one tell Blathers..."
+catch_blurb = "The females canonically cannibalize their male counterparts."
 item_is_hidden = false
 icon = ExtResource( 2 )
 show_item = true

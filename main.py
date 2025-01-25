@@ -95,6 +95,7 @@ async def start_server():
 		# can be done by changing con_logfile on every reload (and also changing the pipe) so that we can properly use a pipe
 		# okay so i need to do even more schizo shit:tm: (con_logfile was removed)
 		log_file = open(CONSOLE_FILE, "r", encoding="utf-8")
+
 		await asyncio.gather(main_loop(), rpc_loop(), listen(log_file))
 	except Exception as e:
 		print(f"Error during startup: {e}")

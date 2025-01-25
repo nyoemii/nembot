@@ -74,13 +74,14 @@ def generate_nonce(length: int) -> str:
 	return nonce
 
 
-async def execute_command_cs2(command: str, delay: float | None = None):
+async def execute_command_cs2(command: str, delay: float | None = None, check_nonce: bool = True) -> None:
 	"""
 	Execute a command in CS2.
 
 	Args:
 		command (str): The command to execute.
 		delay (float | None): The time to wait before executing the command in seconds. Defaults to None.
+		check_nonce (bool): Whether to check for nonce when running the command. Defaults to True.
 
 	Notes:
 
@@ -88,50 +89,58 @@ async def execute_command_cs2(command: str, delay: float | None = None):
 		* It will wait for 2.5 seconds after sending the command to see if it gets executed.
 		* If the command fails to get executed after the 3rd retry, it will print a message saying that the command failed to run.
 	"""
-	nonce = generate_nonce(4)
-	nonce_signal.register(nonce)
+	nonce = generate_nonce(4) if check_nonce else None
+	if check_nonce:
+		nonce_signal.register(nonce)
 
 	for _ in range(3):
 		if delay is not None and delay != 3621:
 			await asyncio.sleep(delay)
 		if delay == 3621:
-			write_command(command + nonce)
-			await asyncio.sleep(0.051)
+			write_command(command + (f"\necholn {nonce}" if check_nonce else ""))
+			await asyncio.sleep(0.0500001)
 			clear_command()
 		else:
-			await asyncio.sleep(0.25)  # wait 0.25 seconds for chat delay, 0.15 should work but is very inconsistent... fuck valve
+			await asyncio.sleep(0.25)
 			if "playerchatwheel" in command:
-				write_command(command + f"\necholn {nonce}")
+				write_command(command + (f"\necholn {nonce}" if check_nonce else ""))
+				await asyncio.sleep(0.0500001)
+				clear_command()
+			elif "say" in command or "say_team" in command:
+				write_command(command + (nonce if check_nonce else ""))
 				await asyncio.sleep(0.0500001)
 				clear_command()
 			else:
-				write_command(command + nonce)
+				write_command(command)
 				await asyncio.sleep(0.0500001)
 				clear_command()
 
-		try:
-			await nonce_signal.wait(nonce, timeout=2.5)
-		except asyncio.TimeoutError:
-			continue
-		else:
-			break
+		if check_nonce:
+			try:
+				await nonce_signal.wait(nonce, timeout=2.5)
+			except asyncio.TimeoutError:
+				continue
+			else:
+				break
 	else:
-		nonce_signal.unregister(nonce)
-		print(f"Failed to run command {command}")
+		if check_nonce:
+			nonce_signal.unregister(nonce)
+			print(f"Failed to run command {command}")
 
 
-async def execute_command(command: str, delay: float | None = None) -> None:
+async def execute_command(command: str, delay: float | None = None, check_nonce: bool = True) -> None:
 	"""
-	Execute a command in the game.
+	Execute a command in the game with optional nonce checking.
 
 	Args:
 		command (str): The command to execute.
 		delay (float | None): The time to wait before executing the command in seconds. Defaults to None.
+		check_nonce (bool): Whether to check for a nonce after executing the command.
 	"""
 	if GAME == "csgo":
-		await execute_command_csgo(command, delay)
+		await execute_command_csgo(command, delay, check_nonce)
 	else:
-		await execute_command_cs2(command, delay)
+		await execute_command_cs2(command, delay, check_nonce)
 
 
 class COPYDATASTRUCT(ctypes.Structure):

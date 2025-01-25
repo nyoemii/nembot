@@ -7,6 +7,8 @@ from util.signal import EventSignal
 BANNED_LIST = [
 	76561198055654571,
 	76561198162871889,
+	76561198398160009,
+	76561198189637015,
 ]
 
 
@@ -27,6 +29,8 @@ COMMAND_LIST = [
 	"!bal",
 	"!money",
 	"!steamid",
+	"!heartrate",
+	"!hr",
 ]
 
 
@@ -117,6 +121,7 @@ PRE_FILTER = [
 	"6ms Server ",
 	"missing sounds dir. Fixing for now.",
 	"[SoundSystemLowLevel]",
+	"models/hostage/v_hostage_arm.vmdl :: draw",
 ]
 
 REGION_FILTER = [

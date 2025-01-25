@@ -7,7 +7,7 @@
 script = ExtResource( 1 )
 item_name = "CREATURE"
 item_description = "rraim eor"
-catch_blurb = "NiceCatch!NiceCatch!NiceCatch!NiceCatch!NiceCatch!NiceCatch!NiceCatch!NiceCatch!NiceCatch!NiceCatch!"
+catch_blurb = "NiceCatch!NiceCatch!NiceCatch!NiceCatch!NiceCatch!NiceCatch!NiceCatch"
 item_is_hidden = false
 icon = ExtResource( 2 )
 show_item = true

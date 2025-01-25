@@ -173,3 +173,4 @@ steam_api64.lib
 jonathan.db
 *.db
 lazy.py
+dpg.py

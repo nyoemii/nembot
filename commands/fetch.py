@@ -12,9 +12,9 @@ class EFriendFlags:
 	k_EFriendFlagNone = 0x00
 	k_EFriendFlagBlocked = 0x01
 	k_EFriendFlagFriendshipRequested = 0x02
-	k_EFriendFlagImmediate = 0x04
+	k_EFriendFlagImmediate = 0x04  # direct friends
 	k_EFriendFlagClanMember = 0x08
-	k_EFriendFlagOnGameServer = 0x10
+	k_EFriendFlagOnGameServer = 0x10  # recent players
 	k_EFriendFlagRequestingFriendship = 0x80
 	k_EFriendFlagRequestingInfo = 0x100
 	k_EFriendFlagIgnored = 0x200

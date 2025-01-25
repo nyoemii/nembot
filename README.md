@@ -39,3 +39,6 @@ no this doesn't read memory it's not a cheat, i'm just using fucking [schizo met
 
 [CatchThemAll](https://thunderstore.io/c/webfishing/p/hostileonion/CatchThemAll/)
 
+
+### more credits
+[RTSS Shared Memory](https://github.com/upgradeQ/RTSSSharedMemoryPythonNET) in python (dll being redistributed along with the example script they have, need to provide source due to license)
