@@ -39,6 +39,9 @@ SHOCKER_ID = "your openshock shocker id"
 
 RPC_ENABLED = True
 
+# auto translation of chat messages
+LANGUAGE_DETECTION = True
+
 # token used for GSI in CS (put in auth field of your gamestate_integration_GSI.cfg)
 GSI_TOKEN = "your gsi token"
 

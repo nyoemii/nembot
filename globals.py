@@ -1,4 +1,5 @@
 import win32gui
+from lingua import Language, LanguageDetectorBuilder
 
 from config import GAME, GSI_TOKEN
 from gsi.server import GSIServer
@@ -9,6 +10,7 @@ BANNED_LIST = [
 	76561198162871889,
 	76561198398160009,
 	76561198189637015,
+	76561198078389589,
 ]
 
 
@@ -62,6 +64,7 @@ PRE_FILTER = [
 	"[Server]",
 	"[BuildSparseShadowTree]",
 	"[SteamAudio]",
+	"[SV CommandQueue]",
 	"execing selfbot",
 	"execing movement/de-subticks/",
 	"Invalid content height",
@@ -167,13 +170,13 @@ REGION_FILTER = [
 PRINT_FILTER = PRE_FILTER + REGION_FILTER
 
 
-# https://regex101.com/r/pTapEF/5
+# https://regex101.com/r/pTapEF/6
 csgo_regex = (
-	r"(?:\d{2}\/){2}\d{4}\s-\s\d{2}:(?:\d{2}:){2}\s(?P<dead_status>\*DEAD\*)?\s?(?:\((?P<team>[^)]+)\))?\s?(?P<username>.*)‎\s(?:@\s(?P<location>.*))?\s?:(?:\s)*(?P<command>\S+)?\s(?P<args>\S+)?"
+	r"(?:\d{2}\/){2}\d{4}\s-\s\d{2}:(?:\d{2}:){2}\s(?P<dead_status>\*DEAD\*)?\s?(?:\((?P<team>[^)]+)\))?\s?(?P<username>.*)‎\s(?:@\s(?P<location>.*))?\s?:(?:\s)*(?P<command>\S+)?\s(?P<args>.*)?"
 )
 
-# https://regex101.com/r/1lYpb1/6
-cs2_regex = r"\[(?P<team>ALL|CT|T)\]\s+(?P<username>.*)‎(?:﹫(?P<location>.*))?\s*(?P<dead_status>\[DEAD\])?:(?:\s)*(?P<command>\S+)?\s(?P<args>\S+)?"
+# https://regex101.com/r/1lYpb1/7
+cs2_regex = r"\[(?P<team>ALL|CT|T)\]\s+(?P<username>.*)‎(?:﹫(?P<location>.*))?\s*(?P<dead_status>\[DEAD\])?:(?:\s)*(?P<command>\S+)?\s(?P<args>.*)?"
 
 
 if GAME == "csgo":
@@ -185,6 +188,22 @@ CLIENT_ID = 872181511334543370
 
 # TODO: change gsi library or add type definitions to everything
 server = GSIServer(("127.0.0.1", 3000), GSI_TOKEN)
+
+languages = [
+	Language.ENGLISH,
+	Language.FRENCH,
+	Language.GERMAN,
+	Language.SPANISH,
+	Language.TURKISH,
+	Language.RUSSIAN,
+	Language.UKRAINIAN,
+	Language.CHINESE,
+	Language.JAPANESE,
+	Language.KOREAN,
+	Language.POLISH,
+]
+
+detector = LanguageDetectorBuilder.from_languages(*languages).build()
 
 csgo_window_handle = win32gui.FindWindow("Valve001", None)
 

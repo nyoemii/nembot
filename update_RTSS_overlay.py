@@ -17,9 +17,9 @@
 
 import sys
 import threading
+from pathlib import Path
 from random import randint
 from time import sleep
-from pathlib import Path
 
 p = Path(__file__).resolve().parent
 sys.path.append(p)  # dll must be in path

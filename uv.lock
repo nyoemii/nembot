@@ -167,6 +167,23 @@ wheels = [
 ]
 
 [[package]]
+name = "lingua-language-detector"
+version = "2.0.2"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b1/a0/5bcf57bcc9f07e4832a9ff5d4fcc0225c79e92e946b2136b4201f0ccdf75/lingua_language_detector-2.0.2-cp311-cp311-macosx_10_7_x86_64.whl", hash = "sha256:14216ee3aeb0c9ab6a5665d71a1399653fe635ed66f208165ed67346feeb2a5c", size = 73638559 },
+    { url = "https://files.pythonhosted.org/packages/4f/a4/b7cbdea7c3c25f9856e62ebdce910b51a4d08d210206d50ce040bfae3f5e/lingua_language_detector-2.0.2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:ca558c52130a3a2a1fa432504fc71d4c6e2370340008d4bad261b33c05f81b3f", size = 74096293 },
+    { url = "https://files.pythonhosted.org/packages/a6/29/f707aae9410ed3154c3526d9803866b05384423189a49503b9164786cb2e/lingua_language_detector-2.0.2-cp311-cp311-manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:a7ae33db037acb47c6517a938885dab4b8bf14e6d6b27a9fa7e237e8680babbc", size = 74752055 },
+    { url = "https://files.pythonhosted.org/packages/bb/67/d873f0a05daa9923e48ddbb857a6c240a9f864016e010aa811118b4008c9/lingua_language_detector-2.0.2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:d6b22ad7d05db4ae6ef8ff127ccee2afb456941ddd781dc8675f110f77de8337", size = 74661524 },
+    { url = "https://files.pythonhosted.org/packages/05/59/5dbee53dd15f76f6c1258de75d11ab708cbaad86a08abc525249adba0cf9/lingua_language_detector-2.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:5d39aa5ca1b2d51aee46c7c96fa7ad0463dd2471a1b9827019b71fa367c918be", size = 74701784 },
+    { url = "https://files.pythonhosted.org/packages/cd/3f/37c181ff67d29b6079287d8e9afe20ea20fc5dc648f9eef8f384ecd7a030/lingua_language_detector-2.0.2-cp311-cp311-musllinux_1_2_aarch64.whl", hash = "sha256:d1502bb5e33a9f535b735cb8a898d96b81a63d19a1d2143f76e3b1ae7b7651ae", size = 74619191 },
+    { url = "https://files.pythonhosted.org/packages/3d/a4/aebfae8133642d2b1dcaf7d39cc623bdf2a96cfded945054f36bb9a29e64/lingua_language_detector-2.0.2-cp311-cp311-musllinux_1_2_i686.whl", hash = "sha256:d72a650be1c44e69dacac26aa7ab354790f95191bc830b3d43ab32ec71388a25", size = 74600253 },
+    { url = "https://files.pythonhosted.org/packages/68/c7/81d9dfd992f25ea06c103335855aae8e678f356242fa1228cde23dc5ce52/lingua_language_detector-2.0.2-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:2c9588ed7e1dfbe06190d6946cd0a9c0f4f22018f09dc37bb6ac686bcfd67907", size = 74662800 },
+    { url = "https://files.pythonhosted.org/packages/63/3c/a6bc5fb5d176786115a31ba9e3862615f9455edc90c72a4e797e6993c855/lingua_language_detector-2.0.2-cp311-none-win32.whl", hash = "sha256:c0a9fcaaf3a05b7b0b199414bfcdfc06a90b6779bfc37f784fafd45a0dad3201", size = 73224123 },
+    { url = "https://files.pythonhosted.org/packages/74/43/15c766f6a1749a3e0b0794e64223f7be4bf209e9d59f7b10bd5a45771be9/lingua_language_detector-2.0.2-cp311-none-win_amd64.whl", hash = "sha256:7ca5e4643cbb229c4eaae198458a5fafdeb812576edb3a160a5c2e4951d3cd1c", size = 73329231 },
+]
+
+[[package]]
 name = "multidict"
 version = "6.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -199,6 +216,7 @@ dependencies = [
     { name = "asqlite" },
     { name = "asyncio" },
     { name = "dearpygui" },
+    { name = "lingua-language-detector" },
     { name = "psutil" },
     { name = "pyexiftool" },
     { name = "pynput" },
@@ -216,6 +234,7 @@ requires-dist = [
     { name = "asqlite", specifier = ">=2.0.0" },
     { name = "asyncio", specifier = ">=3.4.3" },
     { name = "dearpygui", specifier = ">=2.0.0" },
+    { name = "lingua-language-detector", specifier = ">=2.0.2" },
     { name = "psutil", specifier = ">=6.1.0" },
     { name = "pyexiftool", specifier = ">=0.5.6" },
     { name = "pynput", specifier = ">=1.7.7" },

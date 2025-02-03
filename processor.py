@@ -5,17 +5,20 @@ from collections import deque
 import psutil
 import win32gui
 import win32process
+from lingua import Language
 from pynput.keyboard import Controller
 
 from command_execution import execute_command
 from commands.fact import get_fact
 from commands.fetch import find_recently_played
 from commands.webfishing import cast_line
-from config import GAME, PREFIX, HR_DIRECTORY, HR_FILE
+from config import GAME, HR_DIRECTORY, HR_FILE, LANGUAGE_DETECTION, PREFIX
 from database import check_if_player_exists, get_balance, insert_command
-from globals import BANNED_LIST, COMMAND_LIST, COMMAND_REGEX, TEAMS, server
+from globals import BANNED_LIST, COMMAND_LIST, COMMAND_REGEX, TEAMS, detector, server
+from util.translate import translate_message
 
 COMMAND_QUEUE = deque()
+TRANSLATION_QUEUE = deque()
 
 
 async def parse(line: str):
@@ -50,6 +53,11 @@ async def parse(line: str):
 	if not command:
 		return
 
+	if args:
+		full_message = command + " " + args
+	else:
+		full_message = command
+
 	if command.lower() in COMMAND_LIST:
 		steamid = await check_if_player_exists(username)
 		if not steamid:
@@ -62,6 +70,19 @@ async def parse(line: str):
 			command_data = command.replace("!", "")
 			await insert_command(steamid, username, command_data, team, dead, location, timestamp)
 			COMMAND_QUEUE.append((steamid, command, args, username, team, dead, location))
+
+	if LANGUAGE_DETECTION:
+		steamid = await check_if_player_exists(username)
+		if steamid == int(server.get_info("provider", "steamid")):
+			pass
+		else:
+			# detector = LanguageDetectorBuilder.from_all_languages().with_preloaded_language_models().build()
+			translated_command = detector.detect_language_of(full_message)
+			print(f"Detected language: {translated_command}")
+			if translated_command != Language.ENGLISH:
+				translated_message, detected_language = await translate_message(full_message)
+				if translated_message is not None and translated_message != full_message:
+					TRANSLATION_QUEUE.append((translated_message, username, detected_language))
 
 
 async def check_requirements() -> bool:
@@ -90,6 +111,9 @@ async def process_commands():
 			steamid, cmd, arg, user, team, dead, location = COMMAND_QUEUE.popleft()
 			# await asyncio.sleep(0.25)
 			await switchcase_commands(steamid, cmd, arg, user, team, dead, location)
+		if TRANSLATION_QUEUE:
+			message, username, language = TRANSLATION_QUEUE.popleft()
+			await process_translations(message, username, language)
 
 
 async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team: str, dead: str, location: str) -> None:
@@ -129,7 +153,7 @@ async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team:
 				if team in TEAMS:
 					await execute_command("switchhands", 3621, False)
 			case "!flash":
-				if GAME != "csgo":
+				if GAME == "cs2":
 					if team in TEAMS:
 						await execute_command(f"say_team {PREFIX} command unavailable for CS2 (blame valve)")
 				else:
@@ -191,6 +215,18 @@ async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team:
 	# 		await execute_command(f"say_team {PREFIX} You are banned from using the bot. fuck you.")
 	# 	else:
 	# 		await execute_command(f"say {PREFIX} You are banned from using the bot. fuck you.")
+
+
+# TODO: add options for console, team chat, and maybe windows notification or smth (or just bot console lmfao)
+async def process_translations(message: str, username: str, language: str):
+	"""
+	Process translations for the given message and username.
+
+	Args:
+		message (str): The message to process.
+		username (str): The username of the user who sent the message.
+	"""
+	await execute_command(f"say {PREFIX} {username} says ({language}): {message}")
 
 
 async def get_heart_rate():

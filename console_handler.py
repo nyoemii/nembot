@@ -1,8 +1,8 @@
 import asyncio
 import os
 
-from command_processing import parse
 from globals import PRINT_FILTER, nonce_signal
+from processor import parse
 
 
 async def listen(log_file):

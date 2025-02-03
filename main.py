@@ -3,7 +3,6 @@ import os
 
 from watchdog.observers import Observer
 
-from command_processing import check_requirements, process_commands
 from commands.fetch import find_recently_played
 from commands.webfishing import generate_loot_tables, parse_files_in_directory
 from config import CONSOLE_FILE, HR_DIRECTORY, HR_ENABLED, HR_FILE, RPC_ENABLED
@@ -14,6 +13,7 @@ from loop.deathchecking import check_death
 from loop.discord_rpc import DiscordManager
 from loop.heartrate import FileUpdateHandler
 from loop.roundtracking import check_round
+from processor import check_requirements, process_commands
 
 
 async def main_loop():
