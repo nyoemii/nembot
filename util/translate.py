@@ -5,7 +5,7 @@ import aiohttp
 
 async def translate_message(message: str) -> tuple[str, str]:
 	"""
-	Translate a message using the Flossboxin.org translation API.
+	Translate a message using libretranslate.
 
 	Args:
 		message (str): The message to be translated.
