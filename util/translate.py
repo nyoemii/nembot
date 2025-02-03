@@ -14,7 +14,7 @@ async def translate_message(message: str) -> tuple[str, str]:
 		tuple[str, str]: A tuple containing the translated message and the detected language.
 
 	"""
-	url = "https://translate.flossboxin.org.in/translate"
+	url = "https://lt.vern.cc/translate"
 	payload = {"q": message, "source": "auto", "target": "en", "format": "text", "alternatives": 3, "api_key": ""}
 	headers = {"Content-Type": "application/json"}
 
