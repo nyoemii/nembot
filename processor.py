@@ -66,9 +66,6 @@ async def parse(line: str):
 
 		if steamid:
 			steamid = int(steamid)
-			timestamp = server.get_info("provider", "timestamp")
-			command_data = command.replace("!", "")
-			await insert_command(steamid, username, command_data, team, dead, location, timestamp)
 			COMMAND_QUEUE.append((steamid, command, args, username, team, dead, location))
 
 	if LANGUAGE_DETECTION:
@@ -111,19 +108,22 @@ async def process_commands():
 			steamid, cmd, arg, user, team, dead, location = COMMAND_QUEUE.popleft()
 			# await asyncio.sleep(0.25)
 			await switchcase_commands(steamid, cmd, arg, user, team, dead, location)
+			timestamp = server.get_info("provider", "timestamp")
+			command_data = cmd.replace("!", "")
+			await insert_command(steamid, user, command_data, team, dead, location, timestamp)
 		if TRANSLATION_QUEUE:
 			message, username, language = TRANSLATION_QUEUE.popleft()
 			await process_translations(message, username, language)
 
 
-async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team: str, dead: str, location: str) -> None:
+async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team: str, dead: str, location: str) -> None:
 	"""
 	Process commands in the queue if the bot should process commands.
 
 	Args:
 		steamid (int): The SteamID of the player that sent the command.
 		cmd (str): The command issued by the player.
-		arg (str): The arguments provided with the command.
+		args (str): The arguments provided with the command.
 		user (str): The username of the player that sent the command.
 		team (str): The team of the player that sent the command.
 		dead (str): The dead status of the player that sent the command.
@@ -138,10 +138,10 @@ async def switchcase_commands(steamid: int, cmd: str, arg: str, user: str, team:
 			#     await execute_command("quit", 0.5)
 			case "!i":
 				if team in TEAMS:
-					if arg:
+					if args:
 						inspect_link = re.search(
 							r"steam:\/\/rungame\/730\/[0-9]+\/\+csgo_econ_action_preview%20([A-Za-z0-9]+)",
-							arg,
+							args,
 						)
 						if inspect_link:
 							await execute_command(f"gameui_activate;csgo_econ_action_preview {inspect_link.group(1)}\n say {PREFIX} Opened inspect link on my client.", 3621, False)
