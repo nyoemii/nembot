@@ -5,7 +5,7 @@
 no this doesn't read memory it's not a cheat, i'm just using fucking [schizo methods](https://github.com/Pandaptable/CS-dotfiles/tree/main/selfbot/ticks) of sending console commands (exec_async with `n` getting executed every 50 ticks that is aliased to `exec selfbot`)
 
 ## Setup
-1. `uv install`
+1. `uv sync`
 2. `cp config_default.py config.py`
 3. edit config
 4. setup CS CFG folder and launch options
