@@ -16,6 +16,7 @@ BANNED_LIST = [
 
 COMMAND_LIST = [
 	"!i",
+	"!inspect",
 	"!switchhands",
 	"!flash",
 	"!fish",
@@ -33,6 +34,8 @@ COMMAND_LIST = [
 	"!steamid",
 	"!heartrate",
 	"!hr",
+	"!shock",
+	# "!case",
 ]
 
 
@@ -125,6 +128,11 @@ PRE_FILTER = [
 	"missing sounds dir. Fixing for now.",
 	"[SoundSystemLowLevel]",
 	"models/hostage/v_hostage_arm.vmdl :: draw",
+	"--------  -------  --------  --------------",
+	"excl ms   excl %   incl ms   group",
+	"ms, tolerance:   ",
+	"Framerate spike report",
+	"ms    ",
 ]
 
 REGION_FILTER = [
@@ -165,18 +173,23 @@ REGION_FILTER = [
 	"maa2:",
 	"pwu:",
 	"bom2:",
+	"lim:",
+	"dfwm:",
+	"(front=",
+	"ms faster than direct ping of ",
+	"-- below this line ping exceeds mm_dedicated_search_maxping --",
 ]
 
 PRINT_FILTER = PRE_FILTER + REGION_FILTER
 
 
-# https://regex101.com/r/pTapEF/6
+# https://regex101.com/r/pTapEF/7
 csgo_regex = (
-	r"(?:\d{2}\/){2}\d{4}\s-\s\d{2}:(?:\d{2}:){2}\s(?P<dead_status>\*DEAD\*)?\s?(?:\((?P<team>[^)]+)\))?\s?(?P<username>.*)‎\s(?:@\s(?P<location>.*))?\s?:(?:\s)*(?P<command>\S+)?\s(?P<args>.*)?"
+	r"(?:\d{2}\/){2}\d{4}\s-\s\d{2}:(?:\d{2}:){2}\s(?P<dead_status>\*DEAD\*)?\s?(?:\((?P<team>[^)]+)\))?\s?(?P<username>.*?)‎\s(?:@\s(?P<location>.*?))?\s?:(?:\s)*(?P<command>\S+)?\s(?P<args>.*)?"
 )
 
-# https://regex101.com/r/1lYpb1/7
-cs2_regex = r"\[(?P<team>ALL|CT|T)\]\s+(?P<username>.*)‎(?:﹫(?P<location>.*))?\s*(?P<dead_status>\[DEAD\])?:(?:\s)*(?P<command>\S+)?\s(?P<args>.*)?"
+# https://regex101.com/r/1lYpb1/8
+cs2_regex = r"\[(?P<team>ALL|CT|T)\]\s+(?P<username>.*)‎(?:﹫(?P<location>.*?))?\s*(?P<dead_status>\[DEAD\])?:(?:\s)*(?P<command>\S+)?\s(?P<args>.*)?"
 
 
 if GAME == "csgo":
@@ -189,7 +202,7 @@ CLIENT_ID = 872181511334543370
 # TODO: change gsi library or add type definitions to everything
 server = GSIServer(("127.0.0.1", 3000), GSI_TOKEN)
 
-languages = [
+LANGUAGES = [
 	Language.ENGLISH,
 	Language.FRENCH,
 	Language.GERMAN,
@@ -203,7 +216,21 @@ languages = [
 	Language.POLISH,
 ]
 
-detector = LanguageDetectorBuilder.from_languages(*languages).build()
+LANGUAGE_SHORT_CODES = [
+	"en",
+	"fr",
+	"de",
+	"es",
+	"tr",
+	"ru",
+	"uk",
+	"zh",
+	"ja",
+	"ko",
+	"pl",
+]
+
+detector = LanguageDetectorBuilder.from_languages(*LANGUAGES).build()
 
 csgo_window_handle = win32gui.FindWindow("Valve001", None)
 

@@ -116,7 +116,7 @@ async def find_recently_played():
 
 	for i, player in enumerate(players):
 		# print(f"Player {i} - Name: {player['name']} - ID: {player['id']} - Time: {player['time']} - App: {player['app']}")
-		await insert_player(player["id"], player["name"])
+		await insert_player(player["id"], player["name"].replace(";", ":"))
 
 
 async def insert_player(steamid: int, username: str):

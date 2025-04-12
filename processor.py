@@ -1,4 +1,6 @@
 import asyncio
+import aiohttp
+import random
 import re
 from collections import deque
 
@@ -12,9 +14,10 @@ from command_execution import execute_command
 from commands.fact import get_fact
 from commands.fetch import find_recently_played
 from commands.webfishing import cast_line
-from config import GAME, HR_DIRECTORY, HR_FILE, LANGUAGE_DETECTION, PREFIX
+from commands.container import open_container
+from config import *
 from database import check_if_player_exists, get_balance, insert_command
-from globals import BANNED_LIST, COMMAND_LIST, COMMAND_REGEX, TEAMS, detector, server
+from globals import BANNED_LIST, COMMAND_LIST, COMMAND_REGEX, TEAMS, detector, server, LANGUAGE_SHORT_CODES
 from util.translate import translate_message
 
 COMMAND_QUEUE = deque()
@@ -36,7 +39,7 @@ async def parse(line: str):
 	regex = re.search(COMMAND_REGEX, line, flags=re.UNICODE | re.VERBOSE)
 	if regex:
 		team = regex.group("team")
-		username = regex.group("username")
+		username = regex.group("username").replace(";", ":")
 		location = regex.group("location")
 		dead = regex.group("dead_status")
 		command = regex.group("command")
@@ -75,11 +78,12 @@ async def parse(line: str):
 		else:
 			# detector = LanguageDetectorBuilder.from_all_languages().with_preloaded_language_models().build()
 			translated_command = detector.detect_language_of(full_message)
-			print(f"Detected language: {translated_command}")
 			if translated_command != Language.ENGLISH:
 				translated_message, detected_language = await translate_message(full_message)
+				if detected_language not in LANGUAGE_SHORT_CODES:
+					return
 				if translated_message is not None and translated_message != full_message:
-					TRANSLATION_QUEUE.append((translated_message, username, detected_language))
+					TRANSLATION_QUEUE.append((translated_message, username, detected_language, team))
 
 
 async def check_requirements() -> bool:
@@ -105,15 +109,16 @@ async def process_commands():
 	"""
 	if await check_requirements():
 		if COMMAND_QUEUE:
-			steamid, cmd, arg, user, team, dead, location = COMMAND_QUEUE.popleft()
+			steamid, cmd, args, user, team, dead, location = COMMAND_QUEUE.popleft()
 			# await asyncio.sleep(0.25)
-			await switchcase_commands(steamid, cmd, arg, user, team, dead, location)
+			await switchcase_commands(steamid, cmd, args, user, team, dead, location)
 			timestamp = server.get_info("provider", "timestamp")
 			command_data = cmd.replace("!", "")
+			command_data = command_data + " " + args
 			await insert_command(steamid, user, command_data, team, dead, location, timestamp)
 		if TRANSLATION_QUEUE:
-			message, username, language = TRANSLATION_QUEUE.popleft()
-			await process_translations(message, username, language)
+			message, username, language, translation_team = TRANSLATION_QUEUE.popleft()
+			await process_translations(message, username, language, translation_team)
 
 
 async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team: str, dead: str, location: str) -> None:
@@ -136,7 +141,7 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 			#     await execute_command("disconnect", 0.5)
 			# case "!quit" | "!q":
 			#     await execute_command("quit", 0.5)
-			case "!i":
+			case "!i" | "!inspect":
 				if team in TEAMS:
 					if args:
 						inspect_link = re.search(
@@ -210,6 +215,15 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 					await execute_command(f"say_team {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
 				else:
 					await execute_command(f"say {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
+			case "!case":
+				if team in TEAMS:
+					await open_container(args, user, steamid, team)
+				else:
+					await open_container(args, user, steamid, team)
+			case "!shock":
+				if OPENSHOCK_ENABLED:
+					if team in TEAMS:
+						await shock(args, user, steamid)
 	# else:
 	# 	if team in TEAMS:
 	# 		await execute_command(f"say_team {PREFIX} You are banned from using the bot. fuck you.")
@@ -218,15 +232,72 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 
 
 # TODO: add options for console, team chat, and maybe windows notification or smth (or just bot console lmfao)
-async def process_translations(message: str, username: str, language: str):
+async def process_translations(message: str, username: str, language: str, team: str):
 	"""
 	Process translations for the given message and username.
 
 	Args:
 		message (str): The message to process.
 		username (str): The username of the user who sent the message.
+		language (str): The suspected language of the message.
+		team (str): The team of the user who sent the message.
 	"""
-	await execute_command(f"say {PREFIX} {username} says ({language}): {message}")
+	if team in TEAMS:
+		await execute_command(f"say_team {PREFIX} {username} says ({language}): {message}")
+	else:
+		await execute_command(f"say {PREFIX} {username} says ({language}): {message}")
+
+
+async def shock(args: str, username: str, steamid: int):
+	"""
+	Send a shock to the user.
+
+	Args:
+		args (str): The args to parse for the intensity and duration of the shock.
+		username (str): The username of the user who sent the command.
+		steamid (int): The SteamID of the user who sent the command.
+	"""
+	if OPENSHOCK_PUNISHMENT_TYPE == "random":
+		shocker_list = [random.choice(OPENSHOCK_SHOCKER_LIST)]
+	elif OPENSHOCK_PUNISHMENT_TYPE == "one":
+		shocker_list = [OPENSHOCK_SHOCKER_LIST[0]]
+	else:
+		shocker_list = OPENSHOCK_SHOCKER_LIST
+
+	if not args:
+		await execute_command(f"say_team {PREFIX} No intensity or duration provided. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (300-{OPENSHOCK_DURATION_RANGE[1]} ms)>")
+	else:
+		args_list = args.split(" ")
+		if len(args_list) != 2:
+			await execute_command(f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (300-{OPENSHOCK_DURATION_RANGE[1]} ms)>")
+		else:
+			intensity = args_list[0]
+			duration = args_list[1]
+			if int(intensity) not in range(0, OPENSHOCK_STRENGTH_RANGE[1] + 1) or int(duration) not in range(300, OPENSHOCK_DURATION_RANGE[1] + 1):
+				await execute_command(f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (300-{OPENSHOCK_DURATION_RANGE[1]} ms)>")
+				return
+		intensity = int(intensity)
+		duration = int(duration)
+
+		shocks = [{"id": shock_id, "type": OPENSHOCK_TYPE, "intensity": intensity, "duration": duration} for shock_id in shocker_list]
+
+		payload = {"shocks": shocks, "customName": f"Shocked by [{username} ({steamid})](https://steamcommunity.com/profiles/{steamid})"}
+
+		async with aiohttp.ClientSession() as session:
+			try:
+				async with session.post(
+					OPENSHOCK_API_URL,
+					json=payload,
+					headers={"OpenShockToken": OPENSHOCK_API_TOKEN},
+				) as response:
+					if response.status == 200:
+						print("Shock" + ("s" if OPENSHOCK_PUNISHMENT_TYPE == "all" else "") + " sent successfully.")
+					elif response.status == 500:
+						pass
+					else:
+						print(f"Failed to activate shocker. Response: {response}")
+			except aiohttp.ClientError as e:
+				print(f"An error occurred: {e}")
 
 
 async def get_heart_rate():

@@ -1,18 +1,55 @@
+# "cs2" or "csgo"
 GAME = "cs2"
 
-# cs2 config
-CS2_CONSOLE_FILE = "path/to/console.log"
-# put at root of cfg folder
-CS2_EXEC_FILE = "path/to/selfbot.cfg"
+CS2_CONSOLE_FILE = "C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\console.log"
+# file that gets written to for command execution
+CS2_EXEC_FILE = "C:\Program Files (x86)\Steam\steamapps\common\Counter-Strike Global Offensive\game\csgo\cfg\selfbot.cfg"
 
-# unused atm, may use again later
+CSGO_CONSOLE_FILE = "C:\path\to\your\console.log"
+# unused in csgo, just here bc i cannot be fucked to properly account for it
+CSGO_EXEC_FILE = "D:\selfbot.cfg"
+
+GSI_TOKEN = "S8RL9Z6Y22TYQK45JB4V8PHRJJMD9DS9"
+PREFIX = "ɴᴇᴍʙᴏᴛ »"
+
+# hehe jonathan (literally any filename works)
+DATABASE_NAME = "jonathan.db"
+
+# discord rpc
+RPC_ENABLED = True
+# auto translation of messages
+LANGUAGE_DETECTION = False
+
+
+OPENSHOCK_ENABLED = True
+
+OPENSHOCK_STRENGTH_RANGE = 30, 75  # in percent, min 0, max 100
+OPENSHOCK_DURATION_RANGE = 300, 3000  # in millseconds, min 300, max 30000
+# Types: "Shock", "Vibrate", "Sound"
+OPENSHOCK_TYPE = "Shock"
+OPENSHOCK_API_TOKEN = ""
+OPENSHOCK_API_URL = "https://api.openshock.app/2/shockers/control"
+OPENSHOCK_SHOCKER_LIST = [
+	"example-id-1",
+	"example-id-2",
+	"example-id-3",
+	"example-id-4",
+]
+# Types: "random", "one", "all" (one chooses first in list)
+OPENSHOCK_PUNISHMENT_TYPE = "random"
+
+
+# specific to me, only works on classiccounter if you have my steamid (plugin may have also been removed from their servers)
+HR_ENABLED = False
+HR_FILE = "heartrate.txt"
+HR_DIRECTORY = "E:/Media Library/"
+
+# unused
 DROP_KEY = "g"
 SWITCH_HANDS_KEY = "c"
 
-# csgo config
-CSGO_CONSOLE_FILE = "path/to/console.log"
-# unused, just for compatibility with shit code :3
-CSGO_EXEC_FILE = "path/to/selfbot.cfg"
+
+# don't change
 
 if GAME == "csgo":
 	CONSOLE_FILE = CSGO_CONSOLE_FILE
@@ -20,33 +57,3 @@ if GAME == "csgo":
 else:
 	CONSOLE_FILE = CS2_CONSOLE_FILE
 	EXEC_FILE = CS2_EXEC_FILE
-
-
-# hehe jonathan (you can change it to whatever, just make sure you keep it consistent)
-DATABASE_NAME = "jonathan.db"
-
-# recommend subtext here for the text
-PREFIX = "ɴᴇᴍʙᴏᴛ »"
-
-# https://openshock.org stuff
-DEATH_SHOCK_STRENGTH = 60
-DEATH_SHOCK_DURATION = 1500
-SHOCKING_ENABLED = True
-
-API_TOKEN = "your openshock api token"
-API_URL = "https://api.openshock.app/2/shockers/control"
-SHOCKER_ID = "your openshock shocker id"
-
-RPC_ENABLED = True
-
-# auto translation of chat messages
-LANGUAGE_DETECTION = True
-
-# token used for GSI in CS (put in auth field of your gamestate_integration_GSI.cfg)
-GSI_TOKEN = "your gsi token"
-
-
-# only usable on classiccounter if you have my steamid, aka irrelevant
-HR_ENABLED = False
-HR_FILE = "heartrate.txt"
-HR_DIRECTORY = "E:/Media Library/"

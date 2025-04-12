@@ -1,4 +1,5 @@
 import aiohttp
+import random
 
 from config import *
 from globals import server
@@ -18,39 +19,49 @@ async def check_death():
 			LAST_DEATH_COUNT = 0
 		if CURRENT_DEATH_COUNT > LAST_DEATH_COUNT:
 			LAST_DEATH_COUNT = CURRENT_DEATH_COUNT
-			await on_death()
+			if server.get_info("map", "phase") == "live":
+				await on_death()
 
 
 async def on_death():
-	if SHOCKING_ENABLED:
+	if OPENSHOCK_ENABLED:
+		if OPENSHOCK_PUNISHMENT_TYPE == "random":
+			shocker_list = [random.choice(OPENSHOCK_SHOCKER_LIST)]
+		elif OPENSHOCK_PUNISHMENT_TYPE == "one":
+			shocker_list = [OPENSHOCK_SHOCKER_LIST[0]]
+		else:
+			shocker_list = OPENSHOCK_SHOCKER_LIST
+
+		shocks = [
+			{
+				"id": shock_id,
+				"type": OPENSHOCK_TYPE,
+				"intensity": (random.randint(*OPENSHOCK_STRENGTH_RANGE) // 5) * 5,
+				"duration": (random.randint(*OPENSHOCK_DURATION_RANGE) // 100) * 100,
+			}
+			for shock_id in shocker_list
+		]
+
+		payload = {"shocks": shocks, "customName": "Died in CS"}
+
 		async with aiohttp.ClientSession() as session:
 			try:
 				async with session.post(
-					API_URL,
-					json={
-						"shocks": [
-							{
-								"id": SHOCKER_ID,
-								"type": "Shock",
-								"intensity": DEATH_SHOCK_STRENGTH,
-								"duration": DEATH_SHOCK_DURATION,
-							}
-						],
-						"customName": "Died in CS",
-					},
-					headers={"OpenShockToken": API_TOKEN},
+					OPENSHOCK_API_URL,
+					json=payload,
+					headers={"OpenShockToken": OPENSHOCK_API_TOKEN},
 				) as response:
 					if response.status == 200:
-						print("Shocker activated successfully.")
+						print("Shock" + ("s" if OPENSHOCK_PUNISHMENT_TYPE == "all" else "") + " sent successfully.")
 					else:
-						print(f"Failed to activate shocker. Status code: {response}")
+						print(f"Failed to activate shocker. Response: {response}")
 			except aiohttp.ClientError as e:
 				print(f"An error occurred: {e}")
 
 
 async def check_if_dead() -> bool:
 	global DEAD_STATUS
-	if server.get_info("player", "steamid") == server.get_info("provider", "steamid") and not server.get_info("player", "state", "health") > 0:
+	if server.get_info("player", "steamid") != server.get_info("provider", "steamid") or server.get_info("player", "state", "health") <= 0:
 		DEAD_STATUS = True
 	else:
 		DEAD_STATUS = False

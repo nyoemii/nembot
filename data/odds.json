@@ -1,0 +1,292 @@
+[
+	{
+		"type": "case",
+		"rarities": [
+			{
+				"id": "rarity_rare",
+				"name": "Mil-Spec Grade",
+				"odds": 79.923
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Restricted",
+				"odds": 15.985
+			},
+			{
+				"id": "rarity_legendary",
+				"name": "Classified",
+				"odds": 3.197
+			},
+			{
+				"id": "rarity_ancient",
+				"name": "Covert",
+				"odds": 0.639
+			},
+			{
+				"id": "gold",
+				"name": "Rare Special Item",
+				"odds": 0.256
+			}
+		]
+	},
+	{
+		"type": "souvenir_0",
+		"rarities": [
+			{
+				"id": "rarity_rare",
+				"name": "Mil-Spec Grade",
+				"odds": 79.923
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Restricted",
+				"odds": 15.985
+			},
+			{
+				"id": "rarity_legendary",
+				"name": "Classified",
+				"odds": 3.197
+			}
+		]
+	},
+	{
+		"type": "souvenir_1",
+		"rarities": [
+			{
+				"id": "rarity_common",
+				"name": "Consumer Grade",
+				"odds": 80.537
+			},
+			{
+				"id": "rarity_uncommon",
+				"name": "Industrial Grade",
+				"odds": 16.107
+			},
+			{
+				"id": "rarity_rare",
+				"name": "Mil-Spec Grade",
+				"odds": 3.356
+			}
+		]
+	},
+	{
+		"type": "souvenir_2",
+		"rarities": [
+			{
+				"id": "rarity_uncommon",
+				"name": "Industrial Grade",
+				"odds": 80.000
+			},
+			{
+				"id": "rarity_rare",
+				"name": "Mil-Spec Grade",
+				"odds": 16.667
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Restricted",
+				"odds": 3.333
+			}
+		]
+	},
+	{
+		"type": "souvenir_3",
+		"rarities": [
+			{
+				"id": "rarity_common",
+				"name": "Consumer Grade",
+				"odds": 80.000
+			},
+			{
+				"id": "rarity_uncommon",
+				"name": "Industrial Grade",
+				"odds": 16.000
+			},
+			{
+				"id": "rarity_rare",
+				"name": "Mil-Spec Grade",
+				"odds": 3.333
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Restricted",
+				"odds": 0.667
+			}
+		]
+	},
+	{
+		"type": "souvenir_4",
+		"rarities": [
+			{
+				"id": "rarity_common",
+				"name": "Consumer Grade",
+				"odds": 79.893
+			},
+			{
+				"id": "rarity_uncommon",
+				"name": "Industrial Grade",
+				"odds": 15.979
+			},
+			{
+				"id": "rarity_rare",
+				"name": "Mil-Spec Grade",
+				"odds": 3.329
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Restricted",
+				"odds": 0.666
+			},
+			{
+				"id": "rarity_legendary",
+				"name": "Classified",
+				"odds": 0.133
+			}
+		]
+	},
+	{
+		"type": "souvenir_5",
+		"rarities": [
+			{
+				"id": "rarity_common",
+				"name": "Consumer Grade",
+				"odds": 79.872
+			},
+			{
+				"id": "rarity_uncommon",
+				"name": "Industrial Grade",
+				"odds": 15.974
+			},
+			{
+				"id": "rarity_rare",
+				"name": "Mil-Spec Grade",
+				"odds": 3.328
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Restricted",
+				"odds": 0.666
+			},
+			{
+				"id": "rarity_legendary",
+				"name": "Classified",
+				"odds": 0.133
+			},
+			{
+				"id": "rarity_ancient",
+				"name": "Covert",
+				"odds": 0.027
+			}
+		]
+	},
+	{
+		"type": "capsule_0",
+		"rarities": [
+			{
+				"id": "rarity_rare",
+				"name": "High Grade",
+				"odds": 83.333
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Remarkable",
+				"odds": 16.667
+			}
+		]
+	},
+	{
+		"type": "capsule_1",
+		"rarities": [
+			{
+				"id": "rarity_rare",
+				"name": "High Grade",
+				"odds": 80.645
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Remarkable",
+				"odds": 16.129
+			},
+			{
+				"id": "rarity_legendary",
+				"name": "Exotic",
+				"odds": 3.226
+			}
+		]
+	},
+	{
+		"type": "capsule_2",
+		"rarities": [
+			{
+				"id": "rarity_mythical",
+				"name": "Remarkable",
+				"odds": 83.333
+			},
+			{
+				"id": "rarity_legendary",
+				"name": "Exotic",
+				"odds": 16.667
+			}
+		]
+	},
+	{
+		"type": "capsule_3",
+		"rarities": [
+			{
+				"id": "rarity_rare",
+				"name": "High Grade",
+				"odds": 80.128
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Remarkable",
+				"odds": 16.026
+			},
+			{
+				"id": "rarity_legendary",
+				"name": "Exotic",
+				"odds": 3.205
+			},
+			{
+				"id": "rarity_ancient",
+				"name": "Extraordinary",
+				"odds": 0.641
+			}
+		]
+	},
+	{
+		"type": "capsule_4",
+		"rarities": [
+			{
+				"id": "rarity_rare",
+				"name": "High Grade",
+				"odds": 96.154
+			},
+			{
+				"id": "rarity_legendary",
+				"name": "Exotic",
+				"odds": 3.846
+			}
+		]
+	},
+	{
+		"type": "capsule_5",
+		"rarities": [
+			{
+				"id": "rarity_rare",
+				"name": "High Grade",
+				"odds": 82.782
+			},
+			{
+				"id": "rarity_mythical",
+				"name": "Remarkable",
+				"odds": 16.556
+			},
+			{
+				"id": "rarity_ancient",
+				"name": "Extraordinary",
+				"odds": 0.662
+			}
+		]
+	}
+]
