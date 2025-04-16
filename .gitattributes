@@ -5,11 +5,11 @@ aphrodite -linguist-vendored
 aphrodite/** -linguist-vendored
 
 # Override Linguist language for specific file types in aphrodite
-aphrodite/*.ecl linguist-language=Postscript
-aphrodite/*.em linguist-language=RenPy
-aphrodite/*.ps linguist-language=EmberScript
-aphrodite/*.rpy linguist-language=Sass
-aphrodite/*.sass linguist-language=ECL
+aphrodite/*.ecl linguist-language=ECL
+aphrodite/*.em linguist-language=EmberScript
+aphrodite/*.j   linguist-language=Jasmin
+aphrodite/*.zig linguist-language=Zig
+aphrodite/*.aj  linguist-language=AspectJ
 
 # Exclude aphrodite folder from export (if needed)
 aphrodite export-ignore
