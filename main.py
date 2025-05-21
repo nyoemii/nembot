@@ -91,9 +91,6 @@ async def start_server():
 		await generate_loot_tables("fish", "water_trash")
 		await generate_loot_tables("fish", "metal")
 
-		# TODO: implement reading from a pipe like: https://github.com/t5mat/conturn
-		# can be done by changing con_logfile on every reload (and also changing the pipe) so that we can properly use a pipe
-		# okay so i need to do even more schizo shit:tm: (con_logfile was removed)
 		log_file = open(CONSOLE_FILE, "r", encoding="utf-8")
 
 		await asyncio.gather(main_loop(), rpc_loop(), listen(log_file))
