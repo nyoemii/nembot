@@ -68,6 +68,8 @@ PRE_FILTER = [
 	"[BuildSparseShadowTree]",
 	"[SteamAudio]",
 	"[SV CommandQueue]",
+	"[Prediction]",
+	"[SceneFileCache]",
 	"execing selfbot",
 	"execing movement/de-subticks/",
 	"Invalid content height",
@@ -133,6 +135,9 @@ PRE_FILTER = [
 	"ms, tolerance:   ",
 	"Framerate spike report",
 	"ms    ",
+	"Bad resource name <NULL_MODEL>",
+	"Can't set position/velocity on whiz sound",
+	"CMatchSessionOnlineClient::UpdateSessionSettings is",
 ]
 
 REGION_FILTER = [
