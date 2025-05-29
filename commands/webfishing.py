@@ -275,30 +275,7 @@ async def cast_line(steamid: int, username: str, team: str):
 		await insert_fish(fish_name, size, price, quality, steamid, username)
 		await update_balance(steamid, price)
 		if team in TEAMS:
-			if not await check_if_dead():
-				if quality in "pink, red":
-					await execute_command(
-						f"playerchatwheel CW.1 \"{PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_color}{quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!",
-						0.5,
-						False,
-					)
-				elif quality == "gold":
-					await execute_command(
-						f'playerchatwheel CW.1 "{PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_color}{quality_name} {fish_name}! {catch_blurb} It\'s {normalized_size} and is worth ₶{price}!"',
-						0.5,
-						False,
-					)
-				elif quality == "contraband":
-					await execute_command(
-						f'playerchatwheel CW.1 "{PREFIX} {username}: {quality_color}〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It\'s {normalized_size} and is worth ₶{price}!"',
-						0.5,
-						False,
-					)
-				else:
-					await execute_command(f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
-			else:
-				await execute_command(f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
-
+			await execute_command(f"say_team {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
 		else:
 			await execute_command(f"say {PREFIX} {username}: 〈͜͡˒ ⋊ You caught a {quality_name} {fish_name}! {catch_blurb} It's {normalized_size} and is worth ₶{price}!", 0.5)
 

@@ -102,11 +102,7 @@ async def execute_command_cs2(command: str, delay: float | None = None, check_no
 			clear_command()
 		else:
 			await asyncio.sleep(0.25)
-			if "playerchatwheel" in command:
-				write_command(command + (f"\necholn {nonce}" if check_nonce else ""))
-				await asyncio.sleep(0.0500001)
-				clear_command()
-			elif "say" in command or "say_team" in command:
+			if "say" in command or "say_team" in command:
 				write_command(command + (nonce if check_nonce else ""))
 				await asyncio.sleep(0.0500001)
 				clear_command()
@@ -138,7 +134,7 @@ async def execute_command(command: str, delay: float | None = None, check_nonce:
 		check_nonce (bool): Whether to check for a nonce after executing the command.
 	"""
 	if GAME == "csgo":
-		await execute_command_csgo(command, delay, check_nonce)
+		await execute_command_csgo(command, delay)
 	else:
 		await execute_command_cs2(command, delay, check_nonce)
 
