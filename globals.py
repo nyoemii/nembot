@@ -138,6 +138,7 @@ PRE_FILTER = [
 	"Bad resource name <NULL_MODEL>",
 	"Can't set position/velocity on whiz sound",
 	"CMatchSessionOnlineClient::UpdateSessionSettings is",
+	"SteamNetworkingSockets lock",
 ]
 
 REGION_FILTER = [
