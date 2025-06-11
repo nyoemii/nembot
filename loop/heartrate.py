@@ -15,8 +15,7 @@ class FileUpdateHandler(FileSystemEventHandler):
 
 
 def file_updated():
-	with open(f"{HR_DIRECTORY + HR_FILE}", "r", encoding="utf-8") as f:
-		heart_rate = f.read().splitlines()[0]
+	heart_rate = open(f"{HR_DIRECTORY + HR_FILE}", "r", encoding="utf-8").read().splitlines()[0]
 	if server.get_info("player", "activity") != "menu":
 		if server.get_info("map", "phase") == "live":
 			send_message_async(csgo_window_handle, "sm_fart Heartrate: " + heart_rate)
