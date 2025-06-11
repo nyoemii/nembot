@@ -10,7 +10,6 @@ from command_execution import execute_command
 from config import PREFIX
 from database import insert_fish, update_balance
 from globals import TEAMS, server
-from loop.deathchecking import check_if_dead
 
 loot_tables = {}
 
