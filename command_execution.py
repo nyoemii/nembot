@@ -118,6 +118,8 @@ async def execute_command_cs2(command: str, delay: float | None = None, check_no
 				continue
 			else:
 				break
+		else:
+			break
 	else:
 		if check_nonce:
 			nonce_signal.unregister(nonce)
