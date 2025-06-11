@@ -13,15 +13,23 @@ WM_COPYDATA = 0x004A
 
 class TemplateGenerator:
 	def __init__(self):
-		self.counter = 1
+		self.toggle = False
 
 	def generate(self, command):
-		index = self.counter
-		self.counter += 1
-		return f'''	alias target{index} "{command}"
-						unbound
-						target{index}
-						alias unbound "alias target{index} n
+		self.toggle = not self.toggle
+		if self.toggle:
+			return f'''	alias unbound1
+						alias target "{command}"
+						unbound0
+						target
+						alias unbound0 "alias target"
+						'''
+		else:
+			return f'''	alias unbound0
+						alias target "{command}"
+						unbound1
+						target
+						alias unbound1 "alias target"
 						'''
 
 
@@ -154,7 +162,7 @@ async def execute_command(command: str, delay: float | None = None, check_nonce:
 		check_nonce (bool): Whether to check for a nonce after executing the command.
 	"""
 	if GAME == "csgo":
-		await execute_command_csgo(command, delay)
+		await execute_command_csgo(command, delay, check_nonce)
 	else:
 		await execute_command_cs2(command, delay, check_nonce)
 
