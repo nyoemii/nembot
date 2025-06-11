@@ -11,6 +11,23 @@ from globals import csgo_window_handle, nonce_signal
 WM_COPYDATA = 0x004A
 
 
+class TemplateGenerator:
+	def __init__(self):
+		self.counter = 1
+
+	def generate(self, command):
+		index = self.counter
+		self.counter += 1
+		return f'''	alias target{index} "{command}"
+						unbound
+						target{index}
+						alias unbound "alias target{index} n
+						'''
+
+
+gen = TemplateGenerator()
+
+
 def write_command(command: str) -> None:
 	"""
 	Write a command to the file that gets executed by the game.
@@ -19,6 +36,7 @@ def write_command(command: str) -> None:
 		command (str): The command to write.
 	"""
 	with open(EXEC_FILE, "w", encoding="utf-8") as f:
+		command = gen.generate(command)
 		f.write(command)
 
 

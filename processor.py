@@ -158,15 +158,11 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 				if team in TEAMS:
 					await execute_command("switchhands", 3621, False)
 			case "!flash":
-				if GAME == "cs2":
-					if team in TEAMS:
-						await execute_command(f"say_team {PREFIX} command unavailable for CS2 (blame valve)")
-				else:
-					if team in TEAMS:
-						await execute_command(f"say_team {PREFIX} fuck you.")
-						for _ in range(13):
-							await execute_command("flashbangs", 3621)
-							await asyncio.sleep(0.01 / 13)
+				if team in TEAMS:
+					await execute_command(f"say_team {PREFIX} fuck you.")
+					for _ in range(13):
+						await execute_command("flashbangs", 3621, False)
+						await asyncio.sleep(0.01 / 13)
 			case "!fish" | "!〈͜͡˒":  # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
 				if team in TEAMS:
 					await cast_line(steamid, user, team)
