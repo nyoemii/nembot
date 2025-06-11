@@ -181,6 +181,8 @@ REGION_FILTER = [
 	"bom2:",
 	"lim:",
 	"dfwm:",
+	"  gru: ",
+	"  scl: ",
 	"(front=",
 	"ms faster than direct ping of ",
 	"-- below this line ping exceeds mm_dedicated_search_maxping --",
