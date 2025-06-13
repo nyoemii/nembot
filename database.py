@@ -45,6 +45,23 @@ async def init_database():
 				)
 				"""
 			)
+			await cursor.execute(
+				"""
+				CREATE TABLE IF NOT EXISTS skindibi (
+					id INTEGER PRIMARY KEY AUTOINCREMENT,
+					steamid INTEGER NOT NULL,
+					username TEXT,
+					skin_name TEXT,
+					skin_rarity INTEGER,
+					pattern INTEGER,
+					float REAL,
+					wear_name TEXT,
+					stattrak INTEGER,
+					container_name TEXT,
+					timestamp TEXT
+				)
+				"""
+			)
 			await connection.commit()
 
 
@@ -98,6 +115,19 @@ async def update_balance(steamid: int, amount: int):
 				UPDATE players SET money = money + ? WHERE steamid = ?
 				""",
 				(amount, steamid),
+			)
+			await connection.commit()
+
+
+async def insert_item(container_name, skin_name, pattern, float, wear_name, stattrak, username, steamid):
+	async with asqlite.connect(DATABASE_NAME) as connection:
+		async with connection.cursor() as cursor:
+			await cursor.execute(
+				"""
+				INSERT INTO skindibi (steamid, username, skin_name, pattern, float, wear_name, stattrak, container_name, timestamp)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+				""",
+				(steamid, username, skin_name, pattern, float, wear_name, stattrak, container_name, server.get_info("provider", "timestamp")),
 			)
 			await connection.commit()
 

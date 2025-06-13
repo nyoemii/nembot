@@ -164,9 +164,7 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 						await execute_command("flashbangs", 3621, False)
 						await asyncio.sleep(0.01 / 13)
 			case "!fish" | "!〈͜͡˒":  # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
-				if team in TEAMS:
-					await cast_line(steamid, user, team)
-				elif not dead:
+				if team in TEAMS or not dead:
 					await cast_line(steamid, user, team)
 				else:
 					await execute_command(f"say {PREFIX} You cannot fish while dead.")
@@ -212,10 +210,10 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 				else:
 					await execute_command(f"say {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
 			case "!case":
-				if team in TEAMS:
+				if team in TEAMS or not dead:
 					await open_container(args, user, steamid, team)
 				else:
-					await open_container(args, user, steamid, team)
+					await execute_command(f"say {PREFIX} You cannot open a container while dead.")
 			case "!shock":
 				if OPENSHOCK_ENABLED:
 					if team in TEAMS:

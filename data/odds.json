@@ -288,5 +288,25 @@
 				"odds": 0.662
 			}
 		]
+	},
+	{
+		"type": "extra_0",
+		"rarities": [
+			{
+				"id": "rarity_rare",
+				"name": "High Grade",
+				"odds": 100
+			}
+		]
+	},
+	{
+		"type": "extra_1",
+		"rarities": [
+			{
+				"id": "rarity_legendary",
+				"name": "Exotic",
+				"odds": 100
+			}
+		]
 	}
 ]

@@ -35,7 +35,7 @@ COMMAND_LIST = [
 	"!heartrate",
 	"!hr",
 	"!shock",
-	# "!case",
+	"!case",
 ]
 
 
