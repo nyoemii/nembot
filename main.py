@@ -1,5 +1,6 @@
 import asyncio
 import os
+import traceback
 
 from watchdog.observers import Observer
 
@@ -95,9 +96,14 @@ async def start_server():
 
 		await asyncio.gather(main_loop(), rpc_loop(), listen(log_file))
 	except Exception as e:
-		print(f"Error during startup: {e}")
+		print("Error during startup.")
+		print_traceback(e)
 	finally:
 		await shutdown(observer, server)
+
+
+def print_traceback(err):
+	print("".join(traceback.format_exception(type(err), err, err.__traceback__)))
 
 
 if __name__ == "__main__":
