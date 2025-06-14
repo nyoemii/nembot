@@ -190,10 +190,10 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 			case "!help" | "!commands" | "!cmds":
 				if team in TEAMS:
 					await execute_command(
-						f"say_team {PREFIX} !help (shows this message) | !bal | !fish or !〈͜͡˒ ⋊  | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !switchhands"
+						f"say_team {PREFIX} !help (shows this message) | !bal | !fish or !〈͜͡˒ ⋊  | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !switchhands | !case"
 					)
 				else:
-					await execute_command(f"say {PREFIX} !help (shows this message) | !bal | !fish or !〈͜͡˒ ⋊  | !fact | !info (info on the bot)")
+					await execute_command(f"say {PREFIX} !help (shows this message) | !bal | !fish or !〈͜͡˒ ⋊  | !fact | !info (info on the bot) | !case")
 			case "!balance" | "!bal" | "!money":
 				if team in TEAMS:
 					await execute_command(f"say_team {PREFIX} You have ₶{await get_balance(steamid)} hegemony")
