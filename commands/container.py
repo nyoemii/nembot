@@ -156,6 +156,7 @@ async def open_container(container_name, username, steamid, team):
 			await execute_command(f"say {PREFIX} {skin_opened}")
 	else:
 		skin_pattern = None
+		skin_float = None
 		displayed_float = None
 		wear_name = None
 		skin_stattrak = False
