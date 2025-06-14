@@ -92,7 +92,7 @@ async def start_server():
 		await generate_loot_tables("fish", "water_trash")
 		await generate_loot_tables("fish", "metal")
 
-		log_file = open(CONSOLE_FILE, "r", encoding="utf-8")
+		log_file = open(CONSOLE_FILE, "r", encoding="utf-8", errors="replace")
 
 		await asyncio.gather(main_loop(), rpc_loop(), listen(log_file))
 	except Exception as e:
