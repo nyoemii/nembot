@@ -134,13 +134,13 @@ async def open_container(container_name, username, steamid, team):
 		skin_min_float = item_json[0]["min_float"]
 		skin_max_float = item_json[0]["max_float"]
 		skin_float = random.uniform(skin_min_float, skin_max_float)
-		skin_float = float("{:.9f}".format(skin_float))
+		displayed_float = float("{:.9f}".format(skin_float))
 		# Determine wear name based on float
 		wear_name = None
 		for attr in dir(Wear):
 			if attr.startswith("SFUI_InvTooltip_Wear_Amount_"):
 				wear_data = getattr(Wear, attr)
-				if wear_data["min_float"] <= skin_float <= wear_data["max_float"]:
+				if wear_data["min_float"] <= displayed_float <= wear_data["max_float"]:
 					wear_name = wear_data["name"]
 					break
 		# Determine stattrak
@@ -149,14 +149,14 @@ async def open_container(container_name, username, steamid, team):
 		# Determine pattern
 		skin_pattern = random.randint(0, 1000)
 
-		skin_opened = await format_skin(item_name, skin_float, skin_pattern, skin_stattrak, username)
+		skin_opened = await format_skin(item_name, displayed_float, skin_pattern, skin_stattrak, username)
 		if team in TEAMS:
 			await execute_command(f"say_team {PREFIX} {skin_opened}")
 		else:
 			await execute_command(f"say {PREFIX} {skin_opened}")
 	else:
 		skin_pattern = None
-		skin_float = None
+		displayed_float = None
 		wear_name = None
 		skin_stattrak = False
 
