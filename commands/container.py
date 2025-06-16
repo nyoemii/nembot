@@ -123,11 +123,22 @@ async def open_container(container_name, username, steamid, team):
 		weights.append(item_weight)
 
 	chosen_item = random.choices(item_pool, weights=weights, k=1)[0]
+	while container_type == "Music Kit Box":
+		chosen_item = random.choices(item_pool, weights=weights, k=1)[0]
+		if chosen_item["type"] != "Music Kit":
+			break
 	if container_type in ["Sticker Capsule", "Autograph Capsule"]:
 		skin_list = await load_stickers()
 	else:
 		skin_list = await load_skins()
 	item_json = [skin for skin in skin_list if skin["id"] == chosen_item["id"]]
+	if not item_json:
+		if team in TEAMS:
+			await execute_command(f"say_team {PREFIX} You tried to open {proper_container_name} but my code is shit so it broke </3.")
+		else:
+			await execute_command(f"say {PREFIX} You tried to open {proper_container_name} but my code is shit so it broke </3.")
+		print(f"Container: {proper_container_name} | Chosen item: {chosen_item}")
+		return
 	item_name = item_json[0]["name"]
 	# Determine float
 	if container_type not in ["Sticker Capsule", "Autograph Capsule"]:
