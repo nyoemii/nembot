@@ -125,7 +125,7 @@ async def open_container(container_name, username, steamid, team):
 	chosen_item = random.choices(item_pool, weights=weights, k=1)[0]
 	while container_type == "Music Kit Box":
 		chosen_item = random.choices(item_pool, weights=weights, k=1)[0]
-		if chosen_item["type"] != "Music Kit":
+		if container_type != "Music Kit Box":
 			break
 	if container_type in ["Sticker Capsule", "Autograph Capsule"]:
 		skin_list = await load_stickers()
