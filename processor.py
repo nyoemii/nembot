@@ -267,19 +267,25 @@ async def shock(args: str, username: str, steamid: int):
 		shocker_list = OPENSHOCK_SHOCKER_LIST
 
 	if not args:
-		await execute_command(f"say_team {PREFIX} No intensity or duration provided. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (300-{OPENSHOCK_DURATION_RANGE[1]} ms)>")
+		await execute_command(
+			f"say_team {PREFIX} No intensity or duration provided. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} s)>"
+		)
 	else:
 		args_list = args.split(" ")
 		if len(args_list) != 2:
-			await execute_command(f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (300-{OPENSHOCK_DURATION_RANGE[1]} ms)>")
+			await execute_command(
+				f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} s)>"
+			)
 		else:
 			intensity = args_list[0]
 			duration = args_list[1]
-			if int(intensity) not in range(0, OPENSHOCK_STRENGTH_RANGE[1] + 1) or int(duration) not in range(300, OPENSHOCK_DURATION_RANGE[1] + 1):
-				await execute_command(f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (300-{OPENSHOCK_DURATION_RANGE[1]} ms)>")
+			if int(intensity) not in range(0, OPENSHOCK_STRENGTH_RANGE[1] + 1) or float(duration) not in [round(x / 1000, 3) for x in range(300, OPENSHOCK_DURATION_RANGE[1] + 1)]:
+				await execute_command(
+					f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} s)>"
+				)
 				return
 		intensity = int(intensity)
-		duration = int(duration)
+		duration = int(float(duration) * 1000)
 
 		shocks = [{"id": shock_id, "type": OPENSHOCK_TYPE, "intensity": intensity, "duration": duration} for shock_id in shocker_list]
 
