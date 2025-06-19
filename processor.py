@@ -205,10 +205,11 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 				else:
 					await execute_command(f"say {PREFIX} Your SteamID is: {steamid}")
 			case "!heartrate" | "!hr":
-				if team in TEAMS:
-					await execute_command(f"say_team {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
-				else:
-					await execute_command(f"say {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
+				if HR_ENABLED:
+					if team in TEAMS:
+						await execute_command(f"say_team {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
+					else:
+						await execute_command(f"say {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
 			case "!case":
 				if team in TEAMS or not dead:
 					await open_container(args, user, steamid, team)
