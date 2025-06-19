@@ -146,6 +146,7 @@ async def open_container(container_name, username, steamid, team):
 		skin_max_float = item_json[0]["max_float"]
 		skin_float = random.uniform(skin_min_float, skin_max_float)
 		displayed_float = float("{:.9f}".format(skin_float))
+		skin_rarity = item_json["rarity"]["id"].replace("_weapon", "")
 		# Determine wear name based on float
 		wear_name = None
 		for attr in dir(Wear):
@@ -178,7 +179,7 @@ async def open_container(container_name, username, steamid, team):
 		else:
 			await execute_command(f"say {PREFIX} {skin_opened}")
 
-	await insert_item(container_name, item_name, skin_pattern, skin_float, wear_name, skin_stattrak, username, steamid)
+	await insert_item(container_name, item_name, skin_rarity, skin_pattern, skin_float, wear_name, skin_stattrak, username, steamid)
 
 	return
 

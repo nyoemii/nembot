@@ -52,7 +52,7 @@ async def init_database():
 					steamid INTEGER NOT NULL,
 					username TEXT,
 					skin_name TEXT,
-					skin_rarity INTEGER,
+					skin_rarity TEXT,
 					pattern INTEGER,
 					float REAL,
 					wear_name TEXT,
@@ -119,15 +119,15 @@ async def update_balance(steamid: int, amount: int):
 			await connection.commit()
 
 
-async def insert_item(container_name, skin_name, pattern, float, wear_name, stattrak, username, steamid):
+async def insert_item(container_name, skin_name, skin_rarity, pattern, float, wear_name, stattrak, username, steamid):
 	async with asqlite.connect(DATABASE_NAME) as connection:
 		async with connection.cursor() as cursor:
 			await cursor.execute(
 				"""
-				INSERT INTO skindibi (steamid, username, skin_name, pattern, float, wear_name, stattrak, container_name, timestamp)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+				INSERT INTO skindibi (steamid, username, skin_name, skin_rarity, pattern, float, wear_name, stattrak, container_name, timestamp)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 				""",
-				(steamid, username, skin_name, pattern, float, wear_name, stattrak, container_name, server.get_info("provider", "timestamp")),
+				(steamid, username, skin_name, skin_rarity, pattern, float, wear_name, stattrak, container_name, server.get_info("provider", "timestamp")),
 			)
 			await connection.commit()
 
