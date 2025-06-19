@@ -124,17 +124,17 @@ async def execute_command_cs2(command: str, delay: float | None = None, check_no
 			await asyncio.sleep(delay)
 		if delay == 3621:
 			write_command(command + (f"\necholn {nonce}" if check_nonce else ""))
-			await asyncio.sleep(0.0500001)
+			await asyncio.sleep(0.05)
 			clear_command()
 		else:
 			await asyncio.sleep(0.25)
 			if "say" in command or "say_team" in command:
 				write_command(command + (nonce if check_nonce else ""))
-				await asyncio.sleep(0.0500001)
+				await asyncio.sleep(0.05)
 				clear_command()
 			else:
 				write_command(command)
-				await asyncio.sleep(0.0500001)
+				await asyncio.sleep(0.05)
 				clear_command()
 
 		if check_nonce:
