@@ -44,12 +44,12 @@ class Wear:
 	}
 
 
-async def open_container(container_name, username, steamid, team):
+async def open_container(container_name, username, steamid, team, cmd, container_type_user):
 	if not container_name:
 		if team in TEAMS:
-			await execute_command(f"say_team {PREFIX} No container name provided.. Usage: !case <name> or random")
+			await execute_command(f"say_team {PREFIX} No container name provided.. Usage: {cmd} <name> or random")
 		else:
-			await execute_command(f"say {PREFIX} No container name provided. Usage: !case <name> or random")
+			await execute_command(f"say {PREFIX} No container name provided. Usage: {cmd} <name> or random")
 		return
 	containers = await load_containers()
 	if container_name == "random":
@@ -67,6 +67,18 @@ async def open_container(container_name, username, steamid, team):
 	matched_containers = [container for container in containers if container["name"] in [match[0] for match in filtered_matches]]
 	proper_container_name = matched_containers[0]["name"]
 	container_type = matched_containers[0]["type"]
+	if container_type_user == "capsule":
+		while container_type not in ["Sticker Capsule", "Autograph Capsule"]:
+			container_name = random.choice([container["name"] for container in containers if container["type"] in ["Sticker Capsule", "Autograph Capsule"]])
+			matched_containers = [container for container in containers if container["name"] == container_name]
+			proper_container_name = matched_containers[0]["name"]
+			container_type = matched_containers[0]["type"]
+	elif container_type_user == "case":
+		while container_type not in ["Case"]:
+			container_name = random.choice([container["name"] for container in containers if container["type"] == "Case"])
+			matched_containers = [container for container in containers if container["name"] == container_name]
+			proper_container_name = matched_containers[0]["name"]
+			container_type = matched_containers[0]["type"]
 	# search through contains list to get all rarities available in a case, if contains_rare list also exists then add gold to rarity list
 	contains = matched_containers[0]["contains"]
 	rarity_list = []
@@ -123,10 +135,6 @@ async def open_container(container_name, username, steamid, team):
 		weights.append(item_weight)
 
 	chosen_item = random.choices(item_pool, weights=weights, k=1)[0]
-	while container_type == "Music Kit Box":
-		chosen_item = random.choices(item_pool, weights=weights, k=1)[0]
-		if container_type != "Music Kit Box":
-			break
 	if container_type in ["Sticker Capsule", "Autograph Capsule"]:
 		skin_list = await load_stickers()
 	else:
@@ -140,13 +148,13 @@ async def open_container(container_name, username, steamid, team):
 		print(f"Container: {proper_container_name} | Chosen item: {chosen_item}")
 		return
 	item_name = item_json[0]["name"]
+	item_rarity = item_json[0]["rarity"]["id"].replace("_weapon", "")
 	# Determine float
 	if container_type not in ["Sticker Capsule", "Autograph Capsule"]:
 		skin_min_float = item_json[0]["min_float"]
 		skin_max_float = item_json[0]["max_float"]
 		skin_float = random.uniform(skin_min_float, skin_max_float)
 		displayed_float = float("{:.9f}".format(skin_float))
-		skin_rarity = item_json["rarity"]["id"].replace("_weapon", "")
 		# Determine wear name based on float
 		wear_name = None
 		for attr in dir(Wear):
@@ -179,7 +187,7 @@ async def open_container(container_name, username, steamid, team):
 		else:
 			await execute_command(f"say {PREFIX} {skin_opened}")
 
-	await insert_item(container_name, item_name, skin_rarity, skin_pattern, skin_float, wear_name, skin_stattrak, username, steamid)
+	await insert_item(container_name, item_name, item_rarity, skin_pattern, skin_float, wear_name, skin_stattrak, username, steamid)
 
 	return
 

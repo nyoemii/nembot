@@ -190,10 +190,10 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 			case "!help" | "!commands" | "!cmds":
 				if team in TEAMS:
 					await execute_command(
-						f"say_team {PREFIX} !help (shows this message) | !bal | !fish or !〈͜͡˒ ⋊  | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !switchhands | !case"
+						f"say_team {PREFIX} !help (shows this message) | !bal | !fish | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !switchhands | !case | !capsule"
 					)
 				else:
-					await execute_command(f"say {PREFIX} !help (shows this message) | !bal | !fish or !〈͜͡˒ ⋊  | !fact | !info (info on the bot) | !case")
+					await execute_command(f"say {PREFIX} !help (shows this message) | !bal | !fish  | !fact | !info (info on the bot) | !case | !capsule")
 			case "!balance" | "!bal" | "!money":
 				if team in TEAMS:
 					await execute_command(f"say_team {PREFIX} You have ₶{await get_balance(steamid)} hegemony")
@@ -212,7 +212,14 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 						await execute_command(f"say {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
 			case "!case":
 				if team in TEAMS or not dead:
-					await open_container(args, user, steamid, team)
+					container_type = "case"
+					await open_container(args, user, steamid, team, cmd, container_type)
+				else:
+					await execute_command(f"say {PREFIX} You cannot open a container while dead.")
+			case "!capsule":
+				if team in TEAMS or not dead:
+					container_type = "capsule"
+					await open_container(args, user, steamid, team, cmd, container_type)
 				else:
 					await execute_command(f"say {PREFIX} You cannot open a container while dead.")
 			case "!shock":

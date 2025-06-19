@@ -36,6 +36,7 @@ COMMAND_LIST = [
 	"!hr",
 	"!shock",
 	"!case",
+	"!capsule",
 ]
 
 
