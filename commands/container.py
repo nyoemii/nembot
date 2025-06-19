@@ -44,41 +44,42 @@ class Wear:
 	}
 
 
-async def open_container(container_name, username, steamid, team, cmd, container_type_user):
-	if not container_name:
+async def open_container(container_name_user, username, steamid, team, cmd, container_type_user):
+	if not container_name_user:
 		if team in TEAMS:
 			await execute_command(f"say_team {PREFIX} No container name provided.. Usage: {cmd} <name> or random")
 		else:
 			await execute_command(f"say {PREFIX} No container name provided. Usage: {cmd} <name> or random")
 		return
 	containers = await load_containers()
-	if container_name == "random":
-		container_name = random.choice([container["name"] for container in containers])
+	if container_name_user == "random":
+		container_name_user = random.choice([container["name"] for container in containers])
 	# fuzzy search for container
-	container_matches = process.extract(container_name, [container["name"] for container in containers], limit=None)
+	container_matches = process.extract(container_name_user, [container["name"] for container in containers], limit=None)
 	# remove results that don't contain all words present in container_name
-	filtered_matches = [name for name in container_matches if all(word.lower() in name[0].lower() for word in container_name.lower().split())]
+	filtered_matches = [name for name in container_matches if all(word.lower() in name[0].lower() for word in container_name_user.lower().split())]
 	if not filtered_matches:
 		if team in TEAMS:
-			await execute_command(f"say_team {PREFIX} No matching containers found for {container_name}.")
+			await execute_command(f"say_team {PREFIX} No matching containers found for {container_name_user}.")
 		else:
-			await execute_command(f"say {PREFIX} No matching containers found for {container_name}.")
+			await execute_command(f"say {PREFIX} No matching containers found for {container_name_user}.")
 		return
 	matched_containers = [container for container in containers if container["name"] in [match[0] for match in filtered_matches]]
 	proper_container_name = matched_containers[0]["name"]
 	container_type = matched_containers[0]["type"]
 	if container_type_user == "capsule":
 		while container_type not in ["Sticker Capsule", "Autograph Capsule"]:
-			container_name = random.choice([container["name"] for container in containers if container["type"] in ["Sticker Capsule", "Autograph Capsule"]])
-			matched_containers = [container for container in containers if container["name"] == container_name]
+			container_name_user = random.choice([container["name"] for container in containers if container["type"] in ["Sticker Capsule", "Autograph Capsule"]])
+			matched_containers = [container for container in containers if container["name"] == container_name_user]
 			proper_container_name = matched_containers[0]["name"]
 			container_type = matched_containers[0]["type"]
 	elif container_type_user == "case":
 		while container_type not in ["Case"]:
-			container_name = random.choice([container["name"] for container in containers if container["type"] == "Case"])
-			matched_containers = [container for container in containers if container["name"] == container_name]
+			container_name_user = random.choice([container["name"] for container in containers if container["type"] == "Case"])
+			matched_containers = [container for container in containers if container["name"] == container_name_user]
 			proper_container_name = matched_containers[0]["name"]
 			container_type = matched_containers[0]["type"]
+	container_name = matched_containers[0]["name"]
 	# search through contains list to get all rarities available in a case, if contains_rare list also exists then add gold to rarity list
 	contains = matched_containers[0]["contains"]
 	rarity_list = []
