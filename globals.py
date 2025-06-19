@@ -140,6 +140,10 @@ PRE_FILTER = [
 	"Can't set position/velocity on whiz sound",
 	"CMatchSessionOnlineClient::UpdateSessionSettings is",
 	"SteamNetworkingSockets lock",
+	"OnPreResetRound",
+	"ChangeTeam() CTMDBG",
+	"GC Connection established for server version",
+	"EVERYONE CAN BUY!",
 ]
 
 REGION_FILTER = [
