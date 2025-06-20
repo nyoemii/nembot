@@ -1,7 +1,7 @@
 import win32gui
 from lingua import Language, LanguageDetectorBuilder
 
-from config import GAME, GSI_TOKEN
+from config import GAME, GSI_TOKEN, COMMAND_PREFIX
 from gsi.server import GSIServer
 from util.signal import EventSignal
 
@@ -15,28 +15,28 @@ BANNED_LIST = [
 
 
 COMMAND_LIST = [
-	"!i",
-	"!inspect",
-	"!switchhands",
-	"!flash",
-	"!fish",
-	"!〈͜͡˒",
-	"!info",
-	"!location",
-	"!fact",
-	"!drop",
-	"!help",
-	"!commands",
-	"!cmds",
-	"!balance",
-	"!bal",
-	"!money",
-	"!steamid",
-	"!heartrate",
-	"!hr",
-	"!shock",
-	"!case",
-	"!capsule",
+	f"{COMMAND_PREFIX}i",
+	f"{COMMAND_PREFIX}inspect",
+	f"{COMMAND_PREFIX}switchhands",
+	f"{COMMAND_PREFIX}flash",
+	f"{COMMAND_PREFIX}fish",
+	f"{COMMAND_PREFIX}〈͜͡˒",
+	f"{COMMAND_PREFIX}info",
+	f"{COMMAND_PREFIX}location",
+	f"{COMMAND_PREFIX}fact",
+	f"{COMMAND_PREFIX}drop",
+	f"{COMMAND_PREFIX}help",
+	f"{COMMAND_PREFIX}commands",
+	f"{COMMAND_PREFIX}cmds",
+	f"{COMMAND_PREFIX}balance",
+	f"{COMMAND_PREFIX}bal",
+	f"{COMMAND_PREFIX}money",
+	f"{COMMAND_PREFIX}steamid",
+	f"{COMMAND_PREFIX}heartrate",
+	f"{COMMAND_PREFIX}hr",
+	f"{COMMAND_PREFIX}shock",
+	f"{COMMAND_PREFIX}case",
+	f"{COMMAND_PREFIX}capsule",
 ]
 
 

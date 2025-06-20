@@ -141,7 +141,7 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 			#     await execute_command("disconnect", 0.5)
 			# case "!quit" | "!q":
 			#     await execute_command("quit", 0.5)
-			case "!i" | "!inspect":
+			case _ if cmd == f"{COMMAND_PREFIX}i" or cmd == f"{COMMAND_PREFIX}inspect":
 				if team in TEAMS:
 					if args:
 						inspect_link = re.search(
@@ -154,75 +154,75 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 							await execute_command(f"say {PREFIX} Invalid inspect link.")
 					else:
 						await execute_command(f"say {PREFIX} No inspect link provided.")
-			case "!switchhands":
+			case _ if cmd == f"{COMMAND_PREFIX}switchhands":
 				if team in TEAMS:
 					await execute_command("switchhands", 3621, False)
-			case "!flash":
+			case _ if cmd == f"{COMMAND_PREFIX}flash":
 				if team in TEAMS:
 					await execute_command(f"say_team {PREFIX} fuck you.")
 					for _ in range(13):
 						await execute_command("flashbangs", 3621, False)
 						await asyncio.sleep(0.01 / 13)
-			case "!fish" | "!〈͜͡˒":  # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
+			case _ if cmd == f"{COMMAND_PREFIX}fish" or cmd == f"{COMMAND_PREFIX}〈͜͡˒":  # regex would need to be changed to properly match the fish kaomoji: !〈͜͡˒ ⋊
 				if team in TEAMS or not dead:
 					await cast_line(steamid, user, team)
 				else:
 					await execute_command(f"say {PREFIX} You cannot fish while dead.")
-			case "!info":
+			case _ if cmd == f"{COMMAND_PREFIX}info":
 				if team in TEAMS:
 					await execute_command(f"say_team {PREFIX} github.com/Pandaptable/nembot, reads console.log and parses chat through it (aka not a cheat)")
 				else:
 					await execute_command(f"say {PREFIX} github.com/Pandaptable/nembot, reads console.log and parses chat through it (aka not a cheat)")
-			case "!location":
+			case _ if cmd == f"{COMMAND_PREFIX}location":
 				if team in TEAMS:
 					message = "you're dead dumbass." if dead else f"Your current location: {location}"
 					await execute_command(f"say_team {PREFIX} {message}")
-			case "!fact":
+			case _ if cmd == f"{COMMAND_PREFIX}fact":
 				if team in TEAMS:
 					fact = await get_fact()
 					await execute_command(f"say_team {PREFIX} {fact}")
 				else:
 					fact = await get_fact()
 					await execute_command(f"say {PREFIX} {fact}")
-			case "!drop":
+			case _ if cmd == f"{COMMAND_PREFIX}drop":
 				if team in TEAMS:
 					await execute_command("drop", 3621, False)  # funny 3621 placeholder for shit code to execute with 0 delay
-			case "!help" | "!commands" | "!cmds":
+			case _ if cmd == f"{COMMAND_PREFIX}help" or cmd == f"{COMMAND_PREFIX}commands" or cmd == f"{COMMAND_PREFIX}cmds":
 				if team in TEAMS:
 					await execute_command(
-						f"say_team {PREFIX} !help (shows this message) | !bal | !fish | !fact | !i <inspect link> | !info (info on the bot) | !location | !drop | !switchhands | !case | !capsule"
+						f"say_team {PREFIX} {COMMAND_PREFIX}help (shows this message) | {COMMAND_PREFIX}bal | {COMMAND_PREFIX}fish | {COMMAND_PREFIX}fact | {COMMAND_PREFIX}i <inspect link> | {COMMAND_PREFIX}info (info on the bot) | {COMMAND_PREFIX}location | {COMMAND_PREFIX}drop | {COMMAND_PREFIX}switchhands | {COMMAND_PREFIX}case | {COMMAND_PREFIX}capsule"
 					)
 				else:
-					await execute_command(f"say {PREFIX} !help (shows this message) | !bal | !fish | !fact | !info (info on the bot) | !case | !capsule")
-			case "!balance" | "!bal" | "!money":
+					await execute_command(f"say {PREFIX} {COMMAND_PREFIX}help (shows this message) | {COMMAND_PREFIX}bal | {COMMAND_PREFIX}fish | {COMMAND_PREFIX}fact | {COMMAND_PREFIX}info (info on the bot) | {COMMAND_PREFIX}case | {COMMAND_PREFIX}capsule")
+			case _ if cmd == f"{COMMAND_PREFIX}balance" or cmd == f"{COMMAND_PREFIX}bal" or cmd == f"{COMMAND_PREFIX}money":
 				if team in TEAMS:
 					await execute_command(f"say_team {PREFIX} You have ₶{await get_balance(steamid)} hegemony")
 				else:
 					await execute_command(f"say {PREFIX} You have ₶{await get_balance(steamid)} hegemony")
-			case "!steamid":
+			case _ if cmd == f"{COMMAND_PREFIX}steamid":
 				if team in TEAMS:
 					await execute_command(f"say_team {PREFIX} Your SteamID is: {steamid}")
 				else:
 					await execute_command(f"say {PREFIX} Your SteamID is: {steamid}")
-			case "!heartrate" | "!hr":
+			case _ if cmd == f"{COMMAND_PREFIX}heartrate" or cmd == f"{COMMAND_PREFIX}hr":
 				if HR_ENABLED:
 					if team in TEAMS:
 						await execute_command(f"say_team {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
 					else:
 						await execute_command(f"say {PREFIX} My heart rate is: {await get_heart_rate()} bpm")
-			case "!case":
+			case _ if cmd == f"{COMMAND_PREFIX}case":
 				if team in TEAMS or not dead:
 					container_type = "case"
 					await open_container(args, user, steamid, team, cmd, container_type)
 				else:
 					await execute_command(f"say {PREFIX} You cannot open a container while dead.")
-			case "!capsule":
+			case _ if cmd == f"{COMMAND_PREFIX}capsule":
 				if team in TEAMS or not dead:
 					container_type = "capsule"
 					await open_container(args, user, steamid, team, cmd, container_type)
 				else:
 					await execute_command(f"say {PREFIX} You cannot open a container while dead.")
-			case "!shock":
+			case _ if cmd == f"{COMMAND_PREFIX}shock":
 				if OPENSHOCK_ENABLED:
 					if team in TEAMS:
 						await shock(args, user, steamid)
