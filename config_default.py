@@ -11,6 +11,7 @@ CSGO_EXEC_FILE = "D:\selfbot.cfg"
 
 GSI_TOKEN = "S8RL9Z6Y22TYQK45JB4V8PHRJJMD9DS9"
 PREFIX = "ɴᴇᴍʙᴏᴛ »"
+COMMAND_PREFIX = "!"
 
 # hehe jonathan (literally any filename works)
 DATABASE_NAME = "jonathan.db"
