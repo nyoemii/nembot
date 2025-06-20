@@ -1,7 +1,7 @@
 import win32gui
 from lingua import Language, LanguageDetectorBuilder
 
-from config import GAME, GSI_TOKEN
+from config import GAME, GSI_TOKEN, COMMAND_PREFIX
 from gsi.server import GSIServer
 from util.signal import EventSignal
 
