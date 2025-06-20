@@ -16,7 +16,7 @@ no this doesn't read memory it's not a cheat, i'm just using fucking [schizo met
  	- add `-condebug` and `-conclearlog` to your launch options. (i'd also recommend adding `-allow_third_party_software` as i may implement something with window handles, which could possibly cause issues?)
  	- highly recommend adding`log_flags InputService +donotecho` to the end of your autoexec :3
 5. download the [steamworks SDK](https://partner.steamgames.com/downloads/list) dll for version 1.61
-7. put `steam_api64.dll` and `steam_api64.lib` in the root of the repo
+7. install the game Fish (steam://install/3073680) to properly get the SteamAPI to initialize (nembot uses steamworks), you dont have to run it
 8. `uv run main.py`
 9. :trollface:
 
