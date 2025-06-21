@@ -262,8 +262,14 @@ async def shock(args: str, username: str, steamid: int):
 		steamid (int): The SteamID of the user who sent the command.
 	"""
 	args_list = args.split(" ")
-	intensity = int(args_list[0])
-	duration = float(args_list[1])
+	try:
+		intensity = int(args_list[0])
+		duration = float(args_list[1])
+	except (ValueError, IndexError):
+		await execute_command(
+			f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} seconds)>"
+		)
+		return
 
 	if OPENSHOCK_PUNISHMENT_TYPE == "random":
 		shocker_list = [random.choice(OPENSHOCK_SHOCKER_LIST)]
