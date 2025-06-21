@@ -193,7 +193,9 @@ async def switchcase_commands(steamid: int, cmd: str, args: str, user: str, team
 						f"say_team {PREFIX} {COMMAND_PREFIX}help (shows this message) | {COMMAND_PREFIX}bal | {COMMAND_PREFIX}fish | {COMMAND_PREFIX}fact | {COMMAND_PREFIX}i <inspect link> | {COMMAND_PREFIX}info (info on the bot) | {COMMAND_PREFIX}location | {COMMAND_PREFIX}drop | {COMMAND_PREFIX}switchhands | {COMMAND_PREFIX}case | {COMMAND_PREFIX}capsule"
 					)
 				else:
-					await execute_command(f"say {PREFIX} {COMMAND_PREFIX}help (shows this message) | {COMMAND_PREFIX}bal | {COMMAND_PREFIX}fish | {COMMAND_PREFIX}fact | {COMMAND_PREFIX}info (info on the bot) | {COMMAND_PREFIX}case | {COMMAND_PREFIX}capsule")
+					await execute_command(
+						f"say {PREFIX} {COMMAND_PREFIX}help (shows this message) | {COMMAND_PREFIX}bal | {COMMAND_PREFIX}fish | {COMMAND_PREFIX}fact | {COMMAND_PREFIX}info (info on the bot) | {COMMAND_PREFIX}case | {COMMAND_PREFIX}capsule"
+					)
 			case _ if cmd == f"{COMMAND_PREFIX}balance" or cmd == f"{COMMAND_PREFIX}bal" or cmd == f"{COMMAND_PREFIX}money":
 				if team in TEAMS:
 					await execute_command(f"say_team {PREFIX} You have ₶{await get_balance(steamid)} hegemony")
@@ -259,6 +261,8 @@ async def shock(args: str, username: str, steamid: int):
 		username (str): The username of the user who sent the command.
 		steamid (int): The SteamID of the user who sent the command.
 	"""
+	args_list = args.split(" ")
+
 	if OPENSHOCK_PUNISHMENT_TYPE == "random":
 		shocker_list = [random.choice(OPENSHOCK_SHOCKER_LIST)]
 	elif OPENSHOCK_PUNISHMENT_TYPE == "one":
@@ -266,12 +270,11 @@ async def shock(args: str, username: str, steamid: int):
 	else:
 		shocker_list = OPENSHOCK_SHOCKER_LIST
 
-	if not args:
+	if not args or args_list[1] is not float or args_list[0] is not int:
 		await execute_command(
 			f"say_team {PREFIX} No intensity or duration provided. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} seconds)>"
 		)
 	else:
-		args_list = args.split(" ")
 		if len(args_list) != 2:
 			await execute_command(
 				f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} seconds)>"
