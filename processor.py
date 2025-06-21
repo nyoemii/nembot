@@ -272,7 +272,7 @@ async def shock(args: str, username: str, steamid: int):
 	else:
 		shocker_list = OPENSHOCK_SHOCKER_LIST
 
-	if not args or duration is not float or intensity is not int:
+	if not args or not isinstance(duration, float) or not isinstance(intensity, int):
 		await execute_command(
 			f"say_team {PREFIX} No intensity or duration provided. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} seconds)>"
 		)
