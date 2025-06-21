@@ -262,6 +262,8 @@ async def shock(args: str, username: str, steamid: int):
 		steamid (int): The SteamID of the user who sent the command.
 	"""
 	args_list = args.split(" ")
+	intensity = int(args_list[0])
+	duration = float(args_list[1])
 
 	if OPENSHOCK_PUNISHMENT_TYPE == "random":
 		shocker_list = [random.choice(OPENSHOCK_SHOCKER_LIST)]
@@ -270,7 +272,7 @@ async def shock(args: str, username: str, steamid: int):
 	else:
 		shocker_list = OPENSHOCK_SHOCKER_LIST
 
-	if not args or args_list[1] is not float or args_list[0] is not int:
+	if not args or duration is not float or intensity is not int:
 		await execute_command(
 			f"say_team {PREFIX} No intensity or duration provided. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} seconds)>"
 		)
@@ -280,8 +282,6 @@ async def shock(args: str, username: str, steamid: int):
 				f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} seconds)>"
 			)
 		else:
-			intensity = args_list[0]
-			duration = args_list[1]
 			if int(intensity) not in range(0, OPENSHOCK_STRENGTH_RANGE[1] + 1) or float(duration) not in [round(x / 1000, 3) for x in range(300, OPENSHOCK_DURATION_RANGE[1] + 1)]:
 				await execute_command(
 					f"say_team {PREFIX} Invalid intensity or duration. Usage: !shock <intensity (0-{OPENSHOCK_STRENGTH_RANGE[1]})> <duration (0.3-{OPENSHOCK_DURATION_RANGE[1] / 1000} seconds)>"
