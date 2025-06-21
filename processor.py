@@ -42,8 +42,8 @@ async def parse(line: str):
 		username = regex.group("username").replace(";", ":")
 		location = regex.group("location")
 		dead = regex.group("dead_status")
-		command = regex.group("command")
-		args = regex.group("args")
+		command = regex.group("command").replace(";", ":")
+		args = regex.group("args").replace(";", ":")
 	else:
 		team = ""
 		username = ""
