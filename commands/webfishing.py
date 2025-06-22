@@ -128,7 +128,7 @@ class Map:
 		"name": "de_mirage",
 	}
 	de_nuke = {
-		"tables_increased": ["lake", "alien", "void"],
+		"tables_increased": ["lake", "alien", "void", "rain"],
 		"tables_excluded": ["ocean"],
 		"name": "de_nuke",
 	}
