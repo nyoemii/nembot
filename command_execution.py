@@ -6,7 +6,8 @@ from ctypes import wintypes
 import win32api
 
 from config import EXEC_FILE, GAME
-from globals import csgo_window_handle, nonce_signal
+from globals import csgo_window_handle, nonce_signal, ui_instance
+from util.ui import UI
 
 WM_COPYDATA = 0x004A
 
@@ -149,7 +150,10 @@ async def execute_command_cs2(command: str, delay: float | None = None, check_no
 	else:
 		if check_nonce:
 			nonce_signal.unregister(nonce)
+			ui_instance.update_status(f"Failed to run command: {command}")
 			print(f"Failed to run command {command}")
+		return
+	ui_instance.update_status(f"Ready")
 
 
 async def execute_command(command: str, delay: float | None = None, check_nonce: bool = True) -> None:
@@ -161,6 +165,7 @@ async def execute_command(command: str, delay: float | None = None, check_nonce:
 		delay (float | None): The time to wait before executing the command in seconds. Defaults to None.
 		check_nonce (bool): Whether to check for a nonce after executing the command.
 	"""
+	ui_instance.update_status(f"Executing command: {command}")
 	if GAME == "csgo":
 		await execute_command_csgo(command, delay, check_nonce)
 	else:
