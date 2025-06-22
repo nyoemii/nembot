@@ -2,7 +2,7 @@ import aiohttp
 import random
 
 from config import *
-from globals import server
+from globals import server, ui_instance
 
 LAST_DEATH_COUNT = 3621
 
@@ -52,6 +52,7 @@ async def on_death():
 					headers={"OpenShockToken": OPENSHOCK_API_TOKEN},
 				) as response:
 					if response.status == 200:
+						ui_instance.update_status("Sent shock" + ("s" if OPENSHOCK_PUNISHMENT_TYPE == "all" else f"with intensity {intensity} and duration {duration}"))
 						print("Shock" + ("s" if OPENSHOCK_PUNISHMENT_TYPE == "all" else "") + " sent successfully.")
 					else:
 						print(f"Failed to activate shocker. Response: {response}")
