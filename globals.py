@@ -1,9 +1,11 @@
 import win32gui
+from PyQt6.QtWidgets import QApplication
 from lingua import Language, LanguageDetectorBuilder
 
 from config import GAME, GSI_TOKEN, COMMAND_PREFIX
 from gsi.server import GSIServer
 from util.signal import EventSignal
+from util.ui import UI
 
 BANNED_LIST = [
 	76561198055654571,
@@ -252,3 +254,8 @@ TEAMS = ["CT", "T", "Terrorist", "Counter-Terrorist"]
 last_round = None
 last_phase = None
 nonce_signal = EventSignal()
+
+observer = None
+app = QApplication([])
+ui_instance = UI()
+ui_instance.start()
