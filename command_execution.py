@@ -153,7 +153,7 @@ async def execute_command_cs2(command: str, delay: float | None = None, check_no
 			ui_instance.update_status(f"Failed to run command: {command}")
 			print(f"Failed to run command {command}")
 		return
-	ui_instance.update_status(f"Ready")
+	ui_instance.update_status("Ready")
 
 
 async def execute_command(command: str, delay: float | None = None, check_nonce: bool = True) -> None:
