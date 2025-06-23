@@ -32,12 +32,15 @@ async def on_death():
 		else:
 			shocker_list = OPENSHOCK_SHOCKER_LIST
 
+		intensity = random.randint(*OPENSHOCK_STRENGTH_RANGE)
+		duration = (random.randint(*OPENSHOCK_DURATION_RANGE) // 100) * 100
+
 		shocks = [
 			{
 				"id": shock_id,
 				"type": OPENSHOCK_TYPE,
-				"intensity": (random.randint(*OPENSHOCK_STRENGTH_RANGE) // 5) * 5,
-				"duration": (random.randint(*OPENSHOCK_DURATION_RANGE) // 100) * 100,
+				"intensity": intensity,
+				"duration": duration,
 			}
 			for shock_id in shocker_list
 		]
