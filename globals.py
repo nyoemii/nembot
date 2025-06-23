@@ -1,6 +1,8 @@
 import win32gui
 from PyQt6.QtWidgets import QApplication
 from lingua import Language, LanguageDetectorBuilder
+from collections import deque
+
 
 from config import GAME, GSI_TOKEN, COMMAND_PREFIX
 from gsi.server import GSIServer
@@ -259,3 +261,7 @@ nonce_signal = EventSignal()
 app = QApplication([])
 ui_instance = UI()
 ui_instance.start()
+
+
+COMMAND_QUEUE = deque()
+TRANSLATION_QUEUE = deque()

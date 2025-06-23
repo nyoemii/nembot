@@ -11,7 +11,7 @@ from commands.webfishing import generate_loot_tables, parse_files_in_directory
 from config import CONSOLE_FILE, HR_DIRECTORY, HR_ENABLED, HR_FILE, RPC_ENABLED
 from console_handler import listen
 from database import init_database
-from globals import server, app, ui_instance
+from globals import server, app, ui_instance, COMMAND_QUEUE
 from loop.deathchecking import check_death
 from loop.discord_rpc import DiscordManager
 from loop.heartrate import FileUpdateHandler
@@ -30,6 +30,7 @@ async def main_loop():
 		await process_commands()
 		await check_requirements()
 		await check_round()
+		ui_instance.update_command_status(f"{len(COMMAND_QUEUE)} commands in queue.")
 		await asyncio.sleep(0.05)
 		if not started:
 			ui_instance.update_status("Bot started")

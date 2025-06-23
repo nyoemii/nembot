@@ -2,7 +2,6 @@ import asyncio
 import aiohttp
 import random
 import re
-from collections import deque
 
 import psutil
 import win32gui
@@ -17,11 +16,8 @@ from commands.webfishing import cast_line
 from commands.container import open_container
 from config import *
 from database import check_if_player_exists, get_balance, insert_command
-from globals import BANNED_LIST, COMMAND_LIST, COMMAND_REGEX, TEAMS, detector, server, LANGUAGE_SHORT_CODES
+from globals import BANNED_LIST, COMMAND_LIST, COMMAND_REGEX, TEAMS, detector, server, LANGUAGE_SHORT_CODES, COMMAND_QUEUE, TRANSLATION_QUEUE
 from util.translate import translate_message
-
-COMMAND_QUEUE = deque()
-TRANSLATION_QUEUE = deque()
 
 
 async def parse(line: str):

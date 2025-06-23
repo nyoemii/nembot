@@ -1,6 +1,5 @@
 # TODO: run on separate thread for async execution due to ctypes being blocking
 import ctypes
-import os
 
 import asqlite
 
@@ -118,6 +117,8 @@ async def find_recently_played():
 	for i, player in enumerate(players):
 		# print(f"Player {i} - Name: {player['name']} - ID: {player['id']} - Time: {player['time']} - App: {player['app']}")
 		await insert_player(player["id"], player["name"].replace(";", ":"))
+
+	ui_instance.update_status("Players fetched.")
 
 
 async def insert_player(steamid: int, username: str):

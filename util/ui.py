@@ -25,7 +25,7 @@ class UI(QMainWindow):
 		# Window setup
 		self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
 		self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-		self.setFixedSize(300, 80)
+		self.setFixedSize(300, 120)
 		self.setWindowTitle("nembot")
 
 		# Catpuccin mocha
@@ -88,6 +88,11 @@ class UI(QMainWindow):
 		self.status_label.setStyleSheet(f"color: {self.foreground_color}; font: 12pt Arial; background-color: transparent;")
 		self.status_label.setGeometry(15, 47, 280, 20)
 
+		# Command queue label
+		self.command_queue_label = QLabel("", self.central_widget)
+		self.command_queue_label.setStyleSheet(f"color: {self.foreground_color}; font: 12pt Arial; background-color: transparent;")
+		self.command_queue_label.setGeometry(15, 76, 280, 20)
+
 	def _create_rounded_rectangle(self, radius):
 		"""Create a rounded rectangle shape for the window."""
 		path = QPainterPath()
@@ -105,9 +110,9 @@ class UI(QMainWindow):
 			f"font: 11pt Consolas; border: none;"
 			f"""
 			QPushButton {{
-				color: {self.foreground_color}; 
-				background-color: {self.button_background_color}; 
-				font: 11pt Consolas; 
+				color: {self.foreground_color};
+				background-color: {self.button_background_color};
+				font: 11pt Consolas;
 				border: none;
 			}}
 			QPushButton:hover {{
@@ -143,9 +148,9 @@ class UI(QMainWindow):
 			f"font: 11pt Consolas; border: none;"
 			f"""
 			QPushButton {{
-				color: {self.foreground_color}; 
-				background-color: {self.button_background_color}; 
-				font: 11pt Consolas; 
+				color: {self.foreground_color};
+				background-color: {self.button_background_color};
+				font: 11pt Consolas;
 				border: none;
 			}}
 			QPushButton:hover {{
@@ -168,9 +173,9 @@ class UI(QMainWindow):
 			f"font: 11pt Consolas; border: none;"
 			f"""
 			QPushButton {{
-				color: {self.foreground_color}; 
-				background-color: {self.button_background_color}; 
-				font: 11pt Consolas; 
+				color: {self.foreground_color};
+				background-color: {self.button_background_color};
+				font: 11pt Consolas;
 				border: none;
 			}}
 			QPushButton:hover {{
@@ -184,9 +189,17 @@ class UI(QMainWindow):
 		self.close_button.setGeometry(270, 10, 20, 20)
 		self.close_button.clicked.connect(self.close_window)
 
+	def update_command_status(self, text):
+		"""Update the command queue label text on the main thread."""
+		self.command_queue_label.setText(f"{text}")
+
 	def update_status(self, text):
 		"""Update the status label text on the main thread."""
 		self.status_label.setText(f"{text}")
+
+	def get_status(self):
+		"""Get the status label text."""
+		return self.status_label.text()
 
 	def close_window(self):
 		"""Close the window and stop the bot."""
