@@ -5,7 +5,7 @@ import os
 import asqlite
 
 from config import DATABASE_NAME
-from globals import server
+from globals import server, ui_instance
 
 
 class EFriendFlags:
@@ -25,6 +25,7 @@ class EFriendFlags:
 
 async def find_recently_played():
 	print("\nFetching players...\n")
+	ui_instance.update_status("Fetching players...")
 	steam_api = ctypes.CDLL("./steam_api64.dll")
 
 	steam_api.SteamAPI_InitSafe.restype = ctypes.c_bool

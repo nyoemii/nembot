@@ -98,6 +98,7 @@ async def start_server(ui_instance: UI):
 		await init_database()
 		await find_recently_played()
 		ui_instance.update_status("Generating loot tables...")
+
 		await parse_files_in_directory("data/webfishing", 1)
 		await generate_loot_tables("fish", "lake")
 		await generate_loot_tables("fish", "ocean")
