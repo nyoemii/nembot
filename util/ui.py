@@ -104,19 +104,19 @@ class UI(QMainWindow):
 			f"color: {self.foreground_color}; background-color: {self.button_background_color}; "
 			f"font: 11pt Consolas; border: none;"
 			f"""
-            QPushButton {{
-                color: {self.foreground_color}; 
-                background-color: {self.button_background_color}; 
-                font: 11pt Consolas; 
-                border: none;
-            }}
-            QPushButton:hover {{
-                background-color: {self.button_hover_color};  /* Slightly darker */
-            }}
-            QPushButton:pressed {{
-                background-color: {self.button_pressed_color};  /* Even darker */
-            }}
-            """
+			QPushButton {{
+				color: {self.foreground_color}; 
+				background-color: {self.button_background_color}; 
+				font: 11pt Consolas; 
+				border: none;
+			}}
+			QPushButton:hover {{
+				background-color: {self.button_hover_color};  /* Slightly darker */
+			}}
+			QPushButton:pressed {{
+				background-color: {self.button_pressed_color};  /* Even darker */
+			}}
+			"""
 		)
 		self.wrench_button.setGeometry(210, 10, 20, 20)  # Position to the left of the minimize button
 		self.wrench_button.clicked.connect(self.open_config_file)
@@ -142,19 +142,19 @@ class UI(QMainWindow):
 			f"color: {self.foreground_color}; background-color: {self.button_background_color}; "
 			f"font: 11pt Consolas; border: none;"
 			f"""
-            QPushButton {{
-                color: {self.foreground_color}; 
-                background-color: {self.button_background_color}; 
-                font: 11pt Consolas; 
-                border: none;
-            }}
-            QPushButton:hover {{
-                background-color: {self.button_hover_color};  /* Slightly darker */
-            }}
-            QPushButton:pressed {{
-                background-color: {self.button_pressed_color};  /* Even darker */
-            }}
-            """
+			QPushButton {{
+				color: {self.foreground_color}; 
+				background-color: {self.button_background_color}; 
+				font: 11pt Consolas; 
+				border: none;
+			}}
+			QPushButton:hover {{
+				background-color: {self.button_hover_color};  /* Slightly darker */
+			}}
+			QPushButton:pressed {{
+				background-color: {self.button_pressed_color};  /* Even darker */
+			}}
+			"""
 		)
 		self.minimize_button.setGeometry(240, 10, 20, 20)
 		self.minimize_button.clicked.connect(self.minimize_window)
@@ -167,19 +167,19 @@ class UI(QMainWindow):
 			f"color: {self.foreground_color}; background-color: {self.button_background_color}; "
 			f"font: 11pt Consolas; border: none;"
 			f"""
-            QPushButton {{
-                color: {self.foreground_color}; 
-                background-color: {self.button_background_color}; 
-                font: 11pt Consolas; 
-                border: none;
-            }}
-            QPushButton:hover {{
-                background-color: {self.button_hover_color};  /* Slightly darker */
-            }}
-            QPushButton:pressed {{
-                background-color: {self.button_pressed_color};  /* Even darker */
-            }}
-            """
+			QPushButton {{
+				color: {self.foreground_color}; 
+				background-color: {self.button_background_color}; 
+				font: 11pt Consolas; 
+				border: none;
+			}}
+			QPushButton:hover {{
+				background-color: {self.button_hover_color};  /* Slightly darker */
+			}}
+			QPushButton:pressed {{
+				background-color: {self.button_pressed_color};  /* Even darker */
+			}}
+			"""
 		)
 		self.close_button.setGeometry(270, 10, 20, 20)
 		self.close_button.clicked.connect(self.close_window)
