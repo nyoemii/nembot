@@ -71,7 +71,6 @@ async def start_server(ui_instance: UI):
 	"""
 	Start the server and initialize all necessary components.
 	"""
-	print(ui_instance.status_label.text())
 	ui_instance.update_status("Starting server...")
 	try:
 		# make sure steam dll exists
