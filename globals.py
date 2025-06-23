@@ -256,7 +256,6 @@ last_round = None
 last_phase = None
 nonce_signal = EventSignal()
 
-observer = None
 app = QApplication([])
 ui_instance = UI()
 ui_instance.start()

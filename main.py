@@ -11,7 +11,7 @@ from commands.webfishing import generate_loot_tables, parse_files_in_directory
 from config import CONSOLE_FILE, HR_DIRECTORY, HR_ENABLED, HR_FILE, RPC_ENABLED
 from console_handler import listen
 from database import init_database
-from globals import server, app, ui_instance, observer
+from globals import server, app, ui_instance
 from loop.deathchecking import check_death
 from loop.discord_rpc import DiscordManager
 from loop.heartrate import FileUpdateHandler
