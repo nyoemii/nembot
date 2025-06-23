@@ -122,6 +122,7 @@ async def start_server(ui_instance: UI):
 def print_traceback(err):
 	print("".join(traceback.format_exception(type(err), err, err.__traceback__)))
 
+
 def start_bot(ui_instance):
 	try:
 		asyncio.run(start_server(ui_instance))
@@ -129,11 +130,11 @@ def start_bot(ui_instance):
 		print("Shutting down...")
 	except Exception as e:
 		print(f"Error: {e}")
-    
+
+
 if __name__ == "__main__":
 	bot_thread = threading.Thread(target=start_bot, args=(ui_instance,))
 	bot_thread.daemon = True  # Ensure the thread exits when the main program exits
 	bot_thread.start()
-	asyncio.run(shutdown(observer, server))
 	exit_code = app.exec()
 	sys.exit(exit_code)
