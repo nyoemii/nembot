@@ -41,7 +41,7 @@ class UI(QMainWindow):
 		monitors = screeninfo.get_monitors()
 		primary_screen = next((s for s in monitors if s.is_primary), monitors[0])
 		screen_width, screen_height = primary_screen.width, primary_screen.height
-		window_width, window_height = 300, 80
+		window_width, window_height = 340, 80
 		x_position = screen_width - window_width - 10
 		y_position = (screen_height - window_height) // 2
 
@@ -86,12 +86,12 @@ class UI(QMainWindow):
 		# Status label
 		self.status_label = QLabel("test", self.central_widget)
 		self.status_label.setStyleSheet(f"color: {self.foreground_color}; font: 12pt Arial; background-color: transparent;")
-		self.status_label.setGeometry(15, 47, 280, 20)
+		self.status_label.setGeometry(15, 47, 320, 20)
 
 		# Command queue label
 		self.command_queue_label = QLabel("", self.central_widget)
 		self.command_queue_label.setStyleSheet(f"color: {self.foreground_color}; font: 12pt Arial; background-color: transparent;")
-		self.command_queue_label.setGeometry(15, 76, 280, 20)
+		self.command_queue_label.setGeometry(15, 76, 320, 20)
 
 	def _create_rounded_rectangle(self, radius):
 		"""Create a rounded rectangle shape for the window."""
