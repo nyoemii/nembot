@@ -25,7 +25,7 @@ class UI(QMainWindow):
 		# Window setup
 		self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
 		self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
-		self.setFixedSize(300, 120)
+		self.setFixedSize(340, 120)
 		self.setWindowTitle("nembot")
 
 		# Catpuccin mocha
@@ -76,12 +76,12 @@ class UI(QMainWindow):
 		# Separator
 		self.separator = QFrame(self.central_widget)
 		self.separator.setStyleSheet(f"background-color: {self.separator_color};")
-		self.separator.setGeometry(22, 38, 256, 2)
+		self.separator.setGeometry(22, 38, 296, 2)
 
 		# Main label
 		self.label = QLabel(self.windowTitle(), self.central_widget)
 		self.label.setStyleSheet(f"color: {self.foreground_color}; font: 12pt Arial; background-color: transparent;")
-		self.label.setGeometry(15, 8, 200, 20)
+		self.label.setGeometry(15, 8, 240, 20)
 
 		# Status label
 		self.status_label = QLabel("test", self.central_widget)
@@ -123,7 +123,7 @@ class UI(QMainWindow):
 			}}
 			"""
 		)
-		self.wrench_button.setGeometry(210, 10, 20, 20)  # Position to the left of the minimize button
+		self.wrench_button.setGeometry(250, 10, 20, 20)  # Position to the left of the minimize button
 		self.wrench_button.clicked.connect(self.open_config_file)
 
 	def open_config_file(self):
@@ -161,7 +161,7 @@ class UI(QMainWindow):
 			}}
 			"""
 		)
-		self.minimize_button.setGeometry(240, 10, 20, 20)
+		self.minimize_button.setGeometry(280, 10, 20, 20)
 		self.minimize_button.clicked.connect(self.minimize_window)
 
 	def _create_close_button(self):
@@ -186,7 +186,7 @@ class UI(QMainWindow):
 			}}
 			"""
 		)
-		self.close_button.setGeometry(270, 10, 20, 20)
+		self.close_button.setGeometry(310, 10, 20, 20)
 		self.close_button.clicked.connect(self.close_window)
 
 	def update_command_status(self, text):
